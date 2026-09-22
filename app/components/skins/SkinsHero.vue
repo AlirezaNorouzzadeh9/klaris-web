@@ -4,11 +4,33 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog'
+import { CATEGORIES } from '~/data/weapons'
 
-const { configuredCount, resetAll, busy, status } = useLoadout()
+/**
+ * Loadout console: a bordered panel with the page title, a live summary of
+ * what is equipped per category, and the two things a player does here —
+ * copy !wp and reset. No artwork; the grids below are the colourful part.
+ */
+const { loadout, configuredCount, resetAll, busy, status } = useLoadout()
 const confirmOpen = ref(false)
+const ready = computed(() => status.value === 'ready')
 
-const equipped = computed(() => (status.value === 'ready' ? String(configuredCount.value) : '—'))
+/** One dot per category, lit when that category has something equipped. */
+const slots = computed(() => {
+  const l = loadout.value
+  const defs = new Set([...Object.keys(l.skins[2]), ...Object.keys(l.skins[3])].map(Number))
+  const has = (test: boolean) => test
+  return CATEGORIES.map((cat) => {
+    switch (cat.key) {
+      case 'skins': return { ...cat, on: has([...defs].some(d => d < 500)) }
+      case 'knives': return { ...cat, on: has(l.knife[2] !== null || l.knife[3] !== null) }
+      case 'gloves': return { ...cat, on: has(l.gloves[2] !== null || l.gloves[3] !== null) }
+      case 'agents': return { ...cat, on: has(l.agents[2] !== null || l.agents[3] !== null || l.models[2] !== null || l.models[3] !== null) }
+      case 'music': return { ...cat, on: has(l.music[2] !== null || l.music[3] !== null) }
+      default: return { ...cat, on: has(l.pins[2] !== null || l.pins[3] !== null) }
+    }
+  })
+})
 
 async function copyCommand() {
   try {
@@ -25,51 +47,87 @@ async function onReset() {
 </script>
 
 <template>
-  <section class="relative isolate overflow-hidden border-b border-white/8">
-    <img
-      src="/img/hero-loadout.webp"
-      alt=""
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 size-full object-cover object-center opacity-45"
-    >
-    <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(7_9_12/.98)_0%,rgb(7_9_12/.72)_45%,rgb(7_9_12/.86)_100%)]" />
-    <div class="bg-grid pointer-events-none absolute inset-0 opacity-15 [mask-image:linear-gradient(to_bottom,black,transparent_92%)]" />
-    <div class="pointer-events-none absolute -top-52 left-1/2 size-[560px] -translate-x-1/2 rounded-full bg-mint-500/[.08] blur-[150px]" />
+  <section class="mx-auto max-w-[1440px] px-4 pt-6 sm:px-6 lg:px-10">
+    <div class="relative isolate overflow-hidden rounded-2xl border border-white/8 bg-ink-900">
+      <!-- panel skin: mint corner light, diagonal hatching, hairline top edge -->
+      <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_100%_0%,rgb(46_232_156/.12),transparent_60%)]" />
+      <div class="pointer-events-none absolute inset-0 -z-10 opacity-[.07] [background-image:repeating-linear-gradient(135deg,white_0_1px,transparent_1px_9px)]" />
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-mint-500/60 to-transparent" />
 
-    <div class="relative mx-auto grid max-w-[1440px] items-center gap-8 px-4 py-9 sm:px-6 sm:py-12 lg:grid-cols-[1fr_auto] lg:gap-16 lg:px-10 lg:py-14">
-      <div class="text-right">
-        <div class="mb-4 flex items-center justify-end gap-2 text-[11px] font-bold tracking-[0.24em] text-mint-400">
-          <span>CS2 · LOADOUT</span>
-          <span class="h-px w-8 bg-mint-500/60" />
-        </div>
-
-        <h1 class="text-[36px] leading-none font-black tracking-[-0.03em] text-white sm:text-[52px]">لوداوت شخصی تو</h1>
-        <p class="mt-4 max-w-[560px] ms-auto text-[13.5px] leading-8 text-white/60 sm:text-[15px]">
-          اسکین، چاقو، دستکش، ایجنت و موسیقی MVP مورد علاقه‌ات را انتخاب کن و در همه‌ی سرورهای کلاریس همراهت داشته باش.
-        </p>
-
-        <div class="mt-7 flex flex-wrap items-center justify-end gap-2.5">
-          <button type="button" class="inline-flex h-11 items-center gap-2 rounded-lg bg-mint-500 px-5 text-[13px] font-bold text-ink-950 shadow-[0_10px_28px_-12px_var(--color-mint-500)] transition-colors hover:bg-mint-400" @click="copyCommand">
-            <Icon name="lucide:copy" class="size-4" />
-            کپی دستور <span class="ltr font-mono">!wp</span>
-          </button>
-          <button type="button" class="inline-flex h-11 items-center gap-2 rounded-lg border border-white/12 bg-white/[.03] px-4 text-[13px] font-semibold text-white/65 transition-colors hover:border-red-k/55 hover:text-red-k" @click="confirmOpen = true">
-            <Icon name="lucide:rotate-ccw" class="size-4" />
-            ریست لوداوت
-          </button>
-        </div>
-      </div>
-
-      <div class="order-first flex items-center justify-end gap-3 lg:order-none lg:flex-col lg:items-stretch lg:gap-2.5">
-        <div class="rounded-xl border border-white/10 bg-ink-900/75 px-4 py-3 backdrop-blur-md lg:min-w-[190px]">
-          <div class="flex items-center justify-between gap-6">
-            <span class="text-[11px] text-white/45">آیتم‌های انتخاب‌شده</span>
-            <span class="ltr font-mono text-xl font-bold text-white">{{ equipped }}</span>
+      <div class="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10 lg:p-8">
+        <!-- title -->
+        <div>
+          <div class="flex items-center gap-2.5">
+            <span class="grid size-9 shrink-0 place-items-center rounded-xl border border-mint-500/25 bg-mint-500/10 text-mint-400">
+              <Icon name="lucide:layers" class="size-[18px]" />
+            </span>
+            <div>
+              <p class="text-[10.5px] font-bold tracking-[0.28em] text-mint-400">KLARIS · CS2</p>
+              <h1 class="text-[22px] leading-tight font-black text-white sm:text-[26px]">لوداوت من</h1>
+            </div>
           </div>
+
+          <p class="mt-3.5 max-w-[620px] text-[13px] leading-7 text-white/50 sm:text-[14px]">
+            اسکین، چاقو، دستکش، ایجنت و موسیقی MVP هر تیم را جدا انتخاب کن. انتخاب‌هایت روی همه‌ی سرورهای کلاریس یکی است.
+          </p>
+
+          <!-- category dots -->
+          <ul class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <li v-for="s in slots" :key="s.key" class="flex items-center gap-1.5 text-[12px]">
+              <span
+                class="size-1.5 rounded-full transition-colors duration-500"
+                :class="ready && s.on ? 'bg-mint-400 shadow-[0_0_8px_var(--color-mint-500)]' : 'bg-white/15'"
+              />
+              <span :class="ready && s.on ? 'text-white/70' : 'text-white/30'">{{ s.label }}</span>
+            </li>
+          </ul>
         </div>
-        <div class="hidden items-center gap-2 rounded-xl border border-white/10 bg-ink-900/65 px-4 py-3 text-[11px] text-white/50 backdrop-blur-md sm:flex lg:min-w-[190px]">
-          <span class="relative flex size-2 shrink-0"><span class="absolute inset-0 animate-ping rounded-full bg-mint-500/60" /><span class="relative size-2 rounded-full bg-mint-500" /></span>
-          فعال روی همه‌ی سرورها
+
+        <!-- summary + actions -->
+        <div class="flex flex-col gap-3 lg:w-[300px]">
+          <div class="flex items-stretch gap-2.5">
+            <div class="flex-1 rounded-xl border border-white/8 bg-ink-950/60 px-4 py-3">
+              <p class="text-[11px] text-white/40">آیتم انتخاب‌شده</p>
+              <p class="ltr mt-1 font-mono text-2xl leading-none font-bold text-white">
+                <span v-if="ready">{{ configuredCount }}</span>
+                <span v-else class="skeleton inline-block h-6 w-8 rounded-sm align-middle" />
+              </p>
+            </div>
+            <div class="flex flex-1 flex-col justify-center rounded-xl border border-white/8 bg-ink-950/60 px-4 py-3">
+              <p class="text-[11px] text-white/40">وضعیت</p>
+              <p class="mt-1.5 flex items-center gap-2 text-[12.5px] font-semibold text-white">
+                <span class="relative flex size-2 shrink-0">
+                  <span class="absolute inset-0 animate-ping rounded-full bg-mint-500/60" />
+                  <span class="relative size-2 rounded-full bg-mint-500" />
+                </span>
+                همه‌ی سرورها
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="group flex h-11 items-center justify-between rounded-xl bg-mint-500 px-4 text-[13px] font-bold text-ink-950 shadow-[0_12px_30px_-14px_var(--color-mint-500)] transition-colors hover:bg-mint-400"
+            @click="copyCommand"
+          >
+            <span class="flex items-center gap-2">
+              <Icon name="lucide:copy" class="size-4" />
+              کپی دستور
+            </span>
+            <span class="ltr rounded-md bg-ink-950/15 px-2 py-0.5 font-mono text-[12px]">!wp</span>
+          </button>
+
+          <div class="flex items-center justify-between gap-3 text-[12px]">
+            <p class="text-white/35">بدون ری‌کانکت اعمال می‌شود.</p>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 font-semibold text-red-k/80 transition-colors hover:text-red-k"
+              @click="confirmOpen = true"
+            >
+              <Icon name="lucide:rotate-ccw" class="size-3.5" />
+              ریست لوداوت
+            </button>
+          </div>
         </div>
       </div>
     </div>
