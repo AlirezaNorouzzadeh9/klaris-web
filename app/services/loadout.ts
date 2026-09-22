@@ -14,6 +14,8 @@ export interface LoadoutService {
   setAgent(team: TeamId, model: string | null): Promise<void>
   setMusic(teams: TeamId[], musicId: number | null): Promise<void>
   setPin(teams: TeamId[], pinId: number | null): Promise<void>
+  /** PlayerModelChanger: one of the server's own models, per side. */
+  setModel(team: TeamId, id: string | null): Promise<void>
   resetAll(): Promise<void>
 }
 
@@ -31,6 +33,7 @@ export function emptyLoadout(): Loadout {
     agents: perTeam(null),
     music: perTeam(null),
     pins: perTeam(null),
+    models: perTeam(null),
   }
 }
 
@@ -89,6 +92,9 @@ export const mockLoadoutService: LoadoutService = {
   }),
   setPin: (teams, pinId) => mutate((l) => {
     for (const t of teams) l.pins[t] = pinId
+  }),
+  setModel: (team, id) => mutate((l) => {
+    l.models[team] = id
   }),
   resetAll: () => mutate((l) => Object.assign(l, emptyLoadout())),
 }

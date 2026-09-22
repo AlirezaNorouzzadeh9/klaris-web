@@ -48,7 +48,7 @@ export function useLoadout() {
   const configuredCount = computed(() => {
     const l = loadout.value
     const defs = new Set([...Object.keys(l.skins[2]), ...Object.keys(l.skins[3])])
-    const singles = [l.knife, l.gloves, l.agents, l.music, l.pins]
+    const singles = [l.knife, l.gloves, l.agents, l.music, l.pins, l.models]
       .filter(slot => slot[2] !== null || slot[3] !== null).length
     return defs.size + singles
   })
@@ -80,6 +80,8 @@ export function useLoadout() {
       run(`music-${id}`, () => service.setMusic(teams, id), 'MVP music updated'),
     setPin: (teams: TeamId[], id: number | null) =>
       run(`pin-${id}`, () => service.setPin(teams, id), 'Pin updated'),
+    setModel: (team: TeamId, id: string | null) =>
+      run(`model-${id}`, () => service.setModel(team, id), 'Model updated'),
     resetAll: () => run('reset', () => service.resetAll(), 'Everything reset to game defaults'),
   }
 }

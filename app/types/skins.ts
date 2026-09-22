@@ -38,6 +38,26 @@ export interface CatalogAgent {
   agent_name: string
 }
 
+/** A custom player model the server ships (PlayerModelChanger config). */
+export interface CatalogModel {
+  id: string
+  name: string
+  /** Sides that can use it; "all" means both. */
+  side: 'all' | 't' | 'ct'
+  /** Only VIPs can wear it. */
+  vip?: boolean
+}
+
+/** A custom player model the server ships (PlayerModelChanger config). */
+export interface CatalogModel {
+  id: string
+  name: string
+  /** Sides that can use it; "all" means both. */
+  side: 'all' | 't' | 'ct'
+  /** Only VIPs can wear it. */
+  vip?: boolean
+}
+
 /** music, collectibles (pins), keychains and stickers share this shape. */
 export interface CatalogItem {
   id: string
@@ -94,6 +114,8 @@ export interface Loadout {
   music: Record<TeamId, number | null>
   /** wp_player_pins.id */
   pins: Record<TeamId, number | null>
+  /** playermodelchanger: the server's own models, by side */
+  models: Record<TeamId, string | null>
 }
 
 /** What the skin editor needs to know about the finish being configured. */

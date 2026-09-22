@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { CatalogAgent, TeamId } from '~/types/skins'
+import type { CatalogAgent, CatalogModel, TeamId } from '~/types/skins'
 import { matchesQuery } from '~/composables/useCatalog'
 
 const { load } = useCatalog()
-const { loadout, busy, setAgent } = useLoadout()
+const { loadout, busy, setAgent, setModel } = useLoadout()
 
 const agents = ref<CatalogAgent[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
@@ -18,10 +18,15 @@ watch(() => route.query.side, () => {
 const query = ref('')
 const placeholder = 'جستجوی ایجنت… مثلاً Sir Bloody'
 
+/** The server's own player models (PlayerModelChanger), shown above the Valve agents. */
+const models = ref<CatalogModel[]>([])
+
 async function fetchCatalog() {
   state.value = 'loading'
   try {
-    agents.value = (await load('agents')).filter(a => a.model && a.model !== 'null')
+    const [list, custom] = await Promise.all([load('agents'), load('models').catch(() => [])])
+    agents.value = list.filter(a => a.model && a.model !== 'null')
+    models.value = custom
     state.value = 'ready'
   } catch {
     state.value = 'error'
@@ -41,6 +46,16 @@ const split = (a: CatalogAgent) => {
 function toggle(a: CatalogAgent) {
   const on = loadout.value.agents[a.team] === a.model
   setAgent(a.team, on ? null : a.model)
+}
+
+// ---- server models ----
+const visibleModels = computed(() => models.value.filter(m =>
+  (m.side === 'all' || (m.side === 't' ? side.value === 2 : side.value === 3))
+  && matchesQuery(m.name, query.value)))
+
+const modelOn = (m: CatalogModel) => loadout.value.models[side.value] === m.id
+function toggleModel(m: CatalogModel) {
+  setModel(side.value, modelOn(m) ? null : m.id)
 }
 </script>
 
@@ -75,9 +90,41 @@ function toggle(a: CatalogAgent) {
     <div v-for="n in 12" :key="n" class="skeleton h-[248px] rounded-xl" />
   </div>
 
-  <SkinsEmptyResult v-else-if="!visible.length" :query="query" @clear="query = ''" />
+  <template v-else>
+    <!-- the server's own models come first; they are not Valve agents -->
+    <section v-if="visibleModels.length" class="mb-6">
+      <h3 class="mb-3 flex items-center gap-2 text-[13px] font-bold text-white/80">
+        مدل‌های اختصاصی کلاریس
+        <span class="ltr rounded-full bg-gold-k/12 px-2 py-0.5 font-mono text-[10px] font-bold text-gold-k">VIP</span>
+        <span class="h-px flex-1 bg-white/6" />
+      </h3>
+      <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
+        <SkinsItemCard
+          v-for="m in visibleModels"
+          :key="m.id"
+          image=""
+          :title="m.name"
+          kicker="Klaris"
+          :active-teams="modelOn(m) ? [side] : []"
+          glow="rgb(245 180 61 / .16)"
+          :inspectable="false"
+          stage-class="h-[186px]"
+          @select="toggleModel(m)"
+        >
+          <SkinsCardAction
+            :active="modelOn(m)"
+            :label="modelOn(m) ? 'Equipped' : 'Select'"
+            :icon="modelOn(m) ? 'lucide:check' : 'lucide:plus'"
+            :disabled="busy === `model-${m.id}` || busy === 'model-null'"
+            @click="toggleModel(m)"
+          />
+        </SkinsItemCard>
+      </div>
+    </section>
 
-  <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
+    <SkinsEmptyResult v-if="!visible.length && !visibleModels.length" :query="query" @clear="query = ''" />
+
+    <div v-else-if="visible.length" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
     <SkinsItemCard
       v-for="a in visible"
       :key="a.model"
@@ -97,5 +144,6 @@ function toggle(a: CatalogAgent) {
         @click="toggle(a)"
       />
     </SkinsItemCard>
-  </div>
+    </div>
+  </template>
 </template>

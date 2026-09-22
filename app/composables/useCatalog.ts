@@ -1,4 +1,4 @@
-import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogSkin } from '~/types/skins'
+import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogModel, CatalogSkin } from '~/types/skins'
 import { WEAPON_ORDER, weaponClassOf } from '~/data/weapons'
 
 interface CatalogFiles {
@@ -9,6 +9,7 @@ interface CatalogFiles {
   collectibles: CatalogItem[]
   keychains: CatalogItem[]
   stickers: CatalogItem[]
+  models: CatalogModel[]
 }
 
 export interface WeaponEntry {
