@@ -4,8 +4,8 @@ import { wearTierOf } from '~/data/weapons'
 
 /**
  * Inventory-style item card, like a tile in the game's inventory: render on a
- * soft spotlight, wear / StatTrak / name underneath, the action row (with the
- * inspect button beside it) and a quality strip along the bottom edge.
+ * soft spotlight (inspect top-left, sides top-right), weapon / wear and name
+ * underneath, the action button and a quality strip along the bottom edge.
  */
 const props = withDefaults(defineProps<{
   image: string
@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<{
   /** Shown dimmed when `image` is missing upstream (some new finishes have no render). */
   fallback?: string
   interactive?: boolean
-  /** Show the inspect (pseudo-3D) button next to the action. */
+  /** Show the inspect (pseudo-3D) button in the tile corner. */
   inspectable?: boolean
   /** Tile height class: skins 128px, agents 168px, music / pins 120px. */
   stageClass?: string
@@ -148,11 +148,11 @@ watch(() => props.image, () => {
     <!-- labels -->
     <div class="flex flex-1 flex-col gap-2 px-2.5 pt-2 pb-2.5">
       <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
-        <span class="flex items-center justify-between gap-2 font-mono text-[9px] font-bold tracking-[.06em]">
-          <span class="truncate text-white/30">{{ kicker }}</span>
+        <span class="flex items-center justify-between gap-2 font-mono text-[10px] font-bold tracking-[.04em]">
+          <span class="truncate font-sans text-[12px] font-semibold tracking-normal text-white/50">{{ kicker }}</span>
           <span v-if="tier" class="shrink-0" :style="{ color: tier.color }">{{ tier.short }} · {{ wear!.toFixed(3) }}</span>
         </span>
-        <span class="mt-0.5 block truncate text-[13px] font-bold text-white" :title="title">{{ title }}</span>
+        <span class="mt-0.5 block truncate text-[14px] font-bold text-white" :title="title">{{ title }}</span>
       </button>
 
       <div v-if="$slots.default" class="mt-auto">
