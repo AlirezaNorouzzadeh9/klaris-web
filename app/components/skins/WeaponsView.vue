@@ -59,6 +59,7 @@ const skins = computed(() => {
 const paged = computed(() => searching.value || showingAll.value)
 const visibleSkins = computed(() => (paged.value ? skins.value.slice(0, limit.value) : skins.value))
 const allLabel = computed(() => (props.knives ? 'همهٔ چاقوها' : 'همهٔ اسلحه‌ها'))
+const searchPlaceholder = computed(() => (props.knives ? 'جستجوی چاقو… مثلاً Karambit Fade' : 'جستجوی اسکین… مثلاً Asiimov'))
 
 /** Weapons with a saved skin on either side (for knives: the equipped models). */
 const configured = computed(() => {
@@ -79,6 +80,12 @@ function teamsFor(skin: CatalogSkin): TeamId[] {
     const equippedKnife = !props.knives || loadout.value.knife[t] === skin.weapon_name
     return cfg?.paintId === Number(skin.paint) && equippedKnife
   })
+}
+
+/** Float of the equipped copy, for the card's wear bar. */
+function equippedWear(skin: CatalogSkin): number | undefined {
+  const team = teamsFor(skin)[0]
+  return team === undefined ? undefined : loadout.value.skins[team][skin.weapon_defindex]?.wear
 }
 
 // ---- editor ----
@@ -124,10 +131,11 @@ async function onRemove() {
     <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
   </div>
   <template v-else>
+  <!-- phones / tablets: full-width search above the class dropdowns -->
   <SkinsSearchBar
     v-model="query"
-    class="mb-3 lg:mb-5"
-    :placeholder="knives ? 'جستجوی چاقو… مثلاً Karambit Fade' : 'جستجوی اسکین… مثلاً Asiimov'"
+    class="mb-3 lg:hidden"
+    :placeholder="searchPlaceholder"
   />
 
   <!-- phones / tablets: class dropdowns -->
@@ -147,10 +155,10 @@ async function onRemove() {
   </div>
 
   <!-- minmax(0,…) / min-w-0: the card grid must size to its column, not its content. -->
-  <div class="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-6">
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-[22px] lg:grid-cols-[230px_minmax(0,1fr)]">
     <div class="hidden min-w-0 transition-opacity lg:block" :class="searching && 'opacity-50 hover:opacity-100'">
-      <div v-if="state === 'loading'" class="space-y-2">
-        <div v-for="n in 10" :key="n" class="skeleton h-10 rounded-md" />
+      <div v-if="state === 'loading'" class="space-y-1.5 rounded-xl border border-white/7 p-2">
+        <div v-for="n in 10" :key="n" class="skeleton h-[34px] rounded-lg" />
       </div>
       <SkinsWeaponRail
         v-else
@@ -158,64 +166,53 @@ async function onRemove() {
         :weapons="weapons"
         :configured="configured"
         :grouped="!knives"
-        :title="knives ? 'مدل چاقو' : 'اسلحه'"
         :all-label="allLabel"
         :total="pool.length"
       />
     </div>
 
     <div class="min-w-0">
-      <!-- heading: the selected weapon, or search results across all of them -->
-      <div class="mb-4 flex items-center gap-3">
-        <img v-if="current && !searching" :src="current.image" alt="" class="hidden h-10 w-20 object-contain sm:block">
+      <!-- header: title on the start side, pill search on the end side (desktop) -->
+      <div class="mb-3.5 flex items-end justify-between gap-4">
         <div class="min-w-0">
           <h2 v-if="searching" class="text-lg font-black text-white sm:text-xl">
             نتایج «<span class="ltr">{{ query.trim() }}</span>»
           </h2>
           <h2 v-else-if="showingAll" class="text-lg font-black text-white sm:text-xl">{{ allLabel }}</h2>
           <h2 v-else class="ltr text-start text-lg font-black text-white sm:text-xl">{{ current?.label ?? '…' }}</h2>
-          <p class="text-[12.5px] text-white/40">
+          <p class="mt-[3px] text-[12.5px] text-white/40">
             <span class="font-mono">{{ skins.length.toLocaleString('fa-IR') }}</span> اسکین
             <template v-if="searching"> در {{ allLabel }}</template>
-            <template v-else-if="knives"> · با انتخاب اسکین، همین مدل چاقو هم برای آن تیم فعال می‌شود</template>
+            <template v-else-if="knives"> · با انتخاب اسکین، همین مدل چاقو هم فعال می‌شود</template>
           </p>
         </div>
+        <SkinsSearchBar v-model="query" size="md" class="hidden w-[340px] shrink-0 lg:block" :placeholder="searchPlaceholder" />
       </div>
 
-      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-4 2xl:grid-cols-5">
-        <div v-for="n in 12" :key="n" class="skeleton h-[230px] rounded-lg sm:h-[250px]" />
+      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div v-for="n in 15" :key="n" class="skeleton h-[168px] rounded-xl" />
       </div>
 
       <SkinsEmptyResult v-else-if="!skins.length" :query="query" @clear="query = ''" />
 
-      <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <SkinsItemCard
           v-for="skin in visibleSkins"
           :key="`${skin.weapon_defindex}-${skin.paint}`"
           :image="skin.image"
           :title="finishName(skin.paint_name)"
-          :caption="weaponLabel(skin.paint_name)"
+          :kicker="paged ? `${weaponLabel(skin.paint_name)} · #${skin.paint}` : `#${skin.paint}`"
           :fallback="imageOf(skin.weapon_defindex)"
           :active-teams="teamsFor(skin)"
+          :wear="equippedWear(skin)"
           @select="openEditor(skin)"
         >
-          <template #meta>
-            <span class="rounded-xs border border-white/8 px-1.5 py-px font-mono text-[10px] text-white/40">#{{ skin.paint }}</span>
-            <span v-if="teamsFor(skin).length" class="rounded-xs bg-mint-500/12 px-1.5 py-px font-mono text-[10px] font-bold text-mint-400">
-              {{ loadout.skins[teamsFor(skin)[0]!][skin.weapon_defindex]?.wear.toFixed(3) }}
-            </span>
-          </template>
-          <button
-            type="button"
-            class="flex h-9 w-full items-center justify-center gap-1.5 rounded-md border text-[12.5px] font-semibold transition-colors"
-            :class="teamsFor(skin).length
-              ? 'border-mint-500/35 bg-mint-500/10 text-mint-300 hover:bg-mint-500/15'
-              : 'border-white/10 text-white/60 hover:border-mint-500/45 hover:bg-mint-500/[.06] hover:text-mint-300'"
+          <SkinsCardAction
+            :active="teamsFor(skin).length > 0"
+            :label="teamsFor(skin).length ? 'تنظیمات' : 'انتخاب'"
+            :icon="teamsFor(skin).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
             @click="openEditor(skin)"
-          >
-            <Icon :name="teamsFor(skin).length ? 'lucide:sliders-horizontal' : 'lucide:plus'" class="size-3.5" />
-            {{ teamsFor(skin).length ? 'تنظیمات' : 'انتخاب' }}
-          </button>
+          />
         </SkinsItemCard>
       </div>
 

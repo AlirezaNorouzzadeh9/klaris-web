@@ -14,6 +14,7 @@ const items = ref<CatalogItem[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const query = ref('')
 const limit = ref(PAGE)
+const placeholder = computed(() => (props.kind === 'music' ? 'جستجوی موزیک… مثلاً Hotline Miami' : 'جستجوی پین… مثلاً Katowice'))
 
 async function fetchCatalog() {
   state.value = 'loading'
@@ -42,39 +43,37 @@ function toggle(item: CatalogItem, team: TeamId) {
 </script>
 
 <template>
-  <SkinsSearchBar
-    v-model="query"
-    class="mb-4"
-    :placeholder="kind === 'music' ? 'جستجوی موزیک… (مثلاً Hotline Miami یا Neck Deep)' : 'جستجوی پین… (مثلاً Katowice یا Operation)'"
-  />
-  <p class="mb-5 text-[13px] text-white/45">
+  <SkinsSearchBar v-model="query" class="mb-3 lg:hidden" :placeholder="placeholder" />
+
+  <SkinsGridHeader v-model:query="query" :title="kind === 'music' ? 'موزیک MVP' : 'پین'" :placeholder="placeholder">
     برای هر تیم یکی انتخاب کن: روی <span class="ltr font-mono text-side-t">T</span> یا
     <span class="ltr font-mono text-side-ct">CT</span> هر کارت بزن.
-  </p>
+  </SkinsGridHeader>
 
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     لیست بارگذاری نشد.
     <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
   </div>
 
-  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 xl:grid-cols-6">
-    <div v-for="n in 12" :key="n" class="skeleton h-[230px] rounded-lg" />
+  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+    <div v-for="n in 12" :key="n" class="skeleton h-[176px] rounded-xl" />
   </div>
 
   <SkinsEmptyResult v-else-if="!filtered.length" :query="query" @clear="query = ''" />
 
   <template v-else>
-    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 xl:grid-cols-6">
+    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
       <SkinsItemCard
         v-for="item in visible"
         :key="item.id"
         :image="item.image"
         :title="cleanName(item.name)"
-        :caption="kind === 'music' ? 'MUSIC KIT' : 'PIN'"
+        :kicker="kind === 'music' ? 'MUSIC KIT' : 'PIN'"
         :active-teams="teamsFor(item)"
         :interactive="false"
-        stage-class="h-[130px]"
+        stage-class="h-30"
       >
+        <!-- one pick per side -->
         <div class="ltr grid grid-cols-2 gap-1.5">
           <button
             v-for="t in TEAMS"
@@ -82,7 +81,7 @@ function toggle(item: CatalogItem, team: TeamId) {
             type="button"
             :disabled="busy !== null"
             :aria-pressed="slot[t] === Number(item.id)"
-            class="h-8 rounded-sm border font-mono text-[11.5px] font-bold transition-colors disabled:opacity-60"
+            class="h-[30px] rounded-full border font-mono text-[11px] font-bold transition-colors disabled:opacity-60"
             :class="slot[t] === Number(item.id)
               ? t === 2 ? 'border-side-t/60 bg-side-t/15 text-side-t' : 'border-side-ct/60 bg-side-ct/15 text-side-ct'
               : 'border-white/10 text-white/40 hover:border-white/25 hover:text-white/75'"

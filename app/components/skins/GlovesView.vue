@@ -10,6 +10,7 @@ const gloves = ref<CatalogGlove[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const kit = ref<string>('all')
 const query = ref('')
+const placeholder = 'جستجوی دستکش… مثلاً Wave Chaser'
 
 async function fetchCatalog() {
   state.value = 'loading'
@@ -72,47 +73,51 @@ async function onRemove() {
   </div>
 
   <template v-else>
-    <SkinsSearchBar v-model="query" class="mb-4" placeholder="جستجوی دستکش… (مثلاً Pandora یا Wave Chaser)" />
-    <div class="scrollbar-none -mx-4 mb-5 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+    <SkinsSearchBar v-model="query" class="mb-3 lg:hidden" :placeholder="placeholder" />
+
+    <!-- kit chips -->
+    <div class="scrollbar-none -mx-4 mb-[18px] flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
       <button
         v-for="k in ['all', ...kits]"
         :key="k"
         type="button"
-        class="ltr h-9 shrink-0 rounded-md border px-3.5 text-[12.5px] font-semibold transition-colors"
-        :class="kit === k ? 'border-mint-500/50 bg-mint-500/10 text-mint-300' : 'border-white/8 text-white/50 hover:text-white/80'"
+        class="h-[34px] shrink-0 rounded-full border px-3.5 text-[12.5px] font-semibold transition-colors"
+        :class="[
+          k !== 'all' && 'ltr',
+          kit === k ? 'border-mint-500/50 bg-mint-500/10 text-mint-300' : 'border-white/8 text-white/50 hover:text-white/80',
+        ]"
         @click="kit = k"
       >
         {{ k === 'all' ? 'همه' : k.replace('★ ', '') }}
       </button>
     </div>
 
-    <div v-if="state === 'loading'" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-      <div v-for="n in 12" :key="n" class="skeleton h-[250px] rounded-lg" />
+    <SkinsGridHeader v-model:query="query" :title="kit === 'all' ? 'همهٔ دستکش‌ها' : kit.replace('★ ', '')" :placeholder="placeholder">
+      <span class="font-mono">{{ visible.length.toLocaleString('fa-IR') }}</span> دستکش
+    </SkinsGridHeader>
+
+    <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+      <div v-for="n in 12" :key="n" class="skeleton h-[168px] rounded-xl" />
     </div>
 
     <SkinsEmptyResult v-else-if="!visible.length" :query="query" @clear="query = ''" />
 
-    <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+    <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
       <SkinsItemCard
         v-for="g in visible"
         :key="`${g.weapon_defindex}-${g.paint}`"
         :image="g.image"
         :title="finishName(g.paint_name)"
-        :caption="weaponLabel(g.paint_name)"
+        :kicker="weaponLabel(g.paint_name).toUpperCase()"
         :active-teams="teamsFor(g)"
         @select="openEditor(g)"
       >
-        <button
-          type="button"
-          class="flex h-9 w-full items-center justify-center gap-1.5 rounded-md border text-[12.5px] font-semibold transition-colors"
-          :class="teamsFor(g).length
-            ? 'border-mint-500/35 bg-mint-500/10 text-mint-300'
-            : 'border-white/10 text-white/60 hover:border-mint-500/45 hover:text-mint-300'"
+        <SkinsCardAction
+          :active="teamsFor(g).length > 0"
+          :label="teamsFor(g).length ? 'تنظیمات' : 'انتخاب'"
+          :icon="teamsFor(g).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
           @click="openEditor(g)"
-        >
-          <Icon :name="teamsFor(g).length ? 'lucide:sliders-horizontal' : 'lucide:plus'" class="size-3.5" />
-          {{ teamsFor(g).length ? 'تنظیمات' : 'انتخاب' }}
-        </button>
+        />
       </SkinsItemCard>
     </div>
   </template>
