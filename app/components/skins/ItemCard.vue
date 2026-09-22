@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { TeamId } from '~/types/skins'
-import { WEAR_TIERS, wearTierOf } from '~/data/weapons'
+import { wearTierOf } from '~/data/weapons'
 
 /**
  * Item card: render on a tinted spotlight with the name and a big float
- * number over its lower edge, a five-step wear gauge, then the action
+ * number over its lower edge, then the action
  * (select / settings, or the T / CT buttons). Equipped cards get an accent
  * edge; StatTrak (set in the skin settings) adds a corner ribbon. Inspect
  * sits top-left, the sides top-right.
@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
   activeTeams?: TeamId[]
   /** Glow behind the render; defaults to the card accent. */
   glow?: string
-  /** Float of the equipped finish; fills the wear gauge when set. */
+  /** Float of the equipped finish; shown big over the stage when set. */
   wear?: number
   /** StatTrak™ kill count of the equipped copy; undefined = no StatTrak. */
   stattrak?: number
@@ -49,7 +49,6 @@ const emit = defineEmits<{ select: [] }>()
 const active = computed(() => props.activeTeams.length > 0)
 const hasStattrak = computed(() => active.value && props.stattrak !== undefined)
 const tier = computed(() => (props.wear === undefined || !active.value ? null : wearTierOf(props.wear)))
-const tierIndex = computed(() => (tier.value ? WEAR_TIERS.findIndex(t => t.key === tier.value!.key) : -1))
 const canInspect = computed(() => props.inspectable && !!(props.image || props.fallback))
 
 /** Card tint: StatTrak orange, equipped mint, otherwise a cool steel blue. */
@@ -178,16 +177,8 @@ watch(() => props.image, () => {
       <Icon name="lucide:scan-eye" class="size-3.5" />
     </button>
 
-    <!-- wear gauge + actions -->
+    <!-- actions -->
     <div class="ltr flex flex-1 flex-col gap-[9px] px-[11px] pt-2.5 pb-[11px]">
-      <span class="flex gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
-        <span
-          v-for="(t, i) in WEAR_TIERS"
-          :key="t.key"
-          class="h-[5px] flex-1 rounded-[2px] transition-colors duration-300"
-          :style="{ background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
-        />
-      </span>
       <span class="mt-auto flex items-center gap-[7px]">
         <span v-if="$slots.default" class="min-w-0 flex-1">
           <slot />
