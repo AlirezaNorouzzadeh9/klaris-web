@@ -54,11 +54,11 @@ export interface CategoryMeta {
 }
 
 export const CATEGORIES: CategoryMeta[] = [
-  { key: 'skins', label: 'Weapon Skins', icon: 'lucide:crosshair' },
+  { key: 'skins', label: 'Skins', icon: 'lucide:crosshair' },
   { key: 'knives', label: 'Knives', icon: 'lucide:swords' },
   { key: 'gloves', label: 'Gloves', icon: 'lucide:hand' },
   { key: 'agents', label: 'Agents', icon: 'lucide:user-round' },
-  { key: 'music', label: 'MVP Music', icon: 'lucide:music-2' },
+  { key: 'music', label: 'Music', icon: 'lucide:music-2' },
   { key: 'pins', label: 'Pins', icon: 'lucide:medal' },
 ]
 
