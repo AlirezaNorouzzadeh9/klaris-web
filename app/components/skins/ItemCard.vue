@@ -12,6 +12,8 @@ const props = withDefaults(defineProps<{
   title: string
   /** Small mono line above the title: paint id, kit, faction or item type. */
   kicker?: string
+  /** Paint id, shown after the float (e.g. "#1449"). */
+  code?: string
   /** Sides this item is equipped on; empty = not equipped. */
   activeTeams?: TeamId[]
   /** Glow behind the render; defaults to mint when equipped. */
@@ -30,6 +32,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   inspectable: true,
   kicker: '',
+  code: '',
   activeTeams: () => [],
   glow: '',
   wear: undefined,
@@ -150,10 +153,13 @@ watch(() => props.image, () => {
       <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
         <span v-if="kicker" class="block truncate text-[12px] font-semibold text-white/50">{{ kicker }}</span>
         <span class="mt-0.5 block truncate text-[14px] font-bold text-white" :title="title">{{ title }}</span>
-        <span v-if="tier" class="mt-1 flex items-center gap-1.5 font-mono text-[11px] font-bold">
-          <span class="size-1.5 shrink-0 rounded-full" :style="{ background: tier.color }" />
-          <span :style="{ color: tier.color }">{{ tier.short }}</span>
-          <span class="text-white/40">{{ wear!.toFixed(3) }}</span>
+        <span v-if="tier || code" class="mt-1 flex items-center gap-1.5 font-mono text-[11px] font-bold">
+          <template v-if="tier">
+            <span class="size-1.5 shrink-0 rounded-full" :style="{ background: tier.color }" />
+            <span :style="{ color: tier.color }">{{ tier.short }}</span>
+            <span class="text-white/40">{{ wear!.toFixed(3) }}</span>
+          </template>
+          <span v-if="code" class="text-white/30">{{ code }}</span>
         </span>
       </button>
 
