@@ -13,7 +13,7 @@ const keys = CATEGORIES.map(c => c.key)
 
 const category = computed<CategoryKey>({
   get: () => (keys.includes(route.query.tab as CategoryKey) ? (route.query.tab as CategoryKey) : 'skins'),
-  set: tab => router.replace({ query: { ...route.query, tab } }),
+  set: tab => router.replace({ query: { ...route.query, tab, weapon: undefined } }),
 })
 
 const { ensureLoaded } = useLoadout()
@@ -27,7 +27,7 @@ onMounted(ensureLoaded)
     <SkinsLoadoutShowcase />
     <SkinsCategoryTabs v-model="category" />
 
-    <section class="mx-auto max-w-[1440px] px-4 pt-5 pb-8 sm:px-6 lg:px-10 lg:pt-[22px]">
+    <section id="loadout-browser" class="mx-auto max-w-[1440px] scroll-mt-32 px-4 pt-5 pb-8 sm:px-6 lg:px-10 lg:pt-[22px]">
       <!-- keyed so each view mounts fresh and loads only its own catalog -->
       <SkinsWeaponsView v-if="category === 'skins'" key="skins" :knives="false" />
       <SkinsWeaponsView v-else-if="category === 'knives'" key="knives" :knives="true" />

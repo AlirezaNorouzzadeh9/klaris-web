@@ -17,24 +17,37 @@ const weapons = ref<WeaponEntry[]>([])
 const selected = ref<number>(-1)
 const query = ref('')
 
+// ?weapon=<defindex> selects a weapon from outside (the loadout showcase links here).
+const route = useRoute()
+const router = useRouter()
+const weaponFromRoute = () => {
+  const d = Number(route.query.weapon)
+  return weapons.value.some(w => w.defindex === d) ? d : null
+}
+
 async function fetchCatalog() {
   state.value = 'loading'
   try {
     catalog.value = await load('skins')
     weapons.value = weaponsFrom(catalog.value, props.knives)
-    if (selected.value === -1) selected.value = weapons.value[0]?.defindex ?? ALL_WEAPONS
+    if (selected.value === -1) selected.value = weaponFromRoute() ?? weapons.value[0]?.defindex ?? ALL_WEAPONS
     state.value = 'ready'
   } catch {
     state.value = 'error'
   }
 }
 onMounted(fetchCatalog)
+watch(() => route.query.weapon, () => {
+  const d = weaponFromRoute()
+  if (d !== null) selected.value = d
+})
 
 const limit = ref(PAGE)
 // Picking a weapon while searching means "browse this one": leave search mode.
-watch(selected, () => {
+watch(selected, (d) => {
   query.value = ''
   limit.value = PAGE
+  if (d > 0 && Number(route.query.weapon) !== d) router.replace({ query: { ...route.query, weapon: d } })
 })
 watch(query, () => (limit.value = PAGE))
 

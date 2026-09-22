@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogSkin, SkinConfig, TeamId } from '~/types/skins'
+import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogSkin, CategoryKey, SkinConfig, TeamId } from '~/types/skins'
 import { wearTierOf } from '~/data/weapons'
 import { finishName, weaponLabel } from '~/composables/useCatalog'
 
 /**
  * The player's whole loadout for one side, laid out like the in-game loadout
  * screen: agent on a side-tinted stage, the gear column (knife, gloves, music
- * kit, pin) and the three weapon columns. Every tile opens the inspect view.
+ * kit, pin) and the three weapon columns. Every tile jumps to that item's list.
  */
 const { loadout, status } = useLoadout()
 const { load } = useCatalog()
-const { inspect } = useInspect()
 
 const team = ref<TeamId>(3)
 const side = computed(() => (team.value === 2
@@ -46,6 +45,8 @@ const gloveByKey = computed(() => new Map(gloves.value.map(g => [`${g.weapon_def
 // ---- slots ----
 interface Slot {
   key: string
+  /** Weapon / knife defindex, for jumping to its skins. */
+  defindex?: number
   image: string
   weapon: string
   finish: string
@@ -89,6 +90,7 @@ function weaponSlot(defindex: number): Slot | null {
   if (!shown) return null
   return {
     key: String(defindex),
+    defindex,
     image: shown.image || base?.image || '',
     weapon: weaponLabel(shown.paint_name),
     finish: skin ? finishName(skin.paint_name) : 'Default',
@@ -114,7 +116,7 @@ const gear = computed(() => {
   const knifeConfig = knifeBase ? l.skins[t][knifeBase.weapon_defindex] : undefined
   const knifeSkin = knifeBase && knifeConfig ? skinByKey.value.get(`${knifeBase.weapon_defindex}:${knifeConfig.paintId}`) : undefined
   out.push({
-    key: 'knife', icon: 'lucide:swords',
+    key: 'knife', icon: 'lucide:swords', defindex: knifeBase?.weapon_defindex,
     image: (knifeSkin ?? knifeBase)?.image ?? '',
     weapon: knifeBase ? weaponLabel(knifeBase.paint_name) : 'Knife',
     finish: knifeSkin ? finishName(knifeSkin.paint_name) : knifeBase ? 'Vanilla' : 'Default',
@@ -161,19 +163,20 @@ const loading = computed(() => !ready.value || status.value !== 'ready')
 // phones show one weapon column at a time
 const mobileColumn = ref<(typeof COLUMNS)[number]['key']>('rifles')
 
-function open(slot: Slot) {
-  if (!slot.image) return
-  inspect({
-    image: slot.image,
-    title: slot.finish === 'Default' ? slot.weapon : `${slot.weapon} | ${slot.finish}`,
-    kicker: side.value.short,
-    wear: slot.config?.wear,
-  })
+// Clicking a tile opens that item's list below: a weapon's skins, the knife's
+// finishes, or the gloves / music / pins / agents tab.
+const route = useRoute()
+const router = useRouter()
+const GEAR_TAB: Record<string, CategoryKey> = { knife: 'knives', gloves: 'gloves', music: 'music', pin: 'pins' }
+
+async function browse(tab: CategoryKey, weapon?: number) {
+  await router.replace({ query: { ...route.query, tab, weapon } })
+  await nextTick()
+  document.getElementById('loadout-browser')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
-function openAgent() {
-  if (!agent.value.equipped) return
-  inspect({ image: agent.value.image, title: agent.value.name, kicker: agent.value.faction })
-}
+const openSlot = (slot: Slot) => browse('skins', slot.defindex)
+const openGear = (slot: Slot) => browse(GEAR_TAB[slot.key] ?? 'skins', slot.defindex)
+const openAgent = () => browse('agents')
 </script>
 
 <template>
@@ -223,7 +226,7 @@ function openAgent() {
           <button
             type="button"
             class="group relative isolate h-[228px] overflow-hidden rounded-xl border border-white/6 bg-black/25 lg:h-auto lg:min-h-[354px]"
-            :class="agent.equipped ? 'cursor-zoom-in' : 'cursor-default'"
+            :title="'Browse agents'"
             :aria-label="agent.name"
             @click="openAgent"
           >
@@ -259,9 +262,9 @@ function openAgent() {
               :key="g.key"
               type="button"
               class="group relative flex min-w-0 flex-col items-center justify-center gap-1 overflow-hidden rounded-lg border bg-black/25 p-1.5 transition-colors"
-              :class="[g.equipped ? 'border-[color-mix(in_oklab,var(--side)_40%,transparent)] cursor-zoom-in' : 'border-white/6 cursor-default', g.image ? '' : 'text-white/20']"
+              :class="[g.equipped ? 'border-[color-mix(in_oklab,var(--side)_40%,transparent)]' : 'border-white/6 hover:border-white/15', g.image ? '' : 'text-white/20']"
               :title="`${g.weapon} · ${g.finish}`"
-              @click="open(g)"
+              @click="openGear(g)"
             >
               <span v-if="loading" class="skeleton size-10 rounded-md" />
               <img v-else-if="g.image" :src="g.image" alt="" loading="lazy" class="h-12 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105">
@@ -301,11 +304,12 @@ function openAgent() {
                   v-else
                   :key="s.key"
                   type="button"
-                  class="group relative flex h-[46px] min-w-0 cursor-zoom-in items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
+                  class="group relative flex h-[46px] min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
                   :class="s.equipped
                     ? 'border-[color-mix(in_oklab,var(--side)_35%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--side)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--side)_60%,transparent)]'
                     : 'border-white/6 bg-black/20 hover:border-white/14'"
-                  @click="open(s)"
+                  :title="`${s.weapon} skins`"
+                  @click="openSlot(s)"
                 >
                   <img
                     :src="s.image"
