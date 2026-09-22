@@ -7,7 +7,14 @@ const { loadout, busy, setAgent } = useLoadout()
 
 const agents = ref<CatalogAgent[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
-const side = ref<TeamId>(3)
+// ?side=t|ct picks the side from outside (the loadout showcase links here).
+const route = useRoute()
+const sideFromRoute = (): TeamId | null => (route.query.side === 't' ? 2 : route.query.side === 'ct' ? 3 : null)
+const side = ref<TeamId>(sideFromRoute() ?? 3)
+watch(() => route.query.side, () => {
+  const s = sideFromRoute()
+  if (s) side.value = s
+})
 const query = ref('')
 const placeholder = 'جستجوی ایجنت… مثلاً Sir Bloody'
 

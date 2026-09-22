@@ -169,14 +169,14 @@ const route = useRoute()
 const router = useRouter()
 const GEAR_TAB: Record<string, CategoryKey> = { knife: 'knives', gloves: 'gloves', music: 'music', pin: 'pins' }
 
-async function browse(tab: CategoryKey, weapon?: number) {
-  await router.replace({ query: { ...route.query, tab, weapon } })
+async function browse(tab: CategoryKey, weapon?: number, side?: 't' | 'ct') {
+  await router.replace({ query: { ...route.query, tab, weapon, side } })
   await nextTick()
   document.getElementById('loadout-browser')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 const openSlot = (slot: Slot) => browse('skins', slot.defindex)
 const openGear = (slot: Slot) => browse(GEAR_TAB[slot.key] ?? 'skins', slot.defindex)
-const openAgent = () => browse('agents')
+const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct')
 </script>
 
 <template>

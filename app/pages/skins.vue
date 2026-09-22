@@ -13,7 +13,7 @@ const keys = CATEGORIES.map(c => c.key)
 
 const category = computed<CategoryKey>({
   get: () => (keys.includes(route.query.tab as CategoryKey) ? (route.query.tab as CategoryKey) : 'skins'),
-  set: tab => router.replace({ query: { ...route.query, tab, weapon: undefined } }),
+  set: tab => router.replace({ query: { ...route.query, tab, weapon: undefined, side: undefined } }),
 })
 
 const { ensureLoaded } = useLoadout()
