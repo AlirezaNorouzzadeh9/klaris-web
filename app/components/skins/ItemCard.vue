@@ -49,6 +49,9 @@ const hasStattrak = computed(() => active.value && props.stattrak !== undefined)
 const tier = computed(() => (props.wear === undefined || !active.value ? null : wearTierOf(props.wear)))
 const canInspect = computed(() => props.inspectable && !!(props.image || props.fallback))
 
+/** Card tint: StatTrak orange, equipped mint, otherwise a cool steel blue. */
+const accent = computed(() => (hasStattrak.value ? '#f5902d' : active.value ? '#2ee89c' : '#62aeea'))
+
 const { inspect } = useInspect()
 function openInspect() {
   inspect({ image: props.image, fallback: props.fallback, title: props.title, kicker: props.kicker, wear: active.value ? props.wear : undefined })
@@ -80,16 +83,19 @@ watch(() => props.image, () => {
 
 <template>
   <article
-    class="group relative flex flex-col overflow-hidden rounded-lg border bg-ink-850 transition-[border-color,transform,box-shadow] duration-300 ease-out-quint"
+    class="group relative flex flex-col overflow-hidden rounded-lg border bg-ink-850 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--accent)_7%,transparent),transparent_45%)] transition-[border-color,transform,box-shadow] duration-300 ease-out-quint"
     :class="[
-      active ? 'border-mint-500/35' : 'border-white/6 hover:border-white/12',
+      active
+        ? 'border-[color-mix(in_oklab,var(--accent)_45%,transparent)] shadow-[0_14px_34px_-20px_var(--accent)]'
+        : 'border-white/7 hover:border-[color-mix(in_oklab,var(--accent)_35%,transparent)]',
       interactive && 'hover:-translate-y-0.5 hover:shadow-lift',
     ]"
+    :style="{ '--accent': accent }"
   >
     <!-- render on a spotlight -->
     <button
       type="button"
-      class="relative isolate block w-full overflow-hidden bg-[radial-gradient(90%_80%_at_50%_45%,rgb(255_255_255/.06),transparent_70%)] outline-none"
+      class="relative isolate block w-full overflow-hidden bg-[radial-gradient(90%_85%_at_50%_40%,color-mix(in_oklab,var(--accent)_14%,transparent),transparent_70%)] outline-none"
       :class="[stageClass, interactive ? 'cursor-pointer' : 'cursor-default']"
       :tabindex="interactive ? 0 : -1"
       :aria-label="title"
@@ -97,8 +103,9 @@ watch(() => props.image, () => {
     >
       <span
         class="absolute left-1/2 top-1/2 -z-10 size-[130px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[28px] transition-colors duration-500"
-        :style="{ background: glow || (active ? 'rgb(46 232 156 / .16)' : 'rgb(255 255 255 / .05)') }"
+        :style="{ background: glow || `color-mix(in oklab, var(--accent) ${active ? 26 : 12}%, transparent)` }"
       />
+      <span class="absolute inset-x-8 bottom-2 -z-10 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklab,var(--accent)_45%,transparent),transparent)]" />
       <span v-if="!loaded && !failed && image" class="skeleton absolute inset-x-6 inset-y-4 rounded-lg" />
       <img
         v-if="image && !failed"
@@ -151,15 +158,19 @@ watch(() => props.image, () => {
     <!-- labels -->
     <div class="flex flex-1 flex-col gap-2 px-2.5 pt-2 pb-2.5">
       <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
-        <span v-if="kicker" class="block truncate text-[12px] font-semibold text-white/50">{{ kicker }}</span>
+        <span v-if="kicker" class="block truncate text-[12px] font-semibold text-[color-mix(in_oklab,var(--accent)_55%,white_30%)]">{{ kicker }}</span>
         <span class="mt-0.5 block truncate text-[14px] font-bold text-white" :title="title">{{ title }}</span>
-        <span v-if="tier || code" class="mt-1 flex items-center gap-1.5 font-mono text-[11px] font-bold">
-          <template v-if="tier">
-            <span class="size-1.5 shrink-0 rounded-full" :style="{ background: tier.color }" />
-            <span :style="{ color: tier.color }">{{ tier.short }}</span>
-            <span class="text-white/40">{{ wear!.toFixed(3) }}</span>
-          </template>
-          <span v-if="code" class="ms-auto text-white/30">{{ code }}</span>
+        <span v-if="tier || code" class="mt-1.5 flex items-center gap-1.5 font-mono text-[11px] font-bold">
+          <span
+            v-if="tier"
+            class="inline-flex items-center gap-1.5 rounded-full border px-2 py-px"
+            :style="{ color: tier.color, borderColor: `${tier.color}40`, background: `${tier.color}14` }"
+          >
+            <span class="size-1.5 rounded-full shadow-[0_0_6px_currentColor]" :style="{ background: tier.color }" />
+            {{ tier.short }}
+            <span class="text-white/70">{{ wear!.toFixed(3) }}</span>
+          </span>
+          <span v-if="code" class="ms-auto rounded-full bg-white/[.04] px-2 py-px text-white/40">{{ code }}</span>
         </span>
       </button>
 
@@ -170,8 +181,11 @@ watch(() => props.image, () => {
 
     <!-- quality strip, like the colored bar under each inventory item -->
     <span
-      class="h-[3px] w-full shrink-0 transition-colors"
-      :class="hasStattrak ? 'bg-[#f5902d]' : active ? 'bg-mint-500' : 'bg-white/8 group-hover:bg-white/15'"
+      class="h-[3px] w-full shrink-0 transition-opacity duration-300"
+      :class="[
+        hasStattrak ? 'bg-[linear-gradient(90deg,#f5902d,#f5c542)]' : active ? 'bg-[linear-gradient(90deg,var(--color-mint-500),var(--color-cyan-k))]' : 'bg-[linear-gradient(90deg,transparent,color-mix(in_oklab,var(--accent)_50%,transparent),transparent)]',
+        !active && 'opacity-40 group-hover:opacity-100',
+      ]"
     />
   </article>
 </template>

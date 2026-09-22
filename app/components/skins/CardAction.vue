@@ -9,8 +9,8 @@ withDefaults(defineProps<{ active: boolean; label: string; icon: string; disable
     :disabled="disabled"
     class="flex h-[30px] w-full items-center justify-center gap-[5px] rounded-full text-[11.5px] font-semibold transition-colors disabled:opacity-50"
     :class="active
-      ? 'bg-mint-500/12 text-mint-300 hover:bg-mint-500/18'
-      : 'border border-white/10 text-white/55 hover:border-mint-500/45 hover:text-mint-300'"
+      ? 'border border-mint-500/30 bg-[linear-gradient(90deg,rgb(46_232_156/.2),rgb(63_210_242/.14))] text-mint-300 hover:border-mint-500/55 hover:text-white'
+      : 'border border-white/10 bg-white/[.02] text-white/60 hover:border-mint-500/45 hover:bg-mint-500/8 hover:text-mint-300'"
   >
     <Icon :name="icon" class="size-[13px]" />
     {{ label }}
