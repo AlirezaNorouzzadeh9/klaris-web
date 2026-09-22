@@ -153,7 +153,7 @@ function save() {
 <template>
   <Sheet v-model:open="open">
     <SheetContent
-      side="left"
+      side="right"
       dir="rtl"
       @open-auto-focus.prevent
       class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:z-10"
