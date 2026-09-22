@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CatalogItem, EditorItem, SkinConfig, TeamId } from '~/types/skins'
-import { WEAR_TIERS, wearTierOf } from '~/data/weapons'
+import { WEAR_TIERS, sidesFor, wearTierOf } from '~/data/weapons'
 import { emptyKeychain, emptyStickers } from '~/services/loadout'
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 import { Slider } from '@/components/ui/slider'
@@ -57,7 +57,9 @@ watch(open, async (isOpen) => {
   draft.value = keep
     ? (JSON.parse(JSON.stringify(props.initial)) as SkinConfig)
     : { ...blank(), stattrakCount: props.initial?.stattrakCount ?? 0 }
-  teams.value = props.initialTeams.length ? [...props.initialTeams] : [2, 3]
+  const allowed: TeamId[] = props.item && props.kind === 'weapon' ? sidesFor(props.item.defindex) : [2, 3]
+  const saved = props.initialTeams.filter(t => allowed.includes(t))
+  teams.value = saved.length ? saved : [...allowed]
 
   const needsStickers = draft.value.stickers.some(s => s.id) || draft.value.keychain.id
   if (needsStickers) {
@@ -66,6 +68,9 @@ watch(open, async (isOpen) => {
     for (const k of keychains) meta.value.set(`k${k.id}`, k)
   }
 })
+
+/** Gloves and knives go on both sides; a weapon may be T-only or CT-only. */
+const allowedSides = computed<TeamId[]>(() => (props.kind === 'weapon' && props.item ? sidesFor(props.item.defindex) : [2, 3]))
 
 const isNew = computed(() => !props.initial || props.initial.paintId !== props.item?.paintId)
 const tier = computed(() => wearTierOf(draft.value.wear))
@@ -390,8 +395,12 @@ function save() {
             <!-- teams -->
             <section>
               <h4 class="mb-1 text-[13px] font-bold text-white/80">Equip on</h4>
-              <p class="ltr mb-3 text-left text-[12px] text-white/40">You can run different skins on T and CT.</p>
-              <SkinsTeamPicker v-model="teams" />
+              <p class="ltr mb-3 text-left text-[12px] text-white/40">
+                {{ allowedSides.length === 1
+                  ? `Only the ${allowedSides[0] === 2 ? 'T' : 'CT'} side can carry this weapon.`
+                  : 'You can run different skins on T and CT.' }}
+              </p>
+              <SkinsTeamPicker v-model="teams" :sides="allowedSides" />
             </section>
           </div>
         </div>

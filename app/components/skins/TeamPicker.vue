@@ -2,16 +2,23 @@
 import type { TeamId } from '~/types/skins'
 
 /** Multi-select T / CT toggle. At least one side stays selected. */
-const props = withDefaults(defineProps<{ size?: 'sm' | 'md'; allowNone?: boolean }>(), {
+const props = withDefaults(defineProps<{
+  size?: 'sm' | 'md'
+  allowNone?: boolean
+  /** Sides this item can go on; a weapon only one side buys shows one button. */
+  sides?: TeamId[]
+}>(), {
   size: 'md',
   allowNone: false,
+  sides: () => [2, 3],
 })
 const model = defineModel<TeamId[]>({ required: true })
 
-const sides = [
+const ALL = [
   { id: 2 as TeamId, label: 'T', full: 'Terrorist', tone: 'side-t' },
   { id: 3 as TeamId, label: 'CT', full: 'Counter-Terrorist', tone: 'side-ct' },
 ]
+const sides = computed(() => ALL.filter(s => props.sides.includes(s.id)))
 
 function toggle(id: TeamId) {
   const on = model.value.includes(id)

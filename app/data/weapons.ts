@@ -1,4 +1,5 @@
-import type { CategoryKey, WeaponClass, WearTier } from '~/types/skins'
+import type { CategoryKey, TeamId, WeaponClass, WearTier } from '~/types/skins'
+import { TEAMS } from '~/types/skins'
 
 export interface WeaponClassMeta {
   key: WeaponClass
@@ -23,6 +24,23 @@ const CLASS_BY_DEFINDEX: Record<number, WeaponClass> = {
   17: 'smg', 19: 'smg', 23: 'smg', 24: 'smg', 26: 'smg', 33: 'smg', 34: 'smg',
   25: 'shotgun', 27: 'shotgun', 29: 'shotgun', 35: 'shotgun',
   14: 'mg', 28: 'mg',
+}
+
+/**
+ * Weapons only one side can buy (everything else, knives and gloves included,
+ * is available to both).
+ */
+const SIDE_ONLY: Record<number, TeamId> = {
+  // T: Glock-18, Tec-9, Sawed-Off, MAC-10, Galil AR, AK-47, SG 553, G3SG1
+  4: 2, 30: 2, 29: 2, 17: 2, 13: 2, 7: 2, 39: 2, 11: 2,
+  // CT: USP-S, P2000, Five-SeveN, MAG-7, MP9, FAMAS, M4A4, M4A1-S, AUG, SCAR-20
+  61: 3, 32: 3, 3: 3, 27: 3, 34: 3, 10: 3, 16: 3, 60: 3, 8: 3, 38: 3,
+}
+
+/** Sides that can carry this weapon, in T, CT order. */
+export function sidesFor(defindex: number): TeamId[] {
+  const only = SIDE_ONLY[defindex]
+  return only ? [only] : [...TEAMS]
 }
 
 export function weaponClassOf(defindex: number): WeaponClass {
