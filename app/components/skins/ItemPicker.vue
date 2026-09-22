@@ -47,18 +47,18 @@ function pick(item: CatalogItem) {
 
 <template>
   <Dialog v-model:open="open">
-    <DialogContent class="flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-white/10 bg-ink-900 p-0 sm:max-w-3xl [&>button:last-child]:left-4 [&>button:last-child]:right-auto">
+    <DialogContent dir="ltr" class="flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-white/10 bg-ink-900 p-0 sm:max-w-3xl">
       <DialogHeader class="border-b border-white/6 p-5 text-start">
         <DialogTitle>{{ title }}</DialogTitle>
         <DialogDescription>
-          <span v-if="state === 'ready'" class="font-mono">{{ filtered.length.toLocaleString('fa-IR') }}</span> مورد
+          <span v-if="state === 'ready'" class="font-mono">{{ filtered.length.toLocaleString('en-US') }}</span> items
         </DialogDescription>
         <div class="relative mt-3">
           <Icon name="lucide:search" class="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-white/30" />
           <input
             v-model="query"
             type="search"
-            placeholder="جستجو… (مثلاً Katowice یا Holo)"
+            placeholder="Search… e.g. Katowice or Holo"
             class="h-10 w-full rounded-md border border-white/10 bg-ink-950/70 ps-9 pe-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-mint-500/50"
           >
         </div>
@@ -71,11 +71,11 @@ function pick(item: CatalogItem) {
 
         <div v-else-if="state === 'error'" class="grid place-items-center gap-3 py-16 text-center text-white/50">
           <Icon name="lucide:wifi-off" class="size-8" />
-          لیست بارگذاری نشد
-          <button type="button" class="text-mint-400 hover:underline" @click="fetchItems">تلاش دوباره</button>
+          Could not load the list
+          <button type="button" class="text-mint-400 hover:underline" @click="fetchItems">Try again</button>
         </div>
 
-        <p v-else-if="!filtered.length" class="py-16 text-center text-white/40">موردی پیدا نشد.</p>
+        <p v-else-if="!filtered.length" class="py-16 text-center text-white/40">Nothing found</p>
 
         <template v-else>
           <div class="grid grid-cols-3 gap-2 sm:grid-cols-5">
@@ -97,7 +97,7 @@ function pick(item: CatalogItem) {
               class="rounded-md border border-white/10 px-4 py-2 text-[13px] text-white/60 transition-colors hover:border-mint-500/40 hover:text-mint-300"
               @click="limit += PAGE"
             >
-              نمایش بیشتر
+              Show more
             </button>
           </div>
         </template>

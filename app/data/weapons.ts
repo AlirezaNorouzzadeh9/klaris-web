@@ -6,12 +6,12 @@ export interface WeaponClassMeta {
 }
 
 export const WEAPON_CLASSES: WeaponClassMeta[] = [
-  { key: 'rifle', label: 'رایفل' },
-  { key: 'sniper', label: 'اسنایپر' },
-  { key: 'pistol', label: 'کلت' },
+  { key: 'rifle', label: 'Rifle' },
+  { key: 'sniper', label: 'Sniper' },
+  { key: 'pistol', label: 'Pistol' },
   { key: 'smg', label: 'SMG' },
-  { key: 'shotgun', label: 'شاتگان' },
-  { key: 'mg', label: 'مسلسل' },
+  { key: 'shotgun', label: 'Shotgun' },
+  { key: 'mg', label: 'Machine Gun' },
 ]
 
 /** defindex -> weapon class. Anything >= 500 in the catalog is a knife. */
@@ -51,16 +51,15 @@ export interface CategoryMeta {
   key: CategoryKey
   label: string
   icon: string
-  hint: string
 }
 
 export const CATEGORIES: CategoryMeta[] = [
-  { key: 'skins', label: 'اسکین اسلحه', icon: 'lucide:crosshair', hint: 'رنگ، فرسودگی، استیکر و StatTrak هر اسلحه' },
-  { key: 'knives', label: 'چاقو', icon: 'lucide:swords', hint: 'مدل چاقو و اسکین آن' },
-  { key: 'gloves', label: 'دستکش', icon: 'lucide:hand', hint: 'دستکش مخصوص هر تیم' },
-  { key: 'agents', label: 'ایجنت', icon: 'lucide:user-round', hint: 'کاراکتر رسمی CT و T' },
-  { key: 'music', label: 'موزیک MVP', icon: 'lucide:music-2', hint: 'موزیکی که موقع MVP پخش می‌شود' },
-  { key: 'pins', label: 'پین', icon: 'lucide:medal', hint: 'پین روی اسکوربورد' },
+  { key: 'skins', label: 'Weapon Skins', icon: 'lucide:crosshair' },
+  { key: 'knives', label: 'Knives', icon: 'lucide:swords' },
+  { key: 'gloves', label: 'Gloves', icon: 'lucide:hand' },
+  { key: 'agents', label: 'Agents', icon: 'lucide:user-round' },
+  { key: 'music', label: 'MVP Music', icon: 'lucide:music-2' },
+  { key: 'pins', label: 'Pins', icon: 'lucide:medal' },
 ]
 
 /** Official CS2 wear brackets; colours match the in-game float bar. */

@@ -58,8 +58,8 @@ const skins = computed(() => {
 // One weapon has at most ~100 finishes; search results and "all" are paged.
 const paged = computed(() => searching.value || showingAll.value)
 const visibleSkins = computed(() => (paged.value ? skins.value.slice(0, limit.value) : skins.value))
-const allLabel = computed(() => (props.knives ? 'همهٔ چاقوها' : 'همهٔ اسلحه‌ها'))
-const searchPlaceholder = computed(() => (props.knives ? 'جستجوی چاقو… مثلاً Karambit Fade' : 'جستجوی اسکین… مثلاً Asiimov'))
+const allLabel = computed(() => (props.knives ? 'All knives' : 'All weapons'))
+const searchPlaceholder = computed(() => (props.knives ? 'Search knives… e.g. Karambit Fade' : 'Search skins… e.g. Asiimov'))
 
 /** Weapons with a saved skin on either side (for knives: the equipped models). */
 const configured = computed(() => {
@@ -127,8 +127,8 @@ async function onRemove() {
 <template>
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <Icon name="lucide:wifi-off" class="size-9" />
-    لیست اسکین‌ها بارگذاری نشد.
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
+    <span class="ltr">Could not load the skin list</span>
+    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
   <template v-else>
   <!-- phones / tablets: full-width search above the class dropdowns -->
@@ -149,8 +149,8 @@ async function onRemove() {
       :weapons="weapons"
       :configured="configured"
       :grouped="!knives"
-      :title="knives ? 'چاقو' : 'اسلحه'"
-      all-label="همه"
+      :title="knives ? 'Knife' : 'Weapon'"
+      all-label="All"
     />
   </div>
 
@@ -172,22 +172,8 @@ async function onRemove() {
     </div>
 
     <div class="min-w-0">
-      <!-- header: title on the start side, pill search on the end side (desktop) -->
-      <div class="mb-3.5 flex items-end justify-between gap-4">
-        <div class="min-w-0">
-          <h2 v-if="searching" class="text-lg font-black text-white sm:text-xl">
-            نتایج «<span class="ltr">{{ query.trim() }}</span>»
-          </h2>
-          <h2 v-else-if="showingAll" class="text-lg font-black text-white sm:text-xl">{{ allLabel }}</h2>
-          <h2 v-else class="ltr text-start text-lg font-black text-white sm:text-xl">{{ current?.label ?? '…' }}</h2>
-          <p class="mt-[3px] text-[12.5px] text-white/40">
-            <span class="font-mono">{{ skins.length.toLocaleString('fa-IR') }}</span> اسکین
-            <template v-if="searching"> در {{ allLabel }}</template>
-            <template v-else-if="knives"> · با انتخاب اسکین، همین مدل چاقو هم فعال می‌شود</template>
-          </p>
-        </div>
-        <SkinsSearchBar v-model="query" size="md" class="hidden w-[340px] shrink-0 lg:block" :placeholder="searchPlaceholder" />
-      </div>
+      <!-- desktop: the search takes the grid header's place -->
+      <SkinsSearchBar v-model="query" class="mb-3.5 hidden lg:block" :placeholder="searchPlaceholder" />
 
       <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <div v-for="n in 15" :key="n" class="skeleton h-[168px] rounded-xl" />
@@ -209,7 +195,7 @@ async function onRemove() {
         >
           <SkinsCardAction
             :active="teamsFor(skin).length > 0"
-            :label="teamsFor(skin).length ? 'تنظیمات' : 'انتخاب'"
+            :label="teamsFor(skin).length ? 'Settings' : 'Select'"
             :icon="teamsFor(skin).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
             @click="openEditor(skin)"
           />

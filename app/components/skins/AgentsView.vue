@@ -9,7 +9,7 @@ const agents = ref<CatalogAgent[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const side = ref<TeamId>(3)
 const query = ref('')
-const placeholder = 'جستجوی ایجنت… مثلاً Sir Bloody'
+const placeholder = 'Search agents… e.g. Sir Bloody'
 
 async function fetchCatalog() {
   state.value = 'loading'
@@ -38,8 +38,6 @@ function toggle(a: CatalogAgent) {
 </script>
 
 <template>
-  <SkinsSearchBar v-model="query" class="mb-3 lg:hidden" :placeholder="placeholder" />
-
   <!-- CT / T segmented control -->
   <div class="ltr mb-[18px] grid grid-cols-2 gap-1 rounded-lg border border-white/8 bg-ink-900/80 p-1 sm:inline-grid">
     <button
@@ -57,14 +55,11 @@ function toggle(a: CatalogAgent) {
     </button>
   </div>
 
-  <SkinsGridHeader v-model:query="query" :title="side === 2 ? 'ایجنت‌های تروریست' : 'ایجنت‌های ضدتروریست'" :placeholder="placeholder">
-    ایجنت فعال:
-    <span class="ltr font-semibold text-white/75">{{ current ? split(current).name : 'پیش‌فرض بازی' }}</span>
-  </SkinsGridHeader>
+  <SkinsSearchBar v-model="query" class="mb-3.5" :placeholder="placeholder" />
 
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
-    لیست ایجنت‌ها بارگذاری نشد.
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
+    <span class="ltr">Could not load the agent list</span>
+    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
@@ -87,7 +82,7 @@ function toggle(a: CatalogAgent) {
     >
       <SkinsCardAction
         :active="loadout.agents[a.team] === a.model"
-        :label="loadout.agents[a.team] === a.model ? 'فعال' : 'انتخاب'"
+        :label="loadout.agents[a.team] === a.model ? 'Equipped' : 'Select'"
         :icon="loadout.agents[a.team] === a.model ? 'lucide:check' : 'lucide:plus'"
         :disabled="busy === `agent-${a.model}` || busy === 'agent-null'"
         @click="toggle(a)"

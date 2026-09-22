@@ -14,7 +14,7 @@ const items = ref<CatalogItem[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const query = ref('')
 const limit = ref(PAGE)
-const placeholder = computed(() => (props.kind === 'music' ? 'جستجوی موزیک… مثلاً Hotline Miami' : 'جستجوی پین… مثلاً Katowice'))
+const placeholder = computed(() => (props.kind === 'music' ? 'Search music kits… e.g. Hotline Miami' : 'Search pins… e.g. Katowice'))
 
 async function fetchCatalog() {
   state.value = 'loading'
@@ -43,16 +43,11 @@ function toggle(item: CatalogItem, team: TeamId) {
 </script>
 
 <template>
-  <SkinsSearchBar v-model="query" class="mb-3 lg:hidden" :placeholder="placeholder" />
-
-  <SkinsGridHeader v-model:query="query" :title="kind === 'music' ? 'موزیک MVP' : 'پین'" :placeholder="placeholder">
-    برای هر تیم یکی انتخاب کن: روی <span class="ltr font-mono text-side-t">T</span> یا
-    <span class="ltr font-mono text-side-ct">CT</span> هر کارت بزن.
-  </SkinsGridHeader>
+  <SkinsSearchBar v-model="query" class="mb-3.5" :placeholder="placeholder" />
 
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
-    لیست بارگذاری نشد.
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
+    <span class="ltr">Could not load the list</span>
+    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">

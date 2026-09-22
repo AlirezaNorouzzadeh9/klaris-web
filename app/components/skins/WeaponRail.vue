@@ -24,13 +24,13 @@ const groups = computed(() =>
   <!-- sticky offset = header (64) + tab bar (81) + breathing room -->
   <aside class="sticky top-[161px] flex max-h-[min(760px,calc(100dvh-177px))] flex-col overflow-hidden rounded-xl border border-white/7 bg-ink-900/70">
     <div class="border-b border-white/6 p-2.5">
-      <div class="group relative">
+      <div class="group relative" dir="ltr">
         <Icon name="lucide:search" class="pointer-events-none absolute top-1/2 start-2.5 size-[15px] -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-mint-500" />
         <input
           v-model="railFilter"
           type="search"
-          placeholder="فیلتر اسلحه…"
-          aria-label="فیلتر اسلحه"
+          placeholder="Filter weapons…"
+          aria-label="Filter weapons"
           class="h-[34px] w-full rounded-full border border-white/9 bg-ink-950/60 ps-8 pe-3 text-[12.5px] text-white outline-none transition-colors placeholder:text-white/30 focus:border-mint-500/45 [&::-webkit-search-cancel-button]:appearance-none"
           @keydown.esc="railFilter = ''"
         >
@@ -56,7 +56,7 @@ const groups = computed(() =>
         <span class="font-mono text-[10px] text-white/20">{{ total }}</span>
       </button>
 
-      <p v-if="!groups.length" class="px-2 py-6 text-center text-[12px] text-white/35">اسلحه‌ای پیدا نشد.</p>
+      <p v-if="!groups.length" class="px-2 py-6 text-center text-[12px] text-white/35">No weapon found</p>
 
       <div v-for="g in groups" :key="g.key" class="mb-2.5 last:mb-0">
         <p v-if="g.label" class="flex items-center gap-2 px-2 pt-2 pb-1.5 text-[11px] font-bold text-white/30">
@@ -77,7 +77,7 @@ const groups = computed(() =>
           />
           <img :src="w.image" alt="" loading="lazy" class="h-[26px] w-[52px] shrink-0 object-contain opacity-95">
           <span class="ltr flex-1 truncate text-start text-[12.5px] font-semibold" :class="model === w.defindex ? 'text-white' : 'text-white/60 group-hover:text-white/85'">{{ w.label }}</span>
-          <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-mint-500" title="اسکین انتخاب شده" />
+          <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-mint-500" title="Skin equipped" />
         </button>
       </div>
     </div>

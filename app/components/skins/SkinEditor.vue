@@ -116,14 +116,15 @@ function save() {
 <template>
   <Sheet v-model:open="open">
     <SheetContent
-      side="left"
+      side="right"
+      dir="ltr"
       @open-auto-focus.prevent
-      class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:left-4 [&>button:last-child]:right-auto [&>button:last-child]:z-10"
+      class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:z-10"
     >
       <template v-if="item">
         <div class="flex h-14 shrink-0 items-center border-b border-white/6 px-5">
-          <SheetTitle class="text-[15px] font-bold">تنظیم اسکین</SheetTitle>
-          <SheetDescription class="sr-only">فرسودگی، الگو، نام، StatTrak، استیکر و تیم این اسکین را تنظیم کن.</SheetDescription>
+          <SheetTitle class="text-[15px] font-bold">Skin settings</SheetTitle>
+          <SheetDescription class="sr-only">Set the wear, pattern, name tag, StatTrak, stickers and sides for this skin.</SheetDescription>
         </div>
 
         <div class="min-h-0 flex-1 overflow-y-auto">
@@ -164,7 +165,7 @@ function save() {
             <!-- wear -->
             <section>
               <div class="mb-3 flex items-baseline justify-between">
-                <h4 class="text-[13px] font-bold text-white/80">فرسودگی (Float)</h4>
+                <h4 class="text-[13px] font-bold text-white/80">Wear (Float)</h4>
                 <input
                   :value="draft.wear"
                   type="number"
@@ -201,9 +202,9 @@ function save() {
             <!-- pattern -->
             <section>
               <div class="mb-3 flex items-baseline justify-between">
-                <h4 class="text-[13px] font-bold text-white/80">الگو (Pattern)</h4>
+                <h4 class="text-[13px] font-bold text-white/80">Pattern</h4>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" class="grid size-8 place-items-center rounded-sm border border-white/10 text-white/50 transition-colors hover:border-mint-500/40 hover:text-mint-400" title="تصادفی" @click="randomSeed">
+                  <button type="button" class="grid size-8 place-items-center rounded-sm border border-white/10 text-white/50 transition-colors hover:border-mint-500/40 hover:text-mint-400" title="Random" @click="randomSeed">
                     <Icon name="lucide:dices" class="size-4" />
                   </button>
                   <input
@@ -226,7 +227,7 @@ function save() {
                 <input
                   v-model="draft.nametag"
                   maxlength="20"
-                  placeholder="بدون نام"
+                  placeholder="No name tag"
                   class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-mint-500/50"
                 >
               </label>
@@ -240,7 +241,7 @@ function save() {
                   type="number"
                   min="0"
                   :disabled="!draft.stattrak"
-                  aria-label="تعداد کیل StatTrak"
+                  aria-label="StatTrak kill count"
                   class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 font-mono text-sm text-white outline-none transition-opacity focus:border-mint-500/50 disabled:opacity-35"
                 >
               </div>
@@ -248,14 +249,14 @@ function save() {
 
             <!-- stickers & keychain -->
             <section v-if="hasStickers">
-              <h4 class="mb-3 text-[13px] font-bold text-white/80">استیکرها</h4>
+              <h4 class="mb-3 text-[13px] font-bold text-white/80">Stickers</h4>
               <div class="ltr grid grid-cols-5 gap-2">
                 <div v-for="(s, i) in draft.stickers" :key="i" class="group relative aspect-square">
                   <button
                     type="button"
                     class="grid size-full place-items-center rounded-md border transition-colors"
                     :class="s.id ? 'border-white/12 bg-ink-850' : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
-                    :title="s.id ? meta.get(`s${s.id}`)?.name : `اسلات ${i + 1}`"
+                    :title="s.id ? meta.get(`s${s.id}`)?.name : `Slot ${i + 1}`"
                     @click="openPicker('stickers', i)"
                   >
                     <img v-if="s.id && meta.get(`s${s.id}`)" :src="meta.get(`s${s.id}`)!.image" alt="" class="size-[85%] object-contain">
@@ -266,7 +267,7 @@ function save() {
                     v-if="s.id"
                     type="button"
                     class="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full border border-white/15 bg-ink-800 text-white/60 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-k focus:opacity-100"
-                    aria-label="حذف استیکر"
+                    aria-label="Remove sticker"
                     @click="clearSticker(i)"
                   >
                     <Icon name="lucide:x" class="size-3" />
@@ -274,7 +275,7 @@ function save() {
                 </div>
               </div>
 
-              <h4 class="mt-5 mb-3 text-[13px] font-bold text-white/80">آویز (Keychain)</h4>
+              <h4 class="mt-5 mb-3 text-[13px] font-bold text-white/80">Keychain</h4>
               <div class="flex items-center gap-3">
                 <button
                   type="button"
@@ -286,16 +287,16 @@ function save() {
                   <Icon v-else name="lucide:plus" class="size-4" />
                 </button>
                 <div class="min-w-0 flex-1">
-                  <p class="ltr truncate text-start text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'بدون آویز' }}</p>
-                  <button v-if="draft.keychain.id" type="button" class="mt-1 text-[12px] text-white/40 hover:text-red-k" @click="draft.keychain = emptyKeychain()">حذف</button>
+                  <p class="ltr truncate text-start text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
+                  <button v-if="draft.keychain.id" type="button" class="mt-1 text-[12px] text-white/40 hover:text-red-k" @click="draft.keychain = emptyKeychain()">Remove</button>
                 </div>
               </div>
             </section>
 
             <!-- teams -->
             <section>
-              <h4 class="mb-1 text-[13px] font-bold text-white/80">فعال برای تیم</h4>
-              <p class="mb-3 text-[12px] text-white/40">می‌توانی برای T و CT اسکین‌های متفاوت انتخاب کنی.</p>
+              <h4 class="mb-1 text-[13px] font-bold text-white/80">Equip on</h4>
+              <p class="mb-3 text-[12px] text-white/40">You can run different skins on T and CT.</p>
               <SkinsTeamPicker v-model="teams" />
             </section>
           </div>
@@ -304,15 +305,15 @@ function save() {
         <div class="flex shrink-0 items-center gap-2 border-t border-white/6 bg-ink-900 p-4">
           <Button class="flex-1" size="lg" :disabled="busy" @click="save">
             <Icon v-if="busy" name="lucide:loader-2" class="animate-spin" />
-            {{ isNew ? 'انتخاب این اسکین' : 'ذخیرهٔ تغییرات' }}
+            {{ isNew ? 'Equip this skin' : 'Save changes' }}
           </Button>
           <Button v-if="!isNew" variant="destructive" size="lg" :disabled="busy" @click="emit('remove')">
-            <Icon name="lucide:trash-2" /> حذف
+            <Icon name="lucide:trash-2" /> Remove
           </Button>
         </div>
       </template>
     </SheetContent>
   </Sheet>
 
-  <SkinsItemPicker v-model:open="pickerOpen" :file="pickerFile" :title="pickerFile === 'stickers' ? 'انتخاب استیکر' : 'انتخاب آویز'" @pick="onPick" />
+  <SkinsItemPicker v-model:open="pickerOpen" :file="pickerFile" :title="pickerFile === 'stickers' ? 'Choose a sticker' : 'Choose a keychain'" @pick="onPick" />
 </template>

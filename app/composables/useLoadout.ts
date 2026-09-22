@@ -28,10 +28,10 @@ export function useLoadout() {
     try {
       await action()
       loadout.value = await service.load()
-      toast.success(success, { description: 'در بازی بنویس !wp تا بدون خروج اعمال شود.' })
+      toast.success(success, { description: 'Type !wp in game chat to apply it without reconnecting.' })
       return true
     } catch {
-      toast.error('ذخیره نشد', { description: 'اتصال را بررسی کن و دوباره تلاش کن.' })
+      toast.error('Could not save', { description: 'Check your connection and try again.' })
       return false
     } finally {
       busy.value = null
@@ -67,19 +67,19 @@ export function useLoadout() {
         const dropped = TEAMS.filter(t => !teams.includes(t))
         if (dropped.length) await service.removeSkin(dropped, config.defindex)
         if (teams.length) await service.saveSkin(teams, config)
-      }, 'اسکین ذخیره شد'),
+      }, 'Skin saved'),
     removeSkin: (defindex: number) =>
-      run(`skin-${defindex}`, () => service.removeSkin([...TEAMS], defindex), 'اسکین حذف شد'),
+      run(`skin-${defindex}`, () => service.removeSkin([...TEAMS], defindex), 'Skin removed'),
     setKnife: (teams: TeamId[], knife: string | null) =>
-      run(`knife-${knife}`, () => service.setKnife(teams, knife), 'چاقو تنظیم شد'),
+      run(`knife-${knife}`, () => service.setKnife(teams, knife), 'Knife equipped'),
     setGloves: (teams: TeamId[], defindex: number | null) =>
-      run(`gloves-${defindex}`, () => service.setGloves(teams, defindex), 'دستکش تنظیم شد'),
+      run(`gloves-${defindex}`, () => service.setGloves(teams, defindex), 'Gloves equipped'),
     setAgent: (team: TeamId, model: string | null) =>
-      run(`agent-${model}`, () => service.setAgent(team, model), 'ایجنت تنظیم شد'),
+      run(`agent-${model}`, () => service.setAgent(team, model), 'Agent updated'),
     setMusic: (teams: TeamId[], id: number | null) =>
-      run(`music-${id}`, () => service.setMusic(teams, id), 'موزیک MVP تنظیم شد'),
+      run(`music-${id}`, () => service.setMusic(teams, id), 'MVP music updated'),
     setPin: (teams: TeamId[], id: number | null) =>
-      run(`pin-${id}`, () => service.setPin(teams, id), 'پین تنظیم شد'),
-    resetAll: () => run('reset', () => service.resetAll(), 'همه‌چیز به حالت پیش‌فرض برگشت'),
+      run(`pin-${id}`, () => service.setPin(teams, id), 'Pin updated'),
+    resetAll: () => run('reset', () => service.resetAll(), 'Everything reset to game defaults'),
   }
 }

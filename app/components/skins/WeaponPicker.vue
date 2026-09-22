@@ -44,7 +44,7 @@ const groups = computed(() => groupWeapons(props.weapons, props.grouped).map(g =
       {{ allLabel }}
     </button>
 
-    <DropdownMenu v-for="g in groups" :key="g.key">
+    <DropdownMenu v-for="g in groups" :key="g.key" dir="ltr">
       <DropdownMenuTrigger as-child>
         <button
           type="button"

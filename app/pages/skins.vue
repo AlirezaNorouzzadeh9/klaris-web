@@ -3,8 +3,8 @@ import type { CategoryKey } from '~/types/skins'
 import { CATEGORIES } from '~/data/weapons'
 
 useSeoMeta({
-  title: 'شخصی‌سازی',
-  description: 'اسکین اسلحه، چاقو، دستکش، ایجنت، موزیک MVP و پین خود را در سرورهای Klaris انتخاب کن.',
+  title: 'Loadout',
+  description: 'Choose weapon skins, knives, gloves, agents, MVP music and pins for the Klaris CS2 servers.',
 })
 
 const route = useRoute()
@@ -18,17 +18,15 @@ const category = computed<CategoryKey>({
 
 const { ensureLoaded } = useLoadout()
 onMounted(ensureLoaded)
-
-const hint = computed(() => CATEGORIES.find(c => c.key === category.value)?.hint)
 </script>
 
 <template>
-  <div>
+  <!-- This section is English, so it reads left-to-right; the site shell around it stays RTL. -->
+  <div dir="ltr">
     <SkinsHero />
     <SkinsCategoryTabs v-model="category" />
 
     <section class="mx-auto max-w-[1440px] px-4 pt-5 pb-8 sm:px-6 lg:px-10 lg:pt-[22px]">
-      <p class="mb-4 text-[13px] text-white/35 lg:hidden">{{ hint }}</p>
       <!-- keyed so each view mounts fresh and loads only its own catalog -->
       <SkinsWeaponsView v-if="category === 'skins'" key="skins" :knives="false" />
       <SkinsWeaponsView v-else-if="category === 'knives'" key="knives" :knives="true" />

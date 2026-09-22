@@ -9,8 +9,8 @@ const props = withDefaults(defineProps<{ size?: 'sm' | 'md'; allowNone?: boolean
 const model = defineModel<TeamId[]>({ required: true })
 
 const sides = [
-  { id: 2 as TeamId, label: 'T', full: 'تروریست', tone: 'side-t' },
-  { id: 3 as TeamId, label: 'CT', full: 'ضدتروریست', tone: 'side-ct' },
+  { id: 2 as TeamId, label: 'T', full: 'Terrorist', tone: 'side-t' },
+  { id: 3 as TeamId, label: 'CT', full: 'Counter-Terrorist', tone: 'side-ct' },
 ]
 
 function toggle(id: TeamId) {
@@ -21,7 +21,7 @@ function toggle(id: TeamId) {
 </script>
 
 <template>
-  <div class="inline-flex gap-1.5" role="group" aria-label="تیم">
+  <div class="inline-flex gap-1.5" role="group" aria-label="Side">
     <button
       v-for="side in sides"
       :key="side.id"

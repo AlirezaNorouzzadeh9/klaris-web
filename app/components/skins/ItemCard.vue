@@ -89,7 +89,7 @@ watch(() => props.image, () => {
       >
       <span v-else-if="fallback" class="relative grid h-full place-items-center">
         <img :src="fallback" alt="" class="h-full w-[86%] object-contain py-2.5 opacity-25 grayscale">
-        <span class="absolute bottom-1.5 rounded-full bg-ink-950/80 px-2 py-0.5 text-[10px] text-white/45">بدون تصویر</span>
+        <span class="absolute bottom-1.5 rounded-full bg-ink-950/80 px-2 py-0.5 text-[10px] text-white/45">No image</span>
       </span>
       <span v-else class="grid h-full place-items-center text-white/15">
         <Icon name="lucide:image-off" class="size-6" />

@@ -7,5 +7,6 @@ import { Toaster } from '@/components/ui/sonner'
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
-  <Toaster position="bottom-left" dir="rtl" rich-colors :toast-options="{ class: 'font-sans' }" />
+  <!-- dir="auto": each toast follows its own text, so English messages keep their punctuation -->
+  <Toaster position="bottom-left" dir="auto" rich-colors :toast-options="{ class: 'font-sans' }" />
 </template>

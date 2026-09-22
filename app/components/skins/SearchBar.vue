@@ -1,6 +1,6 @@
 <script setup lang="ts">
-/** `lg`: full-width field (phones). `md`: 38px pill that sits in the grid header (desktop). */
-withDefaults(defineProps<{ placeholder: string; size?: 'lg' | 'md' }>(), { size: 'lg' })
+/** `auto`: 48px field on phones, 38px pill from `lg` up. `lg` / `md` pin one of the two. */
+withDefaults(defineProps<{ placeholder: string; size?: 'auto' | 'lg' | 'md' }>(), { size: 'auto' })
 const model = defineModel<string>({ required: true })
 const input = ref<HTMLInputElement>()
 
@@ -18,11 +18,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
 
 <template>
-  <div class="group relative">
+  <!-- the UI here is English, so the field reads left-to-right -->
+  <div class="group relative" dir="ltr">
     <Icon
       name="lucide:search"
       class="pointer-events-none absolute top-1/2 -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-mint-500"
-      :class="size === 'md' ? 'start-3.5 size-4' : 'start-4 size-[18px]'"
+      :class="{
+        'start-3.5 size-4': size === 'md',
+        'start-4 size-[18px]': size === 'lg',
+        'start-4 size-[18px] lg:start-3.5 lg:size-4': size === 'auto',
+      }"
     />
     <input
       ref="input"
@@ -32,16 +37,18 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       enterkeyhint="search"
       autocomplete="off"
       class="w-full text-white outline-none transition-[border-color,box-shadow] placeholder:text-white/30 focus:border-mint-500/50 focus:shadow-[0_0_0_4px_rgb(46_232_156/.08)] [&::-webkit-search-cancel-button]:appearance-none"
-      :class="size === 'md'
-        ? 'h-[38px] rounded-full border border-white/10 bg-ink-900/80 ps-[38px] pe-12 text-[13px]'
-        : 'h-12 rounded-xl border border-white/10 bg-ink-900/80 ps-11 pe-20 text-[14.5px]'"
+      :class="{
+        'h-[38px] rounded-full border border-white/10 bg-ink-900/80 ps-[38px] pe-12 text-[13px]': size === 'md',
+        'h-12 rounded-xl border border-white/10 bg-ink-900/80 ps-11 pe-20 text-[14.5px]': size === 'lg',
+        'h-12 rounded-xl border border-white/10 bg-ink-900/80 ps-11 pe-20 text-[14.5px] lg:h-[38px] lg:rounded-full lg:ps-[38px] lg:pe-12 lg:text-[13px]': size === 'auto',
+      }"
       @keydown.esc="model = ''"
     >
     <button
       v-if="model"
       type="button"
       class="absolute top-1/2 end-2.5 grid size-7 -translate-y-1/2 place-items-center rounded-full text-white/40 transition-colors hover:bg-white/8 hover:text-white"
-      aria-label="پاک کردن جستجو"
+      aria-label="Clear search"
       @click="model = ''; input?.focus()"
     >
       <Icon name="lucide:x" class="size-4" />

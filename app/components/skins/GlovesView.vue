@@ -10,7 +10,7 @@ const gloves = ref<CatalogGlove[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const kit = ref<string>('all')
 const query = ref('')
-const placeholder = 'جستجوی دستکش… مثلاً Wave Chaser'
+const placeholder = 'Search gloves… e.g. Wave Chaser'
 
 async function fetchCatalog() {
   state.value = 'loading'
@@ -68,33 +68,28 @@ async function onRemove() {
 <template>
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <Icon name="lucide:wifi-off" class="size-9" />
-    لیست دستکش‌ها بارگذاری نشد.
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">تلاش دوباره</button>
+    <span class="ltr">Could not load the gloves list</span>
+    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <template v-else>
-    <SkinsSearchBar v-model="query" class="mb-3 lg:hidden" :placeholder="placeholder" />
-
     <!-- kit chips -->
-    <div class="scrollbar-none -mx-4 mb-[18px] flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
+    <div dir="ltr" class="scrollbar-none -mx-4 mb-[18px] flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
       <button
         v-for="k in ['all', ...kits]"
         :key="k"
         type="button"
         class="h-[34px] shrink-0 rounded-full border px-3.5 text-[12.5px] font-semibold transition-colors"
         :class="[
-          k !== 'all' && 'ltr',
           kit === k ? 'border-mint-500/50 bg-mint-500/10 text-mint-300' : 'border-white/8 text-white/50 hover:text-white/80',
         ]"
         @click="kit = k"
       >
-        {{ k === 'all' ? 'همه' : k.replace('★ ', '') }}
+        {{ k === 'all' ? 'All' : k.replace('★ ', '') }}
       </button>
     </div>
 
-    <SkinsGridHeader v-model:query="query" :title="kit === 'all' ? 'همهٔ دستکش‌ها' : kit.replace('★ ', '')" :placeholder="placeholder">
-      <span class="font-mono">{{ visible.length.toLocaleString('fa-IR') }}</span> دستکش
-    </SkinsGridHeader>
+    <SkinsSearchBar v-model="query" class="mb-3.5" :placeholder="placeholder" />
 
     <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
       <div v-for="n in 12" :key="n" class="skeleton h-[168px] rounded-xl" />
@@ -114,7 +109,7 @@ async function onRemove() {
       >
         <SkinsCardAction
           :active="teamsFor(g).length > 0"
-          :label="teamsFor(g).length ? 'تنظیمات' : 'انتخاب'"
+          :label="teamsFor(g).length ? 'Settings' : 'Select'"
           :icon="teamsFor(g).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
           @click="openEditor(g)"
         />
