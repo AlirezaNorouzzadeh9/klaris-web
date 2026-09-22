@@ -1,15 +1,16 @@
 export type CardDesign = 'a' | 'b' | 'c' | 'd'
 
+/** How an equipped (active) card stands out; the card itself is always the minimal one. */
 export const CARD_DESIGNS: { key: CardDesign; label: string }[] = [
-  { key: 'a', label: 'Dossier' },
-  { key: 'b', label: 'Frame' },
-  { key: 'c', label: 'Poster' },
-  { key: 'd', label: 'Minimal' },
+  { key: 'a', label: 'Glow' },
+  { key: 'b', label: 'Badge' },
+  { key: 'c', label: 'Bar' },
+  { key: 'd', label: 'Filled' },
 ]
 
-const STORAGE_KEY = 'klaris.cardDesign'
+const STORAGE_KEY = 'klaris.cardActive'
 
-/** Which item-card design the grids use; switchable while we pick one. */
+/** Which active-card style the grids use; switchable while we pick one. */
 export function useCardDesign() {
   const design = useState<CardDesign>('card-design', () => 'a')
 
