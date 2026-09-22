@@ -48,7 +48,9 @@ const entries = computed(() => {
 </script>
 
 <template>
-  <nav class="scrollbar-none -mx-4 flex items-center gap-1 overflow-x-auto px-3 sm:mx-0 sm:px-0" aria-label="Weapon classes">
+  <nav class="scrollbar-none -mx-4 overflow-x-auto px-3 sm:mx-0 sm:px-0" aria-label="Weapon classes">
+    <!-- centred when it fits; scrolls from the start when it does not -->
+    <div class="mx-auto flex w-max items-center gap-1">
     <button
       type="button"
       class="relative flex h-10 shrink-0 items-center rounded-md px-2.5 text-[15px] font-semibold transition-colors"
@@ -98,5 +100,6 @@ const entries = computed(() => {
         </template>
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   </nav>
 </template>
