@@ -91,13 +91,13 @@ async function onRemove() {
 
     <SkinsSearchBar v-model="query" class="mb-3.5" :placeholder="placeholder" />
 
-    <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+    <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
       <div v-for="n in 12" :key="n" class="skeleton h-[168px] rounded-xl" />
     </div>
 
     <SkinsEmptyResult v-else-if="!visible.length" :query="query" @clear="query = ''" />
 
-    <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+    <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
       <SkinsItemCard
         v-for="g in visible"
         :key="`${g.weapon_defindex}-${g.paint}`"

@@ -1,34 +1,37 @@
 <script setup lang="ts">
 import type { TeamId } from '~/types/skins'
-import { wearTierOf } from '~/data/weapons'
+import { WEAR_TIERS, wearTierOf } from '~/data/weapons'
 
 /**
- * Item card whose background is the item: a blurred colour wash from the
- * render fills the card, the sharp render floats on top, and the labels and
- * action sit in a glass panel over it (inspect top-left, sides top-right,
- * quality strip along the bottom edge).
+ * Item card: render on a tinted spotlight with the name and a big float
+ * number over its lower edge, a five-step wear gauge, then the action row
+ * (StatTrak toggle for weapons and knives, then select / settings or the
+ * T / CT buttons). Equipped cards get an accent edge; StatTrak adds a corner
+ * ribbon. Inspect sits top-left, the sides top-right.
  */
 const props = withDefaults(defineProps<{
   image: string
   title: string
-  /** Small mono line above the title: paint id, kit, faction or item type. */
+  /** Small mono line above the title: weapon, kit, faction or item type. */
   kicker?: string
-  /** Paint id, at the right end of the wear line (e.g. "#1449"). */
+  /** Paint id, shown after the kicker (e.g. "#1449"). */
   code?: string
   /** Sides this item is equipped on; empty = not equipped. */
   activeTeams?: TeamId[]
-  /** Glow behind the render; defaults to mint when equipped. */
+  /** Glow behind the render; defaults to the card accent. */
   glow?: string
-  /** Float of the equipped finish; shows the wear line when set. */
+  /** Float of the equipped finish; fills the wear gauge when set. */
   wear?: number
   /** StatTrak™ kill count of the equipped copy; undefined = no StatTrak. */
   stattrak?: number
+  /** Show the ST toggle in the action row (weapons and knives). */
+  stattrakToggle?: boolean
   /** Shown dimmed when `image` is missing upstream (some new finishes have no render). */
   fallback?: string
   interactive?: boolean
   /** Show the inspect (pseudo-3D) button in the tile corner. */
   inspectable?: boolean
-  /** Tile height class: skins 128px, agents 168px, music / pins 120px. */
+  /** Stage height class: skins 146px, agents 186px, music / pins 138px. */
   stageClass?: string
 }>(), {
   inspectable: true,
@@ -38,16 +41,18 @@ const props = withDefaults(defineProps<{
   glow: '',
   wear: undefined,
   stattrak: undefined,
+  stattrakToggle: false,
   fallback: '',
   interactive: true,
-  stageClass: 'h-32',
+  stageClass: 'h-[146px]',
 })
 
-const emit = defineEmits<{ select: [] }>()
+const emit = defineEmits<{ select: []; stattrak: [] }>()
 
 const active = computed(() => props.activeTeams.length > 0)
 const hasStattrak = computed(() => active.value && props.stattrak !== undefined)
 const tier = computed(() => (props.wear === undefined || !active.value ? null : wearTierOf(props.wear)))
+const tierIndex = computed(() => (tier.value ? WEAR_TIERS.findIndex(t => t.key === tier.value!.key) : -1))
 const canInspect = computed(() => props.inspectable && !!(props.image || props.fallback))
 
 /** Card tint: StatTrak orange, equipped mint, otherwise a cool steel blue. */
@@ -84,38 +89,37 @@ watch(() => props.image, () => {
 
 <template>
   <article
-    class="group relative isolate flex flex-col overflow-hidden rounded-xl border bg-ink-900 transition-[border-color,transform,box-shadow] duration-300 ease-out-quint"
+    class="group relative flex flex-col overflow-hidden rounded-xl border bg-ink-850 transition-[border-color,transform,box-shadow] duration-300 ease-out-quint"
     :class="[
       active
         ? 'border-[color-mix(in_oklab,var(--accent)_45%,transparent)] shadow-[0_14px_34px_-20px_var(--accent)]'
-        : 'border-white/7 hover:border-[color-mix(in_oklab,var(--accent)_35%,transparent)]',
-      interactive && 'hover:-translate-y-0.5 hover:shadow-lift',
+        : 'border-white/7 hover:border-[color-mix(in_oklab,var(--accent)_35%,transparent)] hover:shadow-lift',
+      interactive && 'hover:-translate-y-0.5',
     ]"
     :style="{ '--accent': accent }"
   >
-    <!-- ── background: the item itself, blown up and blurred, with the sharp render on top ── -->
+    <!-- accent edge for equipped items -->
+    <span v-if="active" class="absolute inset-y-0 left-0 z-[5] w-[3px] bg-[var(--accent)]" />
+
+    <!-- StatTrak corner ribbon -->
+    <span v-if="hasStattrak" class="pointer-events-none absolute top-0 right-0 z-[5] size-16 overflow-hidden">
+      <span class="absolute top-[11px] -right-5 w-24 rotate-45 bg-[#f5902d] py-0.5 text-center font-mono text-[9px] font-bold tracking-[.14em] text-[#1a0f02]">ST™</span>
+    </span>
+
+    <!-- stage -->
     <button
       type="button"
-      class="absolute inset-0 -z-10 block overflow-hidden outline-none"
-      :class="interactive ? 'cursor-pointer' : 'cursor-default'"
+      class="relative isolate block w-full overflow-hidden bg-[radial-gradient(90%_85%_at_50%_40%,color-mix(in_oklab,var(--accent)_14%,transparent),transparent_70%)] outline-none"
+      :class="[stageClass, interactive ? 'cursor-pointer' : 'cursor-default']"
       :tabindex="interactive ? 0 : -1"
       :aria-label="title"
       @click="select"
     >
-      <!-- colour wash taken from the render -->
-      <img
-        v-if="image && !failed"
-        :src="image"
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 size-full scale-[1.6] object-cover opacity-45 blur-2xl saturate-150 transition-opacity duration-500"
-        :class="loaded ? '' : 'opacity-0'"
-      >
-      <span class="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_30%,color-mix(in_oklab,var(--accent)_16%,transparent),transparent_75%)]" />
-      <span class="absolute inset-0 bg-gradient-to-b from-ink-900/10 via-ink-900/35 to-ink-900/90" />
-
-      <span v-if="!loaded && !failed && image" class="skeleton absolute inset-x-6 top-5 h-24 rounded-lg" />
-      <!-- the render hangs over the info panel below -->
+      <span
+        class="absolute left-1/2 top-[44%] -z-10 size-[150px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[30px]"
+        :style="{ background: glow || `color-mix(in oklab, var(--accent) ${active ? 26 : 12}%, transparent)` }"
+      />
+      <span v-if="!loaded && !failed && image" class="skeleton absolute inset-x-6 top-4 bottom-12 rounded-lg" />
       <img
         v-if="image && !failed"
         ref="img"
@@ -123,27 +127,40 @@ watch(() => props.image, () => {
         :alt="title"
         loading="lazy"
         decoding="async"
-        class="absolute inset-x-[5%] top-[4%] h-[62%] w-[90%] object-contain drop-shadow-[0_16px_18px_rgb(0_0_0/.7)] transition-[transform,opacity] duration-500 ease-out-quint"
-        :class="[loaded ? 'opacity-100' : 'opacity-0', interactive && 'group-hover:scale-[1.07] group-hover:-rotate-2']"
+        class="relative mx-auto block h-[86%] w-[92%] object-contain pt-1.5 drop-shadow-[0_12px_14px_rgb(0_0_0/.65)] transition-[transform,opacity] duration-500 ease-out-quint"
+        :class="[loaded ? 'opacity-100' : 'opacity-0', interactive && 'group-hover:scale-[1.05]']"
         @load="loaded = true"
         @error="failed = true"
       >
-      <span v-else-if="fallback" class="absolute inset-x-[7%] top-[6%] grid h-[55%] place-items-center">
-        <img :src="fallback" alt="" class="size-full object-contain opacity-25 grayscale">
-        <span class="absolute bottom-1 rounded-full bg-ink-950/80 px-2 py-0.5 text-[10px] text-white/45">No image</span>
+      <span v-else-if="fallback" class="relative grid h-[86%] place-items-center">
+        <img :src="fallback" alt="" class="h-full w-[86%] object-contain py-2.5 opacity-25 grayscale">
+        <span class="absolute top-2 rounded-full bg-ink-950/80 px-2 py-0.5 text-[10px] text-white/45">No image</span>
       </span>
-      <span v-else class="absolute inset-x-0 top-[20%] grid place-items-center text-white/15">
+      <span v-else class="grid h-[86%] place-items-center text-white/15">
         <Icon name="lucide:image-off" class="size-6" />
+      </span>
+
+      <!-- name + float over the stage's lower edge -->
+      <span class="ltr absolute inset-x-0 bottom-0 flex items-end gap-2 bg-gradient-to-t from-ink-850 from-5% via-ink-850/55 to-transparent px-3 pt-[26px] pb-2 text-left">
+        <span class="min-w-0 flex-1">
+          <span class="block truncate font-mono text-[9.5px] font-bold tracking-[.18em] text-[color-mix(in_oklab,var(--accent)_55%,white_30%)] uppercase">
+            {{ kicker }}<template v-if="kicker && code"> · </template>{{ code }}
+          </span>
+          <span class="block truncate text-[14.5px] font-bold text-white" :title="title">{{ title }}</span>
+        </span>
+        <span
+          class="shrink-0 font-mono text-[17px] leading-none font-bold"
+          :style="{ color: tier ? tier.color : 'rgb(255 255 255 / .25)' }"
+        >{{ tier ? wear!.toFixed(3) : '—' }}</span>
       </span>
     </button>
 
-    <!-- sides (and StatTrak) -->
-    <span v-if="active" class="ltr pointer-events-none absolute top-2 right-2 z-10 flex gap-[3px]">
-      <span
-        v-if="hasStattrak"
-        class="rounded-full border border-[#f5902d]/30 bg-ink-950/60 px-1.5 py-px font-mono text-[9px] font-bold text-[#f5902d] backdrop-blur-sm"
-        title="StatTrak™"
-      >ST™</span>
+    <!-- sides -->
+    <span
+      v-if="active"
+      class="ltr pointer-events-none absolute top-2 z-[6] flex gap-[3px]"
+      :class="hasStattrak ? 'right-14' : 'right-2'"
+    >
       <span
         v-for="t in activeTeams"
         :key="t"
@@ -152,11 +169,11 @@ watch(() => props.image, () => {
       >{{ t === 2 ? 'T' : 'CT' }}</span>
     </span>
 
-    <!-- inspect: top-left, opposite the side chips; always shown on touch screens -->
+    <!-- inspect: top-left; always shown on touch screens -->
     <button
       v-if="canInspect"
       type="button"
-      class="absolute top-2 left-2 z-10 grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/60 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
+      class="absolute top-2 left-2.5 z-[6] grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/60 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
       aria-label="Inspect"
       title="Inspect"
       @click="openInspect"
@@ -164,42 +181,32 @@ watch(() => props.image, () => {
       <Icon name="lucide:scan-eye" class="size-3.5" />
     </button>
 
-    <!-- ── foreground: glass panels over the item ── -->
-    <div class="pointer-events-none flex flex-1 flex-col">
-      <!-- room for the render; clicks fall through to the background button -->
-      <div class="shrink-0" :class="stageClass" />
-
-      <div class="pointer-events-auto mx-2 flex flex-1 flex-col gap-2 rounded-lg border border-white/8 bg-ink-950/55 p-2.5 shadow-[0_8px_24px_-12px_rgb(0_0_0/.8)] backdrop-blur-md">
-        <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
-          <span v-if="kicker" class="block truncate text-[12px] font-semibold text-[color-mix(in_oklab,var(--accent)_55%,white_30%)]">{{ kicker }}</span>
-          <span class="mt-0.5 block truncate text-[14px] font-bold text-white" :title="title">{{ title }}</span>
-          <span v-if="tier || code" class="mt-1.5 flex items-center gap-1.5 font-mono text-[11px] font-bold">
-            <span
-              v-if="tier"
-              class="inline-flex items-center gap-1.5 rounded-full border px-2 py-px"
-              :style="{ color: tier.color, borderColor: `${tier.color}40`, background: `${tier.color}14` }"
-            >
-              <span class="size-1.5 rounded-full shadow-[0_0_6px_currentColor]" :style="{ background: tier.color }" />
-              {{ tier.short }}
-              <span class="text-white/70">{{ wear!.toFixed(3) }}</span>
-            </span>
-            <span v-if="code" class="ms-auto rounded-full bg-white/[.06] px-2 py-px text-white/45">{{ code }}</span>
-          </span>
-        </button>
-
-        <div v-if="$slots.default" class="mt-auto">
+    <!-- wear gauge + actions -->
+    <div class="ltr flex flex-1 flex-col gap-[9px] px-[11px] pt-2.5 pb-[11px]">
+      <span class="flex gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
+        <span
+          v-for="(t, i) in WEAR_TIERS"
+          :key="t.key"
+          class="h-[5px] flex-1 rounded-[2px]"
+          :style="{ background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
+        />
+      </span>
+      <span class="mt-auto flex items-center gap-[7px]">
+        <button
+          v-if="stattrakToggle"
+          type="button"
+          class="h-7 shrink-0 rounded-[7px] border px-[9px] font-mono text-[9.5px] font-bold transition-all duration-200"
+          :class="hasStattrak
+            ? 'border-[#f5902d]/55 bg-[#f5902d]/16 text-[#f5902d]'
+            : 'border-white/10 text-white/35 hover:border-[#f5902d]/40 hover:text-[#f5902d]'"
+          :aria-pressed="hasStattrak"
+          :title="hasStattrak ? 'StatTrak™ on' : 'Turn on StatTrak™'"
+          @click="emit('stattrak')"
+        >ST</button>
+        <span v-if="$slots.default" class="min-w-0 flex-1">
           <slot />
-        </div>
-      </div>
-
-      <!-- quality strip, like the colored bar under each inventory item -->
-      <span
-        class="mt-2 h-[3px] w-full shrink-0 transition-opacity duration-300"
-        :class="[
-          hasStattrak ? 'bg-[linear-gradient(90deg,#f5902d,#f5c542)]' : active ? 'bg-[linear-gradient(90deg,var(--color-mint-500),var(--color-cyan-k))]' : 'bg-[linear-gradient(90deg,transparent,color-mix(in_oklab,var(--accent)_50%,transparent),transparent)]',
-          !active && 'opacity-40 group-hover:opacity-100',
-        ]"
-      />
+        </span>
+      </span>
     </div>
   </article>
 </template>

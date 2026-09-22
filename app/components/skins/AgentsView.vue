@@ -69,13 +69,13 @@ function toggle(a: CatalogAgent) {
     <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
-  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
     <div v-for="n in 12" :key="n" class="skeleton h-[248px] rounded-xl" />
   </div>
 
   <SkinsEmptyResult v-else-if="!visible.length" :query="query" @clear="query = ''" />
 
-  <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+  <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
     <SkinsItemCard
       v-for="a in visible"
       :key="a.model"
@@ -84,7 +84,7 @@ function toggle(a: CatalogAgent) {
       :kicker="split(a).faction.toUpperCase()"
       :active-teams="loadout.agents[a.team] === a.model ? [a.team] : []"
       :glow="a.team === 2 ? 'rgb(226 173 85 / .16)' : 'rgb(98 174 234 / .16)'"
-      stage-class="h-42"
+      stage-class="h-[186px]"
       @select="toggle(a)"
     >
       <SkinsCardAction

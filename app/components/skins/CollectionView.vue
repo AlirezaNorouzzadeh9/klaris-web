@@ -50,14 +50,14 @@ function toggle(item: CatalogItem, team: TeamId) {
     <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
-  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+  <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
     <div v-for="n in 12" :key="n" class="skeleton h-[176px] rounded-xl" />
   </div>
 
   <SkinsEmptyResult v-else-if="!filtered.length" :query="query" @clear="query = ''" />
 
   <template v-else>
-    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
       <SkinsItemCard
         v-for="item in visible"
         :key="item.id"
@@ -66,7 +66,7 @@ function toggle(item: CatalogItem, team: TeamId) {
         :kicker="kind === 'music' ? 'MUSIC KIT' : 'PIN'"
         :active-teams="teamsFor(item)"
         :interactive="false"
-        stage-class="h-30"
+        stage-class="h-[138px]"
       >
         <!-- one pick per side -->
         <div class="grid grid-cols-2 gap-1.5">
@@ -76,7 +76,7 @@ function toggle(item: CatalogItem, team: TeamId) {
             type="button"
             :disabled="busy !== null"
             :aria-pressed="slot[t] === Number(item.id)"
-            class="h-[30px] rounded-full border font-mono text-[11px] font-bold transition-colors disabled:opacity-60"
+            class="h-7 rounded-[7px] border font-mono text-[10.5px] font-bold transition-colors disabled:opacity-60"
             :class="slot[t] === Number(item.id)
               ? t === 2 ? 'border-side-t/60 bg-side-t/15 text-side-t' : 'border-side-ct/60 bg-side-ct/15 text-side-ct'
               : 'border-white/10 text-white/40 hover:border-white/25 hover:text-white/75'"

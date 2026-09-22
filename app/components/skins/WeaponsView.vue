@@ -3,6 +3,7 @@ import type { CatalogSkin, EditorItem, SkinConfig, TeamId } from '~/types/skins'
 import { TEAMS } from '~/types/skins'
 import { finishName, matchesQuery, weaponLabel, weaponsFrom, type WeaponEntry } from '~/composables/useCatalog'
 import { ALL_WEAPONS, weaponClassOf } from '~/data/weapons'
+import { emptyKeychain, emptyStickers } from '~/services/loadout'
 
 const props = defineProps<{ knives: boolean }>()
 const PAGE = 60
@@ -130,6 +131,29 @@ async function onSave(teams: TeamId[], config: SkinConfig) {
   if (ok) editorOpen.value = false
 }
 
+/** ST on the card: flip StatTrak on the equipped copy, or equip a fresh StatTrak copy on both sides. */
+async function toggleStattrak(skin: CatalogSkin) {
+  const teams = teamsFor(skin)
+  const current = equippedConfig(skin)
+  if (teams.length && current) {
+    await saveSkin(teams, { ...current, stattrak: !current.stattrak })
+    return
+  }
+  const config: SkinConfig = {
+    defindex: skin.weapon_defindex,
+    paintId: Number(skin.paint),
+    wear: 0.000001,
+    seed: 0,
+    nametag: '',
+    stattrak: true,
+    stattrakCount: 0,
+    stickers: emptyStickers(),
+    keychain: emptyKeychain(),
+  }
+  const ok = await saveSkin([...TEAMS], config)
+  if (ok && props.knives) await setKnife([...TEAMS], skin.weapon_name)
+}
+
 async function onRemove() {
   if (!editing.value) return
   const ok = await removeSkin(editing.value.weapon_defindex)
@@ -188,13 +212,13 @@ async function onRemove() {
       <!-- desktop: the search takes the grid header's place -->
       <SkinsSearchBar v-model="query" class="mb-3.5 hidden lg:block" :placeholder="searchPlaceholder" />
 
-      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(228px,1fr))]">
         <div v-for="n in 15" :key="n" class="skeleton h-[168px] rounded-xl" />
       </div>
 
       <SkinsEmptyResult v-else-if="!skins.length" :query="query" @clear="query = ''" />
 
-      <div v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+      <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(228px,1fr))]">
         <SkinsItemCard
           v-for="skin in visibleSkins"
           :key="`${skin.weapon_defindex}-${skin.paint}`"
@@ -206,7 +230,9 @@ async function onRemove() {
           :active-teams="teamsFor(skin)"
           :wear="equippedConfig(skin)?.wear"
           :stattrak="equippedConfig(skin)?.stattrak ? equippedConfig(skin)!.stattrakCount : undefined"
+          stattrak-toggle
           @select="openEditor(skin)"
+          @stattrak="toggleStattrak(skin)"
         >
           <SkinsCardAction
             :active="teamsFor(skin).length > 0"
