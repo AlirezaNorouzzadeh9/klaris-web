@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   title: string
   /** Small mono line above the title: paint id, kit, faction or item type. */
   kicker?: string
-  /** Paint id, shown after the float (e.g. "#1449"). */
+  /** Paint id, at the right end of the wear line (e.g. "#1449"). */
   code?: string
   /** Sides this item is equipped on; empty = not equipped. */
   activeTeams?: TeamId[]
@@ -159,7 +159,7 @@ watch(() => props.image, () => {
             <span :style="{ color: tier.color }">{{ tier.short }}</span>
             <span class="text-white/40">{{ wear!.toFixed(3) }}</span>
           </template>
-          <span v-if="code" class="text-white/30">{{ code }}</span>
+          <span v-if="code" class="ms-auto text-white/30">{{ code }}</span>
         </span>
       </button>
 
