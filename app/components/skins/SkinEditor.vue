@@ -32,6 +32,18 @@ const blank = (): SkinConfig => ({
 const draft = ref<SkinConfig>(blank())
 const teams = ref<TeamId[]>([2, 3])
 const previewFailed = ref(false)
+const { inspect } = useInspect()
+
+function openInspect() {
+  if (!props.item) return
+  inspect({
+    image: props.item.image,
+    fallback: props.item.fallbackImage,
+    title: props.item.title,
+    kicker: props.item.caption,
+    wear: props.kind === 'glove' ? undefined : draft.value.wear,
+  })
+}
 
 // Stickers/keychains are stored as ids; names and images come from the catalog.
 const { load } = useCatalog()
@@ -148,6 +160,13 @@ function save() {
               alt=""
               class="mx-auto h-full w-[78%] object-contain py-6 opacity-25 grayscale"
             >
+            <button
+              type="button"
+              class="absolute top-3 right-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-3 text-[12px] font-semibold text-white/70 backdrop-blur-sm transition-colors hover:border-mint-500/50 hover:text-mint-300"
+              @click="openInspect"
+            >
+              <Icon name="lucide:scan-eye" class="size-3.5" /> Inspect
+            </button>
             <div class="ltr absolute top-3 left-3 flex flex-col items-start gap-1.5">
               <span class="rounded-xs px-2 py-0.5 font-mono text-[10.5px] font-bold" :style="{ background: `${tier.color}22`, color: tier.color }">{{ tier.label }}</span>
               <span v-if="draft.stattrak" class="rounded-xs bg-[#f5902d]/15 px-2 py-0.5 font-mono text-[10.5px] font-bold text-[#f5902d]">StatTrak™ {{ draft.stattrakCount }}</span>

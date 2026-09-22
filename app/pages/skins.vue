@@ -35,5 +35,8 @@ onMounted(ensureLoaded)
       <SkinsCollectionView v-else-if="category === 'music'" key="music" kind="music" />
       <SkinsCollectionView v-else key="pins" kind="pins" />
     </section>
+
+    <!-- one viewer for the whole page; cards and the editor open it via useInspect() -->
+    <SkinsInspectViewer />
   </div>
 </template>

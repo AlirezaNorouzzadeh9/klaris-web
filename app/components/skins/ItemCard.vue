@@ -16,9 +16,12 @@ const props = withDefaults(defineProps<{
   /** Shown dimmed when `image` is missing upstream (some new finishes have no render). */
   fallback?: string
   interactive?: boolean
+  /** Show the inspect (pseudo-3D) button in the tile corner. */
+  inspectable?: boolean
   /** Tile height class: skins 112px, agents 168px, music / pins 120px. */
   stageClass?: string
 }>(), {
+  inspectable: true,
   kicker: '',
   activeTeams: () => [],
   glow: '',
@@ -31,6 +34,11 @@ const props = withDefaults(defineProps<{
 defineEmits<{ select: [] }>()
 
 const active = computed(() => props.activeTeams.length > 0)
+
+const { inspect } = useInspect()
+function openInspect() {
+  inspect({ image: props.image, fallback: props.fallback, title: props.title, kicker: props.kicker, wear: active.value ? props.wear : undefined })
+}
 const tier = computed(() => (props.wear === undefined ? null : wearTierOf(props.wear)))
 
 const failed = ref(false)
@@ -104,6 +112,18 @@ watch(() => props.image, () => {
           :class="t === 2 ? 'bg-side-t/15 text-side-t' : 'bg-side-ct/15 text-side-ct'"
         >{{ t === 2 ? 'T' : 'CT' }}</span>
       </span>
+    </button>
+
+    <!-- sibling of the tile button (buttons cannot nest); always shown on touch screens -->
+    <button
+      v-if="inspectable && (image || fallback)"
+      type="button"
+      class="absolute top-2 start-2 z-10 grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/70 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
+      aria-label="Inspect"
+      title="Inspect"
+      @click="openInspect"
+    >
+      <Icon name="lucide:scan-eye" class="size-3.5" />
     </button>
 
     <!-- body -->
