@@ -4,10 +4,10 @@ import { WEAR_TIERS, wearTierOf } from '~/data/weapons'
 
 /**
  * Item card: render on a tinted spotlight with the name and a big float
- * number over its lower edge, a five-step wear gauge, then the action row
- * (StatTrak toggle for weapons and knives, then select / settings or the
- * T / CT buttons). Equipped cards get an accent edge; StatTrak adds a corner
- * ribbon. Inspect sits top-left, the sides top-right.
+ * number over its lower edge, a five-step wear gauge, then the action
+ * (select / settings, or the T / CT buttons). Equipped cards get an accent
+ * edge; StatTrak (set in the skin settings) adds a corner ribbon. Inspect
+ * sits top-left, the sides top-right.
  */
 const props = withDefaults(defineProps<{
   image: string
@@ -24,8 +24,6 @@ const props = withDefaults(defineProps<{
   wear?: number
   /** StatTrak™ kill count of the equipped copy; undefined = no StatTrak. */
   stattrak?: number
-  /** Show the ST toggle in the action row (weapons and knives). */
-  stattrakToggle?: boolean
   /** Shown dimmed when `image` is missing upstream (some new finishes have no render). */
   fallback?: string
   interactive?: boolean
@@ -41,13 +39,12 @@ const props = withDefaults(defineProps<{
   glow: '',
   wear: undefined,
   stattrak: undefined,
-  stattrakToggle: false,
   fallback: '',
   interactive: true,
   stageClass: 'h-[146px]',
 })
 
-const emit = defineEmits<{ select: []; stattrak: [] }>()
+const emit = defineEmits<{ select: [] }>()
 
 const active = computed(() => props.activeTeams.length > 0)
 const hasStattrak = computed(() => active.value && props.stattrak !== undefined)
@@ -192,17 +189,6 @@ watch(() => props.image, () => {
         />
       </span>
       <span class="mt-auto flex items-center gap-[7px]">
-        <button
-          v-if="stattrakToggle"
-          type="button"
-          class="h-7 shrink-0 rounded-[7px] border px-[9px] font-mono text-[9.5px] font-bold transition-all duration-200"
-          :class="hasStattrak
-            ? 'border-[#f5902d]/55 bg-[#f5902d]/16 text-[#f5902d]'
-            : 'border-white/10 text-white/35 hover:border-[#f5902d]/40 hover:text-[#f5902d]'"
-          :aria-pressed="hasStattrak"
-          :title="hasStattrak ? 'StatTrak™ on' : 'Turn on StatTrak™'"
-          @click="emit('stattrak')"
-        >ST</button>
         <span v-if="$slots.default" class="min-w-0 flex-1">
           <slot />
         </span>

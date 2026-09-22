@@ -3,7 +3,6 @@ import type { CatalogSkin, EditorItem, SkinConfig, TeamId } from '~/types/skins'
 import { TEAMS } from '~/types/skins'
 import { finishName, matchesQuery, weaponLabel, weaponsFrom, type WeaponEntry } from '~/composables/useCatalog'
 import { ALL_WEAPONS, weaponClassOf } from '~/data/weapons'
-import { emptyKeychain, emptyStickers } from '~/services/loadout'
 
 const props = defineProps<{ knives: boolean }>()
 const PAGE = 60
@@ -131,29 +130,6 @@ async function onSave(teams: TeamId[], config: SkinConfig) {
   if (ok) editorOpen.value = false
 }
 
-/** ST on the card: flip StatTrak on the equipped copy, or equip a fresh StatTrak copy on both sides. */
-async function toggleStattrak(skin: CatalogSkin) {
-  const teams = teamsFor(skin)
-  const current = equippedConfig(skin)
-  if (teams.length && current) {
-    await saveSkin(teams, { ...current, stattrak: !current.stattrak })
-    return
-  }
-  const config: SkinConfig = {
-    defindex: skin.weapon_defindex,
-    paintId: Number(skin.paint),
-    wear: 0.000001,
-    seed: 0,
-    nametag: '',
-    stattrak: true,
-    stattrakCount: 0,
-    stickers: emptyStickers(),
-    keychain: emptyKeychain(),
-  }
-  const ok = await saveSkin([...TEAMS], config)
-  if (ok && props.knives) await setKnife([...TEAMS], skin.weapon_name)
-}
-
 async function onRemove() {
   if (!editing.value) return
   const ok = await removeSkin(editing.value.weapon_defindex)
@@ -230,9 +206,7 @@ async function onRemove() {
           :active-teams="teamsFor(skin)"
           :wear="equippedConfig(skin)?.wear"
           :stattrak="equippedConfig(skin)?.stattrak ? equippedConfig(skin)!.stattrakCount : undefined"
-          stattrak-toggle
           @select="openEditor(skin)"
-          @stattrak="toggleStattrak(skin)"
         >
           <SkinsCardAction
             :active="teamsFor(skin).length > 0"
