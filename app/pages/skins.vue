@@ -39,5 +39,6 @@ onMounted(ensureLoaded)
 
     <!-- one viewer for the whole page; cards and the editor open it via useInspect() -->
     <SkinsInspectViewer />
+    <SkinsCardDesignSwitcher />
   </div>
 </template>

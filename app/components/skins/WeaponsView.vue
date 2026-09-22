@@ -83,9 +83,9 @@ function teamsFor(skin: CatalogSkin): TeamId[] {
 }
 
 /** Float of the equipped copy, for the card's wear bar. */
-function equippedWear(skin: CatalogSkin): number | undefined {
+function equippedConfig(skin: CatalogSkin) {
   const team = teamsFor(skin)[0]
-  return team === undefined ? undefined : loadout.value.skins[team][skin.weapon_defindex]?.wear
+  return team === undefined ? undefined : loadout.value.skins[team][skin.weapon_defindex]
 }
 
 // ---- editor ----
@@ -190,7 +190,8 @@ async function onRemove() {
           :kicker="paged ? `${weaponLabel(skin.paint_name)} · #${skin.paint}` : `#${skin.paint}`"
           :fallback="imageOf(skin.weapon_defindex)"
           :active-teams="teamsFor(skin)"
-          :wear="equippedWear(skin)"
+          :wear="equippedConfig(skin)?.wear"
+          :stattrak="equippedConfig(skin)?.stattrak ? equippedConfig(skin)!.stattrakCount : undefined"
           @select="openEditor(skin)"
         >
           <SkinsCardAction
