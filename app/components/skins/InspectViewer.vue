@@ -218,7 +218,7 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
 <template>
   <Dialog v-model:open="open">
     <DialogContent
-      dir="ltr"
+      dir="rtl"
       :show-close-button="false"
       class="flex h-dvh w-screen max-w-none flex-col gap-0 overflow-hidden rounded-none border-0 bg-ink-950 p-0 sm:h-[min(88dvh,780px)] sm:w-[min(calc(100vw-3rem),1100px)] sm:max-w-none sm:rounded-2xl sm:border sm:border-white/8"
       @open-auto-focus.prevent

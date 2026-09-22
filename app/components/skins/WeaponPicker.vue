@@ -59,7 +59,7 @@ const entries = computed(() => {
       <span v-if="model === ALL_WEAPONS" class="absolute inset-x-2.5 bottom-1 h-0.5 rounded-full bg-mint-500" />
     </button>
 
-    <DropdownMenu v-for="e in entries" :key="e.key" dir="ltr">
+    <DropdownMenu v-for="e in entries" :key="e.key" dir="rtl">
       <DropdownMenuTrigger as-child>
         <button
           type="button"

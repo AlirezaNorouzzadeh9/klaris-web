@@ -39,7 +39,7 @@ function toggle(a: CatalogAgent) {
 
 <template>
   <!-- CT / T segmented control -->
-  <div class="ltr mb-[18px] grid grid-cols-2 gap-1 rounded-lg border border-white/8 bg-ink-900/80 p-1 sm:inline-grid">
+  <div class="mb-[18px] grid grid-cols-2 gap-1 rounded-lg border border-white/8 bg-ink-900/80 p-1 sm:inline-grid">
     <button
       v-for="s in ([3, 2] as TeamId[])"
       :key="s"

@@ -74,7 +74,7 @@ async function onRemove() {
 
   <template v-else>
     <!-- kit chips -->
-    <div dir="ltr" class="scrollbar-none -mx-4 mb-[18px] flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
+    <div class="scrollbar-none -mx-4 mb-[18px] flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
       <button
         v-for="k in ['all', ...kits]"
         :key="k"

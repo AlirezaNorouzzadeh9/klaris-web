@@ -76,7 +76,7 @@ const groups = computed(() =>
             :class="model === w.defindex ? 'opacity-100' : 'opacity-0'"
           />
           <img :src="w.image" alt="" loading="lazy" class="h-[26px] w-[52px] shrink-0 object-contain opacity-95">
-          <span class="ltr flex-1 truncate text-start text-[12.5px] font-semibold" :class="model === w.defindex ? 'text-white' : 'text-white/60 group-hover:text-white/85'">{{ w.label }}</span>
+          <span class="ltr flex-1 truncate text-right text-[12.5px] font-semibold" :class="model === w.defindex ? 'text-white' : 'text-white/60 group-hover:text-white/85'">{{ w.label }}</span>
           <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-mint-500" title="Skin equipped" />
         </button>
       </div>

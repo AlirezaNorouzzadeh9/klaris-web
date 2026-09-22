@@ -128,8 +128,8 @@ function save() {
 <template>
   <Sheet v-model:open="open">
     <SheetContent
-      side="right"
-      dir="ltr"
+      side="left"
+      dir="rtl"
       @open-auto-focus.prevent
       class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:z-10"
     >
@@ -162,16 +162,16 @@ function save() {
             >
             <button
               type="button"
-              class="absolute top-3 right-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-3 text-[12px] font-semibold text-white/70 backdrop-blur-sm transition-colors hover:border-mint-500/50 hover:text-mint-300"
+              class="absolute top-3 end-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-3 text-[12px] font-semibold text-white/70 backdrop-blur-sm transition-colors hover:border-mint-500/50 hover:text-mint-300"
               @click="openInspect"
             >
               <Icon name="lucide:scan-eye" class="size-3.5" /> Inspect
             </button>
-            <div class="ltr absolute top-3 left-3 flex flex-col items-start gap-1.5">
+            <div class="absolute top-3 start-3 flex flex-col items-start gap-1.5">
               <span class="rounded-xs px-2 py-0.5 font-mono text-[10.5px] font-bold" :style="{ background: `${tier.color}22`, color: tier.color }">{{ tier.label }}</span>
               <span v-if="draft.stattrak" class="rounded-xs bg-[#f5902d]/15 px-2 py-0.5 font-mono text-[10.5px] font-bold text-[#f5902d]">StatTrak™ {{ draft.stattrakCount }}</span>
             </div>
-            <div class="ltr absolute right-3 bottom-3 left-3 flex items-end justify-between gap-3">
+            <div class="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3">
               <div>
                 <p class="font-mono text-[10.5px] font-bold tracking-wider text-white/35 uppercase">{{ item.caption }}</p>
                 <p class="text-[15px] font-bold text-white">{{ item.title }}</p>
@@ -197,7 +197,7 @@ function save() {
                   @change="clampFloat"
                 >
               </div>
-              <div class="ltr grid grid-cols-5 gap-1">
+              <div class="grid grid-cols-5 gap-1">
                 <button
                   v-for="t in WEAR_TIERS"
                   :key="t.key"
@@ -210,11 +210,11 @@ function save() {
                 >{{ t.short }}</button>
               </div>
               <!-- rail tinted by wear bracket, slider on top -->
-              <div class="ltr relative mt-4">
+              <div class="relative mt-4">
                 <div class="absolute inset-x-0 top-1/2 flex h-1.5 -translate-y-1/2 overflow-hidden rounded-full">
                   <span v-for="t in WEAR_TIERS" :key="t.key" :style="{ width: `${(t.max - t.min) * 100}%`, background: t.color }" class="opacity-70" />
                 </div>
-                <Slider v-model="wearModel" :min="0" :max="1" :step="0.001" class="relative [&_[data-slot=slider-range]]:bg-transparent [&_[data-slot=slider-track]]:bg-transparent" />
+                <Slider v-model="wearModel" dir="rtl" :min="0" :max="1" :step="0.001" class="relative [&_[data-slot=slider-range]]:bg-transparent [&_[data-slot=slider-track]]:bg-transparent" />
               </div>
             </section>
 
@@ -236,7 +236,7 @@ function save() {
                   >
                 </div>
               </div>
-              <Slider v-model="seedModel" :min="0" :max="1000" :step="1" class="ltr" />
+              <Slider v-model="seedModel" dir="rtl" :min="0" :max="1000" :step="1" />
             </section>
 
             <!-- name tag + stattrak -->
@@ -269,7 +269,7 @@ function save() {
             <!-- stickers & keychain -->
             <section v-if="hasStickers">
               <h4 class="mb-3 text-[13px] font-bold text-white/80">Stickers</h4>
-              <div class="ltr grid grid-cols-5 gap-2">
+              <div class="grid grid-cols-5 gap-2">
                 <div v-for="(s, i) in draft.stickers" :key="i" class="group relative aspect-square">
                   <button
                     type="button"
@@ -285,7 +285,7 @@ function save() {
                   <button
                     v-if="s.id"
                     type="button"
-                    class="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full border border-white/15 bg-ink-800 text-white/60 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-k focus:opacity-100"
+                    class="absolute -top-1.5 -end-1.5 grid size-5 place-items-center rounded-full border border-white/15 bg-ink-800 text-white/60 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-k focus:opacity-100"
                     aria-label="Remove sticker"
                     @click="clearSticker(i)"
                   >
@@ -306,7 +306,7 @@ function save() {
                   <Icon v-else name="lucide:plus" class="size-4" />
                 </button>
                 <div class="min-w-0 flex-1">
-                  <p class="ltr truncate text-start text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
+                  <p class="ltr truncate text-right text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
                   <button v-if="draft.keychain.id" type="button" class="mt-1 text-[12px] text-white/40 hover:text-red-k" @click="draft.keychain = emptyKeychain()">Remove</button>
                 </div>
               </div>
@@ -315,7 +315,7 @@ function save() {
             <!-- teams -->
             <section>
               <h4 class="mb-1 text-[13px] font-bold text-white/80">Equip on</h4>
-              <p class="mb-3 text-[12px] text-white/40">You can run different skins on T and CT.</p>
+              <p class="ltr mb-3 text-right text-[12px] text-white/40">You can run different skins on T and CT.</p>
               <SkinsTeamPicker v-model="teams" />
             </section>
           </div>

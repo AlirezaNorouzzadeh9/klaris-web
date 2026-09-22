@@ -21,8 +21,8 @@ onMounted(ensureLoaded)
 </script>
 
 <template>
-  <!-- This section is English, so it reads left-to-right; the site shell around it stays RTL. -->
-  <div dir="ltr">
+  <!-- right-to-left like the rest of the site; English names inside are isolated with `.ltr` -->
+  <div dir="rtl">
     <SkinsHero />
     <SkinsCategoryTabs v-model="category" />
 

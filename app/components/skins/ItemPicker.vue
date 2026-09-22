@@ -47,13 +47,13 @@ function pick(item: CatalogItem) {
 
 <template>
   <Dialog v-model:open="open">
-    <DialogContent dir="ltr" class="flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-white/10 bg-ink-900 p-0 sm:max-w-3xl">
+    <DialogContent dir="rtl" class="flex max-h-[85dvh] flex-col gap-0 overflow-hidden border-white/10 bg-ink-900 p-0 sm:max-w-3xl">
       <DialogHeader class="border-b border-white/6 p-5 text-start">
         <DialogTitle>{{ title }}</DialogTitle>
         <DialogDescription>
           <span v-if="state === 'ready'" class="font-mono">{{ filtered.length.toLocaleString('en-US') }}</span> items
         </DialogDescription>
-        <div class="relative mt-3" dir="rtl">
+        <div class="relative mt-3">
           <Icon name="lucide:search" class="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-white/30" />
           <input
             v-model="query"

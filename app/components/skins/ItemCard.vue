@@ -129,16 +129,16 @@ watch(() => props.image, () => {
     <!-- body -->
     <div class="flex flex-1 flex-col gap-2 px-2.5 pb-2.5">
       <div class="min-w-0">
-        <p v-if="kicker" class="ltr truncate text-start font-mono text-[9px] font-bold tracking-[.08em] text-white/28">{{ kicker }}</p>
-        <h3 class="ltr mt-0.5 truncate text-start text-[12.5px] font-bold text-white" :title="title">{{ title }}</h3>
+        <p v-if="kicker" class="ltr truncate text-right font-mono text-[9px] font-bold tracking-[.08em] text-white/28">{{ kicker }}</p>
+        <h3 class="ltr mt-0.5 truncate text-right text-[12.5px] font-bold text-white" :title="title">{{ title }}</h3>
       </div>
 
-      <div v-if="tier && active" class="ltr">
+      <div v-if="tier && active">
         <div class="flex items-center justify-between font-mono text-[9px] text-white/40">
           <span>{{ tier.label }}</span><span>{{ wear!.toFixed(3) }}</span>
         </div>
         <div class="relative mt-1 h-[3px] rounded-full bg-white/8">
-          <span class="absolute inset-y-0 left-0 rounded-full" :style="{ width: `${Math.max(2, wear! * 100)}%`, background: tier.color }" />
+          <span class="absolute inset-y-0 start-0 rounded-full" :style="{ width: `${Math.max(2, wear! * 100)}%`, background: tier.color }" />
         </div>
       </div>
 

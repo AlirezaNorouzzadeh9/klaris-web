@@ -33,7 +33,7 @@ async function onReset() {
           <span class="h-px w-6 bg-mint-500/60" /> LOADOUT · CS2
         </p>
         <h1 class="text-[26px] font-black tracking-[-0.02em] text-white sm:text-[38px]">Loadout</h1>
-        <p class="mt-2 max-w-[560px] text-[13.5px] leading-7 text-white/55 sm:mt-3 sm:text-[15px] sm:leading-[30px]">
+        <p class="ltr mt-2 max-w-[560px] text-right text-[13.5px] leading-7 text-white/55 sm:mt-3 sm:text-[15px] sm:leading-[30px]">
           Pick skins, knives, gloves, agents and MVP music for each side.
           <span class="hidden sm:inline">Your loadout is the same on every Klaris server.</span>
         </p>
@@ -91,7 +91,7 @@ async function onReset() {
               </button>
             </DialogTrigger>
           </div>
-          <DialogContent dir="ltr" class="border-white/10 bg-ink-900 sm:max-w-md">
+          <DialogContent dir="rtl" class="border-white/10 bg-ink-900 sm:max-w-md">
             <DialogHeader class="text-start">
               <DialogTitle>Reset your whole loadout?</DialogTitle>
               <DialogDescription class="leading-7">

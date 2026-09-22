@@ -69,7 +69,7 @@ function toggle(item: CatalogItem, team: TeamId) {
         stage-class="h-30"
       >
         <!-- one pick per side -->
-        <div class="ltr grid grid-cols-2 gap-1.5">
+        <div class="grid grid-cols-2 gap-1.5">
           <button
             v-for="t in TEAMS"
             :key="t"
