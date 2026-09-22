@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="sticky top-16 z-30 border-b border-white/6 bg-ink-950/90 backdrop-blur-md">
+  <div class="sticky top-[76px] z-30 border-b border-white/6 bg-ink-950/90 backdrop-blur-md sm:top-20">
     <div class="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
       <div dir="ltr" class="scrollbar-none -mx-4 overflow-x-auto px-4 py-3 sm:mx-0 sm:px-0">
         <div class="mx-auto flex w-max items-center gap-2" role="tablist" aria-label="Categories">

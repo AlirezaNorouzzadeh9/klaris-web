@@ -4,7 +4,6 @@ withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
 
 <template>
   <span class="ltr inline-flex items-center gap-2.5 select-none" aria-label="KLARIS CS2">
-    <!-- Mark: a sharpened K inside a tactical bracket. -->
     <svg viewBox="0 0 32 32" class="size-8 shrink-0" aria-hidden="true">
       <path d="M4 3h7v3H7v20h4v3H4z" fill="currentColor" class="text-white/25" />
       <path d="M28 3h-7v3h4v20h-4v3h7z" fill="currentColor" class="text-white/25" />

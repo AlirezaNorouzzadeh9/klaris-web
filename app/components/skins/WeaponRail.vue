@@ -22,7 +22,7 @@ const groups = computed(() =>
 
 <template>
   <!-- sticky offset = header (64) + tab bar (81) + breathing room -->
-  <aside class="sticky top-[161px] flex max-h-[min(760px,calc(100dvh-177px))] flex-col overflow-hidden rounded-xl border border-white/7 bg-ink-900/70">
+  <aside class="sticky top-[176px] flex max-h-[min(760px,calc(100dvh-192px))] flex-col overflow-hidden rounded-xl border border-white/7 bg-ink-900/70">
     <div class="border-b border-white/6 p-2.5">
       <div class="group relative" dir="rtl">
         <Icon name="lucide:search" class="pointer-events-none absolute top-1/2 start-2.5 size-[15px] -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-mint-500" />
