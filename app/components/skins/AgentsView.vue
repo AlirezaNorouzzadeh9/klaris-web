@@ -45,7 +45,8 @@ function toggle(a: CatalogAgent) {
 </script>
 
 <template>
-  <!-- CT / T segmented control -->
+  <!-- CT / T segmented control, on the left -->
+  <div dir="ltr">
   <div class="mb-[18px] grid grid-cols-2 gap-1 rounded-lg border border-white/8 bg-ink-900/80 p-1 sm:inline-grid">
     <button
       v-for="s in ([3, 2] as TeamId[])"
@@ -60,6 +61,7 @@ function toggle(a: CatalogAgent) {
       <span class="sm:hidden">{{ s === 2 ? 'T' : 'CT' }}</span>
       <span class="hidden sm:inline">{{ s === 2 ? 'TERRORIST' : 'COUNTER-TERRORIST' }}</span>
     </button>
+  </div>
   </div>
 
   <SkinsSearchBar v-model="query" class="mb-3.5" :placeholder="placeholder" />

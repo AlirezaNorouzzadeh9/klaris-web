@@ -67,6 +67,7 @@ function toggle(item: CatalogItem, team: TeamId) {
         :active-teams="teamsFor(item)"
         :interactive="false"
         stage-class="h-[138px]"
+        :title-lines="2"
       >
         <!-- one pick per side -->
         <div class="grid grid-cols-2 gap-1.5">
