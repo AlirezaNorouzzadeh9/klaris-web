@@ -55,14 +55,14 @@ const entries = computed(() => {
 <template>
   <nav class="scrollbar-none -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0" aria-label="Weapon classes">
     <!-- centred when it fits; scrolls from the start when it does not -->
-    <div class="mx-auto flex w-max items-center gap-1.5 rounded-xl border border-white/7 bg-ink-900/70 p-1.5">
+    <div class="mx-auto flex w-max items-center gap-1 rounded-xl border border-white/7 bg-ink-900/70 p-1">
     <button
       type="button"
-      class="ltr relative flex h-10 shrink-0 items-center gap-2 rounded-lg border px-3 text-[14px] font-semibold transition-colors"
+      class="ltr relative flex h-8 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[12.5px] font-semibold transition-colors"
       :class="model === ALL_WEAPONS ? 'border-mint-500/50 bg-mint-500/10 text-mint-300' : 'border-white/8 bg-white/[.03] text-white/85 active:bg-white/[.07]'"
       @click="model = ALL_WEAPONS"
     >
-      <Icon name="lucide:person-standing" class="size-[18px] opacity-80" />
+      <Icon name="lucide:person-standing" class="size-4 opacity-80" />
       {{ allLabel }}
     </button>
 
@@ -70,14 +70,14 @@ const entries = computed(() => {
       <DropdownMenuTrigger as-child>
         <button
           type="button"
-          class="ltr group relative flex h-10 shrink-0 items-center gap-2 rounded-lg border px-3 text-[14px] font-semibold transition-colors"
+          class="ltr group relative flex h-8 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[12.5px] font-semibold transition-colors"
           :class="e.active
             ? 'border-mint-500/50 bg-mint-500/10 text-mint-300'
             : 'border-white/8 bg-white/[.03] text-white/85 active:bg-white/[.07] data-[state=open]:border-white/20 data-[state=open]:bg-white/[.07]'"
         >
-          <img v-if="e.icon" :src="e.icon" alt="" class="h-5 w-10 object-contain brightness-0 invert" :class="e.active ? 'opacity-90' : 'opacity-75'">
+          <img v-if="e.icon" :src="e.icon" alt="" class="h-4 w-8 object-contain brightness-0 invert" :class="e.active ? 'opacity-90' : 'opacity-75'">
           {{ e.label }}
-          <svg viewBox="0 0 10 6" class="w-2.5 transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden="true"><path d="M0 0h10L5 6z" fill="currentColor" /></svg>
+          <svg viewBox="0 0 10 6" class="w-2 transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden="true"><path d="M0 0h10L5 6z" fill="currentColor" /></svg>
           <span v-if="e.hasConfigured && !e.active" class="absolute -top-0.5 -end-0.5 size-2 rounded-full border-2 border-ink-900 bg-mint-500" />
         </button>
       </DropdownMenuTrigger>
