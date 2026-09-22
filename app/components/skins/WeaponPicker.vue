@@ -73,10 +73,11 @@ const entries = computed(() => {
         </button>
       </DropdownMenuTrigger>
 
+      <!-- the weapon list reads left-to-right (reka sets dir from the root, hence the CSS); the nav row stays RTL -->
       <DropdownMenuContent
         align="start"
         :side-offset="6"
-        class="w-[min(14rem,calc(100vw-2rem))] max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] rounded-lg border-white/8 bg-ink-700 p-1 shadow-lift"
+        class="[direction:ltr] w-[min(14rem,calc(100vw-2rem))] max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] rounded-lg border-white/8 bg-ink-700 p-1 shadow-lift"
       >
         <template v-for="s in e.sections" :key="s.label">
           <DropdownMenuLabel
