@@ -190,20 +190,20 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
       <div class="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-25 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
 
       <!-- header -->
-      <header class="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 px-4 py-3 sm:px-5">
+      <header dir="ltr" class="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 px-4 py-3 sm:px-5">
         <div class="flex items-center gap-3">
           <span class="h-7 w-1 rounded-full bg-[var(--side)] transition-colors duration-500" />
           <div>
-            <p class="ltr text-right font-mono text-[10px] font-bold tracking-[.2em] text-white/35">Your Loadout</p>
-            <p class="ltr text-right text-[15px] font-bold text-white">{{ side.label }}</p>
+            <p class="font-mono text-[10px] font-bold tracking-[.2em] text-white/35">Your Loadout</p>
+            <p class="text-[15px] font-bold text-white">{{ side.label }}</p>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
-          <p class="ltr hidden font-mono text-[11.5px] text-white/40 sm:block">
+          <p class="hidden font-mono text-[11.5px] text-white/40 sm:block">
             <span class="font-bold text-white">{{ loading ? '–' : equippedCount }}</span> / {{ slotCount }} custom
           </p>
-          <div class="ltr flex rounded-lg bg-black/40 p-1" role="tablist" aria-label="Side">
+          <div class="flex rounded-lg bg-black/40 p-1" role="tablist" aria-label="Side">
             <button
               v-for="t in ([2, 3] as TeamId[])"
               :key="t"
