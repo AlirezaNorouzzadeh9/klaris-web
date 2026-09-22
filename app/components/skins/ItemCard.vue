@@ -152,7 +152,6 @@ watch(() => props.image, () => {
           <span class="truncate text-white/30">{{ kicker }}</span>
           <span v-if="tier" class="shrink-0" :style="{ color: tier.color }">{{ tier.short }} · {{ wear!.toFixed(3) }}</span>
         </span>
-        <span v-if="hasStattrak" class="mt-1 block truncate text-[10.5px] font-semibold text-[#f5902d]">StatTrak™ · {{ stattrak }} kills</span>
         <span class="mt-0.5 block truncate text-[13px] font-bold text-white" :title="title">{{ title }}</span>
       </button>
 
