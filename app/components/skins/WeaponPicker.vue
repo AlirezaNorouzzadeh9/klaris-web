@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { WeaponEntry } from '~/composables/useCatalog'
 import { ALL_WEAPONS, groupWeapons } from '~/data/weapons'
+import type { WeaponClass } from '~/types/skins'
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
 /**
- * Phone / tablet weapon selector: a text nav — "All" plus one dropdown per
- * weapon class (Rifles, Pistols, Shotguns…) — each opening a roomy list of
- * weapon renders and names. The class holding the selection turns mint.
+ * Phone / tablet weapon selector: a text nav — "All", Rifles, Snipers,
+ * Pistols and one "Mid-Tier" menu that holds SMGs, shotguns and machine guns
+ * as labelled sections. The entry holding the selection turns mint.
  */
 const props = defineProps<{
   weapons: WeaponEntry[]
@@ -20,12 +21,30 @@ const props = defineProps<{
 }>()
 const model = defineModel<number>({ required: true })
 
-const groups = computed(() => groupWeapons(props.weapons, props.grouped).map(g => ({
-  ...g,
-  label: g.label || props.title,
-  active: g.items.some(w => w.defindex === model.value),
-  hasConfigured: g.items.some(w => props.configured.has(w.defindex)),
-})))
+/** Classes folded into the single "Mid-Tier" menu, in display order. */
+const MID_TIER: WeaponClass[] = ['smg', 'shotgun', 'mg']
+
+interface Section { label: string; items: WeaponEntry[] }
+
+const entries = computed(() => {
+  const groups = groupWeapons(props.weapons, props.grouped)
+  const out: { key: string; label: string; sections: Section[] }[] = []
+  const mid: Section[] = []
+  for (const g of groups) {
+    if (MID_TIER.includes(g.key as WeaponClass)) mid.push({ label: g.label, items: g.items })
+    else out.push({ key: g.key, label: g.label || props.title, sections: [{ label: '', items: g.items }] })
+  }
+  if (mid.length) out.push({ key: 'mid-tier', label: 'Mid-Tier', sections: mid })
+
+  return out.map((e) => {
+    const all = e.sections.flatMap(s => s.items)
+    return {
+      ...e,
+      active: all.some(w => w.defindex === model.value),
+      hasConfigured: all.some(w => props.configured.has(w.defindex)),
+    }
+  })
+})
 </script>
 
 <template>
@@ -40,36 +59,42 @@ const groups = computed(() => groupWeapons(props.weapons, props.grouped).map(g =
       <span v-if="model === ALL_WEAPONS" class="absolute inset-x-2.5 bottom-1 h-0.5 rounded-full bg-mint-500" />
     </button>
 
-    <DropdownMenu v-for="g in groups" :key="g.key" dir="ltr">
+    <DropdownMenu v-for="e in entries" :key="e.key" dir="ltr">
       <DropdownMenuTrigger as-child>
         <button
           type="button"
           class="group relative flex h-10 shrink-0 items-center gap-1 rounded-md px-2.5 text-[15px] font-semibold transition-colors data-[state=open]:bg-white/[.06]"
-          :class="g.active ? 'text-mint-400' : 'text-white/80 active:bg-white/5'"
+          :class="e.active ? 'text-mint-400' : 'text-white/80 active:bg-white/5'"
         >
-          {{ g.label }}
+          {{ e.label }}
           <Icon name="lucide:chevron-down" class="size-4 opacity-70 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-          <span v-if="g.active" class="absolute inset-x-2.5 bottom-1 h-0.5 rounded-full bg-mint-500" />
-          <span v-else-if="g.hasConfigured" class="absolute top-2 end-1 size-1.5 rounded-full bg-mint-500" />
+          <span v-if="e.active" class="absolute inset-x-2.5 bottom-1 h-0.5 rounded-full bg-mint-500" />
+          <span v-else-if="e.hasConfigured" class="absolute top-2 end-1 size-1.5 rounded-full bg-mint-500" />
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="start"
         :side-offset="6"
-        class="w-[min(18rem,calc(100vw-2rem))] max-h-[min(26rem,var(--reka-dropdown-menu-content-available-height))] rounded-lg border-white/8 bg-ink-700 p-1.5 shadow-lift"
+        class="w-[min(14rem,calc(100vw-2rem))] max-h-[min(24rem,var(--reka-dropdown-menu-content-available-height))] rounded-lg border-white/8 bg-ink-700 p-1 shadow-lift"
       >
-        <DropdownMenuItem
-          v-for="w in g.items"
-          :key="w.defindex"
-          class="gap-3.5 rounded-md px-3 py-2.5 focus:bg-white/[.07]"
-          :class="model === w.defindex && 'bg-mint-500/12'"
-          @select="model = w.defindex"
-        >
-          <img :src="w.image" alt="" loading="lazy" class="h-7 w-11 shrink-0 object-contain">
-          <span class="flex-1 truncate text-[15px]" :class="model === w.defindex ? 'font-semibold text-mint-300' : 'text-white/90'">{{ w.label }}</span>
-          <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-mint-500" title="Skin equipped" />
-        </DropdownMenuItem>
+        <template v-for="s in e.sections" :key="s.label">
+          <DropdownMenuLabel
+            v-if="s.label"
+            class="px-2.5 pt-2.5 pb-1 text-[10.5px] font-bold tracking-[.08em] text-white/40 uppercase"
+          >{{ s.label }}</DropdownMenuLabel>
+          <DropdownMenuItem
+            v-for="w in s.items"
+            :key="w.defindex"
+            class="gap-2.5 rounded-md px-2.5 py-1.5 focus:bg-white/[.07]"
+            :class="model === w.defindex && 'bg-mint-500/12'"
+            @select="model = w.defindex"
+          >
+            <img :src="w.image" alt="" loading="lazy" class="h-5 w-9 shrink-0 object-contain">
+            <span class="flex-1 truncate text-[13.5px]" :class="model === w.defindex ? 'font-semibold text-mint-300' : 'text-white/90'">{{ w.label }}</span>
+            <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-mint-500" title="Skin equipped" />
+          </DropdownMenuItem>
+        </template>
       </DropdownMenuContent>
     </DropdownMenu>
   </nav>
