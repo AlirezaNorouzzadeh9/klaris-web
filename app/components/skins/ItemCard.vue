@@ -133,33 +133,31 @@ watch(() => props.image, () => {
       </span>
     </button>
 
+    <!-- inspect: top-left, opposite the side chips; sibling of the tile (buttons cannot nest); always shown on touch screens -->
+    <button
+      v-if="canInspect"
+      type="button"
+      class="absolute top-2 left-2 z-10 grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/70 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
+      aria-label="Inspect"
+      title="Inspect"
+      @click="openInspect"
+    >
+      <Icon name="lucide:scan-eye" class="size-3.5" />
+    </button>
+
     <!-- labels -->
     <div class="flex flex-1 flex-col gap-2 px-2.5 pt-2 pb-2.5">
-      <button type="button" class="block w-full text-right outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
-        <span class="ltr flex items-center justify-between gap-2 font-mono text-[9px] font-bold tracking-[.06em]">
-          <span v-if="tier" :style="{ color: tier.color }">{{ tier.short }} · {{ wear!.toFixed(3) }}</span>
-          <span v-else />
+      <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
+        <span class="flex items-center justify-between gap-2 font-mono text-[9px] font-bold tracking-[.06em]">
           <span class="truncate text-white/30">{{ kicker }}</span>
+          <span v-if="tier" class="shrink-0" :style="{ color: tier.color }">{{ tier.short }} · {{ wear!.toFixed(3) }}</span>
         </span>
-        <span v-if="hasStattrak" class="ltr mt-1 block truncate text-right text-[10.5px] font-semibold text-[#f5902d]">StatTrak™ · {{ stattrak }} kills</span>
-        <span class="ltr mt-0.5 block truncate text-right text-[13px] font-bold text-white" :title="title">{{ title }}</span>
+        <span v-if="hasStattrak" class="mt-1 block truncate text-[10.5px] font-semibold text-[#f5902d]">StatTrak™ · {{ stattrak }} kills</span>
+        <span class="mt-0.5 block truncate text-[13px] font-bold text-white" :title="title">{{ title }}</span>
       </button>
 
-      <!-- action row: select / settings, with inspect beside it -->
-      <div v-if="$slots.default || canInspect" class="mt-auto flex items-center gap-1.5">
-        <div v-if="$slots.default" class="min-w-0 flex-1">
-          <slot />
-        </div>
-        <button
-          v-if="canInspect"
-          type="button"
-          class="grid size-[30px] shrink-0 place-items-center rounded-full border border-white/10 text-white/50 transition-colors hover:border-mint-500/50 hover:text-mint-300"
-          aria-label="Inspect"
-          title="Inspect"
-          @click="openInspect"
-        >
-          <Icon name="lucide:scan-eye" class="size-3.5" />
-        </button>
+      <div v-if="$slots.default" class="mt-auto">
+        <slot />
       </div>
     </div>
 
