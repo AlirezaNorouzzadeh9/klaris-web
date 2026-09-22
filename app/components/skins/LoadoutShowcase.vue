@@ -194,7 +194,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
         <div class="flex items-center gap-3">
           <span class="h-7 w-1 rounded-full bg-[var(--side)] transition-colors duration-500" />
           <div>
-            <p class="ltr text-right font-mono text-[10px] font-bold tracking-[.25em] text-white/35">YOUR LOADOUT</p>
+            <p class="ltr text-right font-mono text-[10px] font-bold tracking-[.2em] text-white/35">Your Loadout</p>
             <p class="ltr text-right text-[15px] font-bold text-white">{{ side.label }}</p>
           </div>
         </div>
@@ -292,7 +292,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
 
           <div class="ltr grid gap-3 lg:grid-cols-3">
             <div v-for="c in columns" :key="c.key" class="min-w-0" :class="mobileColumn === c.key ? 'block' : 'hidden lg:block'">
-              <p class="mb-2 hidden items-center gap-2 font-mono text-[10.5px] font-bold tracking-[.2em] text-white/35 uppercase lg:flex">
+              <p class="mb-2 hidden items-center gap-2 font-mono text-[10.5px] font-bold tracking-[.12em] text-white/35 lg:flex">
                 {{ c.label }} <span class="h-px flex-1 bg-white/6" />
               </p>
               <div class="flex flex-col gap-1">
@@ -319,7 +319,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                     :class="!s.equipped && 'opacity-45 grayscale-[.6]'"
                   >
                   <span class="min-w-0 flex-1">
-                    <span class="block truncate font-mono text-[9.5px] font-bold tracking-[.06em] text-white/35 uppercase">{{ s.weapon }}</span>
+                    <span class="block truncate font-mono text-[9.5px] font-bold tracking-[.04em] text-white/35">{{ s.weapon }}</span>
                     <span class="block truncate text-[12.5px] font-bold" :class="s.equipped ? 'text-white' : 'text-white/40'">{{ s.finish }}</span>
                   </span>
                   <span v-if="s.config" class="flex shrink-0 flex-col items-end gap-1">

@@ -228,7 +228,7 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
         <!-- top bar -->
         <div class="z-10 flex shrink-0 items-center gap-3 px-4 pt-4 sm:px-6 sm:pt-5">
           <div class="min-w-0 flex-1">
-            <p v-if="item.kicker" class="truncate font-mono text-[10.5px] font-bold tracking-[.12em] text-white/35 uppercase">{{ item.kicker }}</p>
+            <p v-if="item.kicker" class="truncate font-mono text-[10.5px] font-bold tracking-[.12em] text-white/35">{{ item.kicker }}</p>
             <DialogTitle class="truncate text-lg font-black text-white sm:text-2xl">{{ item.title }}</DialogTitle>
             <DialogDescription class="sr-only">Inspect view. Drag or use the arrow keys to rotate; scroll, pinch or use plus and minus to zoom.</DialogDescription>
           </div>

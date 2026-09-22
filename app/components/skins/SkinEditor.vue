@@ -203,7 +203,7 @@ function save() {
             </div>
             <div class="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3">
               <div>
-                <p class="font-mono text-[10.5px] font-bold tracking-wider text-white/35 uppercase">{{ item.caption }}</p>
+                <p class="font-mono text-[10.5px] font-bold tracking-wider text-white/35">{{ item.caption }}</p>
                 <p class="text-[15px] font-bold text-white">{{ item.title }}</p>
               </div>
               <p v-if="draft.nametag" class="truncate font-mono text-[12px] text-mint-300">"{{ draft.nametag }}"</p>
@@ -328,7 +328,7 @@ function save() {
 
               <!-- placement for the selected sticker -->
               <div v-if="tunedSticker && typeof tuning === 'number'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
-                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55">
                   Slot {{ tuning + 1 }} · {{ meta.get(`s${tunedSticker.id}`)?.name ?? `Sticker #${tunedSticker.id}` }}
                 </p>
                 <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
@@ -371,7 +371,7 @@ function save() {
 
               <!-- placement for the charm -->
               <div v-if="draft.keychain.id && tuning === 'keychain'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
-                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55">
                   Charm · {{ meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` }}
                 </p>
                 <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">

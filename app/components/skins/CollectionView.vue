@@ -63,7 +63,7 @@ function toggle(item: CatalogItem, team: TeamId) {
         :key="item.id"
         :image="item.image"
         :title="cleanName(item.name)"
-        :kicker="kind === 'music' ? 'MUSIC KIT' : 'PIN'"
+        :kicker="kind === 'music' ? 'Music Kit' : 'Pin'"
         :active-teams="teamsFor(item)"
         :interactive="false"
         stage-class="h-[138px]"

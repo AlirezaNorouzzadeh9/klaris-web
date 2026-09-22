@@ -103,7 +103,7 @@ async function onRemove() {
         :key="`${g.weapon_defindex}-${g.paint}`"
         :image="g.image"
         :title="finishName(g.paint_name)"
-        :kicker="weaponLabel(g.paint_name).toUpperCase()"
+        :kicker="weaponLabel(g.paint_name)"
         :active-teams="teamsFor(g)"
         @select="openEditor(g)"
       >

@@ -83,7 +83,7 @@ function toggle(a: CatalogAgent) {
       :key="a.model"
       :image="a.image"
       :title="split(a).name"
-      :kicker="split(a).faction.toUpperCase()"
+      :kicker="split(a).faction"
       :active-teams="loadout.agents[a.team] === a.model ? [a.team] : []"
       :glow="a.team === 2 ? 'rgb(226 173 85 / .16)' : 'rgb(98 174 234 / .16)'"
       stage-class="h-[186px]"
