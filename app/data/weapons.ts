@@ -6,12 +6,12 @@ export interface WeaponClassMeta {
 }
 
 export const WEAPON_CLASSES: WeaponClassMeta[] = [
-  { key: 'rifle', label: 'Rifle' },
-  { key: 'sniper', label: 'Sniper' },
-  { key: 'pistol', label: 'Pistol' },
-  { key: 'smg', label: 'SMG' },
-  { key: 'shotgun', label: 'Shotgun' },
-  { key: 'mg', label: 'Machine Gun' },
+  { key: 'rifle', label: 'Rifles' },
+  { key: 'sniper', label: 'Snipers' },
+  { key: 'pistol', label: 'Pistols' },
+  { key: 'smg', label: 'SMGs' },
+  { key: 'shotgun', label: 'Shotguns' },
+  { key: 'mg', label: 'Machine Guns' },
 ]
 
 /** defindex -> weapon class. Anything >= 500 in the catalog is a knife. */

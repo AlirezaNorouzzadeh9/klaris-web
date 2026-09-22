@@ -149,7 +149,7 @@ async function onRemove() {
       :weapons="weapons"
       :configured="configured"
       :grouped="!knives"
-      :title="knives ? 'Knife' : 'Weapon'"
+      :title="knives ? 'Knives' : 'Weapons'"
       all-label="All"
     />
   </div>
