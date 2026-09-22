@@ -18,8 +18,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
 
 <template>
-  <!-- the UI here is English, so the field reads left-to-right -->
-  <div class="group relative" dir="ltr">
+  <!-- the placeholder is Persian, so the field reads right-to-left -->
+  <div class="group relative" dir="rtl">
     <Icon
       name="lucide:search"
       class="pointer-events-none absolute top-1/2 -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-mint-500"
@@ -33,7 +33,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       ref="input"
       v-model="model"
       type="search"
-      :placeholder="rtlText(placeholder)"
+      :placeholder="placeholder"
       enterkeyhint="search"
       autocomplete="off"
       class="w-full text-white outline-none transition-[border-color,box-shadow] placeholder:text-white/30 focus:border-mint-500/50 focus:shadow-[0_0_0_4px_rgb(46_232_156/.08)] [&::-webkit-search-cancel-button]:appearance-none"

@@ -53,12 +53,12 @@ function pick(item: CatalogItem) {
         <DialogDescription>
           <span v-if="state === 'ready'" class="font-mono">{{ filtered.length.toLocaleString('en-US') }}</span> items
         </DialogDescription>
-        <div class="relative mt-3">
+        <div class="relative mt-3" dir="rtl">
           <Icon name="lucide:search" class="pointer-events-none absolute top-1/2 start-3 size-4 -translate-y-1/2 text-white/30" />
           <input
             v-model="query"
             type="search"
-            :placeholder="rtlText('جستجو… مثلاً Katowice یا Holo')"
+            placeholder="جستجو… مثلاً Katowice یا Holo"
             class="h-10 w-full rounded-md border border-white/10 bg-ink-950/70 ps-9 pe-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-mint-500/50"
           >
         </div>
