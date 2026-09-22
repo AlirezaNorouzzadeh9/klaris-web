@@ -154,7 +154,7 @@ function save() {
   <Sheet v-model:open="open">
     <SheetContent
       side="right"
-      dir="rtl"
+      dir="ltr"
       @open-auto-focus.prevent
       class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:z-10"
     >
@@ -239,7 +239,7 @@ function save() {
                 <div class="absolute inset-x-0 top-1/2 flex h-1.5 -translate-y-1/2 overflow-hidden rounded-full">
                   <span v-for="t in WEAR_TIERS" :key="t.key" :style="{ width: `${(t.max - t.min) * 100}%`, background: t.color }" class="opacity-70" />
                 </div>
-                <Slider v-model="wearModel" dir="rtl" :min="0" :max="1" :step="0.001" class="relative [&_[data-slot=slider-range]]:bg-transparent [&_[data-slot=slider-track]]:bg-transparent" />
+                <Slider v-model="wearModel" dir="ltr" :min="0" :max="1" :step="0.001" class="relative [&_[data-slot=slider-range]]:bg-transparent [&_[data-slot=slider-track]]:bg-transparent" />
               </div>
             </section>
 
@@ -261,7 +261,7 @@ function save() {
                   >
                 </div>
               </div>
-              <Slider v-model="seedModel" dir="rtl" :min="0" :max="1000" :step="1" />
+              <Slider v-model="seedModel" dir="ltr" :min="0" :max="1000" :step="1" />
             </section>
 
             <!-- name tag + stattrak -->
@@ -323,7 +323,7 @@ function save() {
 
               <!-- placement for the selected sticker -->
               <div v-if="tunedSticker && typeof tuning === 'number'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
-                <p class="ltr mb-3.5 truncate text-right font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
                   Slot {{ tuning + 1 }} · {{ meta.get(`s${tunedSticker.id}`)?.name ?? `Sticker #${tunedSticker.id}` }}
                 </p>
                 <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
@@ -359,14 +359,14 @@ function save() {
                   <Icon v-else name="lucide:plus" class="size-4" />
                 </button>
                 <div class="min-w-0 flex-1">
-                  <p class="ltr truncate text-right text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
+                  <p class="ltr truncate text-left text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
                   <p v-if="draft.keychain.id && tuning !== 'keychain'" class="mt-1 text-[12px] text-white/35">Tap to adjust position and pattern</p>
                 </div>
               </div>
 
               <!-- placement for the charm -->
               <div v-if="draft.keychain.id && tuning === 'keychain'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
-                <p class="ltr mb-3.5 truncate text-right font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                <p class="ltr mb-3.5 truncate text-left font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
                   Charm · {{ meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` }}
                 </p>
                 <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
@@ -390,7 +390,7 @@ function save() {
             <!-- teams -->
             <section>
               <h4 class="mb-1 text-[13px] font-bold text-white/80">Equip on</h4>
-              <p class="ltr mb-3 text-right text-[12px] text-white/40">You can run different skins on T and CT.</p>
+              <p class="ltr mb-3 text-left text-[12px] text-white/40">You can run different skins on T and CT.</p>
               <SkinsTeamPicker v-model="teams" />
             </section>
           </div>
