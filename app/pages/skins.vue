@@ -24,6 +24,7 @@ onMounted(ensureLoaded)
   <!-- right-to-left like the rest of the site; English names inside are isolated with `.ltr` -->
   <div dir="rtl">
     <SkinsHero />
+    <SkinsLoadoutShowcase />
     <SkinsCategoryTabs v-model="category" />
 
     <section class="mx-auto max-w-[1440px] px-4 pt-5 pb-8 sm:px-6 lg:px-10 lg:pt-[22px]">
