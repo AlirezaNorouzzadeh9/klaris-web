@@ -30,8 +30,15 @@ const equipped = computed(() => (status.value === 'ready' ? String(configuredCou
 
 <template>
   <section class="relative overflow-hidden border-b border-white/6">
-    <!-- stage: grid, a glow above the title and a soft floor light -->
-    <div class="bg-grid pointer-events-none absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]" />
+    <!-- stage: artwork, then grid, a glow above the title and a soft floor light -->
+    <img
+      src="/img/hero-loadout.webp"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 size-full object-cover object-center opacity-70 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+    >
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_80%_at_50%_45%,rgb(7_9_12/.92),rgb(7_9_12/.55)_70%,rgb(7_9_12/.35))]" />
+    <div class="bg-grid pointer-events-none absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]" />
     <div class="pointer-events-none absolute -top-[220px] left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-mint-500/[.07] blur-[140px]" />
     <div class="pointer-events-none absolute inset-x-0 -bottom-24 h-48 bg-[radial-gradient(60%_100%_at_50%_100%,rgb(46_232_156/.08),transparent_70%)]" />
 
