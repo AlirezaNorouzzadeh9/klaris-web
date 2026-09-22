@@ -14,7 +14,7 @@ const items = ref<CatalogItem[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const query = ref('')
 const limit = ref(PAGE)
-const placeholder = computed(() => (props.kind === 'music' ? 'Search music kits… e.g. Hotline Miami' : 'Search pins… e.g. Katowice'))
+const placeholder = computed(() => (props.kind === 'music' ? 'جستجوی موزیک کیت… مثلاً Hotline Miami' : 'جستجوی پین… مثلاً Katowice'))
 
 async function fetchCatalog() {
   state.value = 'loading'

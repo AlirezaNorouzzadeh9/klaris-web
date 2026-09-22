@@ -10,7 +10,7 @@ const gloves = ref<CatalogGlove[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const kit = ref<string>('all')
 const query = ref('')
-const placeholder = 'Search gloves… e.g. Wave Chaser'
+const placeholder = 'جستجوی دستکش… مثلاً Wave Chaser'
 
 async function fetchCatalog() {
   state.value = 'loading'

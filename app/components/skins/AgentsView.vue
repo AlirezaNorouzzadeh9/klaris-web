@@ -9,7 +9,7 @@ const agents = ref<CatalogAgent[]>([])
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const side = ref<TeamId>(3)
 const query = ref('')
-const placeholder = 'Search agents… e.g. Sir Bloody'
+const placeholder = 'جستجوی ایجنت… مثلاً Sir Bloody'
 
 async function fetchCatalog() {
   state.value = 'loading'

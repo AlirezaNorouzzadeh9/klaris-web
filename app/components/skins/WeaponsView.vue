@@ -59,7 +59,7 @@ const skins = computed(() => {
 const paged = computed(() => searching.value || showingAll.value)
 const visibleSkins = computed(() => (paged.value ? skins.value.slice(0, limit.value) : skins.value))
 const allLabel = computed(() => (props.knives ? 'All knives' : 'All weapons'))
-const searchPlaceholder = computed(() => (props.knives ? 'Search knives… e.g. Karambit Fade' : 'Search skins… e.g. Asiimov'))
+const searchPlaceholder = computed(() => (props.knives ? 'جستجوی چاقو… مثلاً Karambit Fade' : 'جستجوی اسکین… مثلاً Asiimov'))
 
 /** Weapons with a saved skin on either side (for knives: the equipped models). */
 const configured = computed(() => {

@@ -58,7 +58,7 @@ function pick(item: CatalogItem) {
           <input
             v-model="query"
             type="search"
-            placeholder="Search… e.g. Katowice or Holo"
+            :placeholder="rtlText('جستجو… مثلاً Katowice یا Holo')"
             class="h-10 w-full rounded-md border border-white/10 bg-ink-950/70 ps-9 pe-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-mint-500/50"
           >
         </div>

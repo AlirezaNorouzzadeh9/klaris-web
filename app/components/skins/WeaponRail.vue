@@ -29,7 +29,7 @@ const groups = computed(() =>
         <input
           v-model="railFilter"
           type="search"
-          placeholder="Filter weapons…"
+          :placeholder="rtlText('فیلتر اسلحه‌ها…')"
           aria-label="Filter weapons"
           class="h-[34px] w-full rounded-full border border-white/9 bg-ink-950/60 ps-8 pe-3 text-[12.5px] text-white outline-none transition-colors placeholder:text-white/30 focus:border-mint-500/45 [&::-webkit-search-cancel-button]:appearance-none"
           @keydown.esc="railFilter = ''"
