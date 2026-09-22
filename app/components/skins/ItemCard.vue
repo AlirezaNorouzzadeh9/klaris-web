@@ -95,8 +95,8 @@ watch(() => props.image, () => {
     ]"
     :style="{ '--accent': accent }"
   >
-    <!-- accent edge for equipped items -->
-    <span v-if="active" class="absolute inset-y-0 left-0 z-[5] w-[3px] bg-[var(--accent)]" />
+    <!-- accent edge along the top for equipped items -->
+    <span v-if="active" class="absolute inset-x-0 top-0 z-[5] h-[3px] bg-[var(--accent)]" />
 
     <!-- StatTrak corner ribbon -->
     <span v-if="hasStattrak" class="pointer-events-none absolute top-0 right-0 z-[5] size-16 overflow-hidden">
@@ -180,13 +180,12 @@ watch(() => props.image, () => {
 
     <!-- wear gauge + actions -->
     <div class="ltr flex flex-1 flex-col gap-[9px] px-[11px] pt-2.5 pb-[11px]">
-      <!-- steps rise from left to right, like a signal meter -->
-      <span class="flex h-[11px] items-end gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
+      <span class="flex gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
         <span
           v-for="(t, i) in WEAR_TIERS"
           :key="t.key"
-          class="flex-1 rounded-[2px] transition-colors duration-300"
-          :style="{ height: `${3 + i * 2}px`, background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
+          class="h-[5px] flex-1 rounded-[2px] transition-colors duration-300"
+          :style="{ background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
         />
       </span>
       <span class="mt-auto flex items-center gap-[7px]">
