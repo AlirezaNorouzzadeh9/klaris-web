@@ -148,11 +148,13 @@ watch(() => props.image, () => {
     <!-- labels -->
     <div class="flex flex-1 flex-col gap-2 px-2.5 pt-2 pb-2.5">
       <button type="button" class="ltr block w-full text-left outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
-        <span class="flex items-center justify-between gap-2 font-mono text-[10px] font-bold tracking-[.04em]">
-          <span class="truncate font-sans text-[12px] font-semibold tracking-normal text-white/50">{{ kicker }}</span>
-          <span v-if="tier" class="shrink-0" :style="{ color: tier.color }">{{ tier.short }} · {{ wear!.toFixed(3) }}</span>
-        </span>
+        <span v-if="kicker" class="block truncate text-[12px] font-semibold text-white/50">{{ kicker }}</span>
         <span class="mt-0.5 block truncate text-[14px] font-bold text-white" :title="title">{{ title }}</span>
+        <span v-if="tier" class="mt-1 flex items-center gap-1.5 font-mono text-[11px] font-bold">
+          <span class="size-1.5 shrink-0 rounded-full" :style="{ background: tier.color }" />
+          <span :style="{ color: tier.color }">{{ tier.short }}</span>
+          <span class="text-white/40">{{ wear!.toFixed(3) }}</span>
+        </span>
       </button>
 
       <div v-if="$slots.default" class="mt-auto">

@@ -175,13 +175,13 @@ async function onRemove() {
       <!-- desktop: the search takes the grid header's place -->
       <SkinsSearchBar v-model="query" class="mb-3.5 hidden lg:block" :placeholder="searchPlaceholder" />
 
-      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div v-if="state === 'loading'" class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
         <div v-for="n in 15" :key="n" class="skeleton h-[168px] rounded-xl" />
       </div>
 
       <SkinsEmptyResult v-else-if="!skins.length" :query="query" @clear="query = ''" />
 
-      <div v-else class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
         <SkinsItemCard
           v-for="skin in visibleSkins"
           :key="`${skin.weapon_defindex}-${skin.paint}`"
