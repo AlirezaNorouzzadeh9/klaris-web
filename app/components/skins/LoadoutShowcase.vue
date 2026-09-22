@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogSkin, SkinConfig, TeamId } from '~/types/skins'
-import { wearTierOf, weaponClassOf } from '~/data/weapons'
+import { wearTierOf } from '~/data/weapons'
 import { finishName, weaponLabel } from '~/composables/useCatalog'
 
 /**
@@ -53,15 +53,32 @@ interface Slot {
   config?: SkinConfig
 }
 
-/** What the game hands each side before anything is changed. */
-const DEFAULTS: Record<TeamId, Record<'pistols' | 'mid' | 'rifles', number[]>> = {
-  2: { pistols: [4, 36, 30, 1, 2], mid: [17, 33, 24, 19, 35], rifles: [13, 7, 40, 39, 9] },
-  3: { pistols: [61, 36, 3, 1, 2], mid: [34, 33, 24, 19, 35], rifles: [10, 60, 40, 8, 9] },
+/**
+ * Every weapon each side can carry, in the order of the game's loadout screen
+ * (starting pistol first; Zeus x27 sits with the pistols).
+ */
+const AVAILABLE: Record<TeamId, Record<'pistols' | 'mid' | 'rifles', number[]>> = {
+  // Glock-18 · P250 · Tec-9 · CZ75-Auto · Desert Eagle · R8 · Dual Berettas · Zeus
+  // Nova · XM1014 · Sawed-Off · MAC-10 · MP7 · MP5-SD · UMP-45 · P90 · PP-Bizon · M249 · Negev
+  // Galil AR · AK-47 · SSG 08 · SG 553 · AWP · G3SG1
+  2: {
+    pistols: [4, 36, 30, 63, 1, 64, 2, 31],
+    mid: [35, 25, 29, 17, 33, 23, 24, 19, 26, 14, 28],
+    rifles: [13, 7, 40, 39, 9, 11],
+  },
+  // USP-S · P2000 · P250 · Five-SeveN · CZ75-Auto · Desert Eagle · R8 · Dual Berettas · Zeus
+  // Nova · XM1014 · MAG-7 · MP9 · MP7 · MP5-SD · UMP-45 · P90 · PP-Bizon · M249 · Negev
+  // FAMAS · M4A4 · M4A1-S · SSG 08 · AUG · AWP · SCAR-20
+  3: {
+    pistols: [61, 32, 36, 3, 63, 1, 64, 2, 31],
+    mid: [35, 25, 27, 34, 33, 23, 24, 19, 26, 14, 28],
+    rifles: [10, 16, 60, 40, 8, 9, 38],
+  },
 }
 const COLUMNS = [
-  { key: 'pistols', label: 'Pistols', classes: ['pistol'] },
-  { key: 'mid', label: 'Mid-Tier', classes: ['smg', 'shotgun', 'mg'] },
-  { key: 'rifles', label: 'Rifles', classes: ['rifle', 'sniper'] },
+  { key: 'pistols', label: 'Pistols' },
+  { key: 'mid', label: 'Mid-Tier' },
+  { key: 'rifles', label: 'Rifles' },
 ] as const
 
 function weaponSlot(defindex: number): Slot | null {
@@ -80,15 +97,11 @@ function weaponSlot(defindex: number): Slot | null {
   }
 }
 
-/** Equipped weapons of the class first, then the side's defaults, five per column. */
-const columns = computed(() => COLUMNS.map((col) => {
-  const equipped = Object.keys(loadout.value.skins[team.value])
-    .map(Number)
-    .filter(d => (col.classes as readonly string[]).includes(weaponClassOf(d)))
-  const order = [...new Set([...equipped, ...DEFAULTS[team.value][col.key]])]
-  const slots = order.map(weaponSlot).filter((s): s is Slot => s !== null).slice(0, 5)
-  return { ...col, slots }
-}))
+const columns = computed(() => COLUMNS.map(col => ({
+  ...col,
+  slots: AVAILABLE[team.value][col.key].map(weaponSlot).filter((s): s is Slot => s !== null),
+})))
+const slotCount = computed(() => columns.value.reduce((n, c) => n + c.slots.length, 0) + 5) // + agent and 4 gear
 
 const gear = computed(() => {
   const l = loadout.value
@@ -185,7 +198,7 @@ function openAgent() {
 
         <div class="flex items-center gap-3">
           <p class="ltr hidden font-mono text-[11.5px] text-white/40 sm:block">
-            <span class="font-bold text-white">{{ loading ? '–' : equippedCount }}</span> / 21 custom
+            <span class="font-bold text-white">{{ loading ? '–' : equippedCount }}</span> / {{ slotCount }} custom
           </p>
           <div class="ltr flex rounded-lg bg-black/40 p-1" role="tablist" aria-label="Side">
             <button
@@ -279,16 +292,16 @@ function openAgent() {
               <p class="mb-2 hidden items-center gap-2 font-mono text-[10.5px] font-bold tracking-[.2em] text-white/35 uppercase lg:flex">
                 {{ c.label }} <span class="h-px flex-1 bg-white/6" />
               </p>
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-1">
                 <template v-if="loading">
-                  <span v-for="n in 5" :key="n" class="skeleton h-[62px] rounded-lg" />
+                  <span v-for="n in 7" :key="n" class="skeleton h-[46px] rounded-lg" />
                 </template>
                 <button
                   v-for="s in c.slots"
                   v-else
                   :key="s.key"
                   type="button"
-                  class="group relative flex h-[62px] min-w-0 cursor-zoom-in items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
+                  class="group relative flex h-[46px] min-w-0 cursor-zoom-in items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
                   :class="s.equipped
                     ? 'border-[color-mix(in_oklab,var(--side)_35%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--side)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--side)_60%,transparent)]'
                     : 'border-white/6 bg-black/20 hover:border-white/14'"
@@ -298,7 +311,7 @@ function openAgent() {
                     :src="s.image"
                     alt=""
                     loading="lazy"
-                    class="h-full w-[46%] shrink-0 object-contain py-1.5 drop-shadow-[0_6px_8px_rgb(0_0_0/.55)] transition-transform duration-300 group-hover:scale-[1.06]"
+                    class="h-full w-[40%] shrink-0 object-contain py-1 drop-shadow-[0_6px_8px_rgb(0_0_0/.55)] transition-transform duration-300 group-hover:scale-[1.06]"
                     :class="!s.equipped && 'opacity-45 grayscale-[.6]'"
                   >
                   <span class="min-w-0 flex-1">
