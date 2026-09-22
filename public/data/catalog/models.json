@@ -1,9 +1,267 @@
 [
-  { "id": "megumin", "name": "Megumin", "side": "all", "vip": true, "image": "/img/models/megumin.webp" },
-  { "id": "mordecai", "name": "Mordecai", "side": "all", "vip": true, "image": "/img/models/mordecai.webp" },
-  { "id": "agent_smith", "name": "Agent Smith", "side": "all", "vip": true, "image": "/img/models/agent_smith.webp" },
-  { "id": "agent_smith_w", "name": "Agent Smith (White)", "side": "all", "vip": true, "image": "/img/models/agent_smith_w.webp" },
-  { "id": "leon", "name": "Leon Kennedy", "side": "all", "vip": true, "image": "/img/models/leon.webp" },
-  { "id": "ghostface", "name": "GhostFace", "side": "all", "vip": true, "image": "/img/models/ghostface.webp" },
-  { "id": "goku", "name": "Son Goku", "side": "all", "vip": true, "image": "/img/models/goku.webp" }
+  {
+    "id": "megumin",
+    "name": "Megumin",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/megumin.webp"
+  },
+  {
+    "id": "mordecai",
+    "name": "Mordecai",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/mordecai.webp"
+  },
+  {
+    "id": "agent_smith",
+    "name": "Agent Smith",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/agent_smith.webp"
+  },
+  {
+    "id": "agent_smith_w",
+    "name": "Agent Smith (White)",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/agent_smith_w.webp"
+  },
+  {
+    "id": "leon",
+    "name": "Leon Kennedy",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/leon.webp"
+  },
+  {
+    "id": "ghostface",
+    "name": "GhostFace",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/ghostface.webp"
+  },
+  {
+    "id": "goku",
+    "name": "Son Goku",
+    "side": "all",
+    "vip": true,
+    "image": "/img/models/goku.webp"
+  },
+  {
+    "id": "pack_keqing",
+    "name": "Keqing",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_griseo",
+    "name": "Griseo",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_cheshire",
+    "name": "Cheshire",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_tokisaki_mio",
+    "name": "Tokisaki Mio",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_416",
+    "name": "HK416",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_kaoji",
+    "name": "Kaoji",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_snow",
+    "name": "Snow",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_amamiya",
+    "name": "Amamiya",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_hoshino_swim",
+    "name": "Hoshino",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_professor_niyaniya",
+    "name": "Professor Niyaniya",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_airi_danzai",
+    "name": "Airi (Danzai)",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_airi_dreaming",
+    "name": "Airi (Dreaming)",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_airi_maid",
+    "name": "Airi (Maid)",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_haku",
+    "name": "Haku",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_manuka_mari",
+    "name": "Manuka Mari",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_aili",
+    "name": "Aili",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_tashkent",
+    "name": "Tashkent",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_anon",
+    "name": "Anon Chihaya",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_chiffon_star_dust",
+    "name": "Chiffon Star Dust",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_little_mercury",
+    "name": "Little Mercury",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_moe_aegis",
+    "name": "Moe Aegis",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_sakurarinhoshi",
+    "name": "Sakura Rin Hoshi",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_shinra_sister",
+    "name": "Shinra Sister",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_smei",
+    "name": "Smei",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_yog_sothoth",
+    "name": "Yog-Sothoth",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_chisato_sk2model",
+    "name": "Chisato",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_chisato_sk2model_2",
+    "name": "Chisato (Lycoris Recoil)",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_makima",
+    "name": "Makima",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_sarahoshikawa",
+    "name": "Sara Hoshikawa",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_itachi_uchiha_ct",
+    "name": "Itachi Uchiha",
+    "side": "ct",
+    "vip": true
+  },
+  {
+    "id": "pack_hakua",
+    "name": "Hakua",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_kikyo2_playermodel",
+    "name": "Kikyo",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_manuka_playermodel",
+    "name": "Manuka",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_maya_playermodel",
+    "name": "Maya",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_rindo_playermodel",
+    "name": "Rindo",
+    "side": "all",
+    "vip": true
+  },
+  {
+    "id": "pack_yoll_playermodel",
+    "name": "Yoll",
+    "side": "all",
+    "vip": true
+  }
 ]
