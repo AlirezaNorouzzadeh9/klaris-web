@@ -3,21 +3,34 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } fr
 import { wearTierOf } from '~/data/weapons'
 
 /**
- * Pseudo-3D inspect view for any catalog render. Drag (mouse or finger) turns
- * the flat image in perspective and it keeps the angle you leave it at, with a
+ * Pseudo-3D inspect view for any catalog render. Drag (mouse or finger) spins
+ * the item all the way round and it keeps the angle you leave it at, with a
  * little inertia; wheel / pinch / double-click / buttons zoom toward the
- * pointer. A sheen follows the angle and the render is mirrored on the floor.
- * Left alone for a few seconds it sways gently, like the in-game inspect.
+ * pointer. A sheen follows the angle across the front face.
+ * Left alone for a few seconds it turns slowly, like a shop turntable.
  */
 const { item, open } = useInspect()
 
-const MAX_Y = 40 // degrees left / right
-const MAX_X = 22 // degrees up / down
+const MAX_X = 22 // degrees up / down; left / right spins freely
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
 const IDLE_MS = 4000
-const DRAG_Y = 0.4 // degrees per pixel
+const TURNTABLE_DEG_PER_S = 24
+const DRAG_Y = 0.45 // degrees per pixel
 const DRAG_X = 0.3
+
+/**
+ * The render is stacked into thin layers to fake thickness: seen edge-on the
+ * darkened middle layers read as the item's body instead of a paper-thin line,
+ * and the back layer shows the (mirrored) render when the item faces away.
+ */
+const LAYER_COUNT = 12
+const DEPTH_PX = 18
+const layers = Array.from({ length: LAYER_COUNT }, (_, i) => {
+  const z = -DEPTH_PX / 2 + (i * DEPTH_PX) / (LAYER_COUNT - 1)
+  const face = i === 0 || i === LAYER_COUNT - 1
+  return { z, face, front: i === LAYER_COUNT - 1 }
+})
 
 const stage = ref<HTMLElement>()
 const model = ref<HTMLElement>()
@@ -36,7 +49,9 @@ let reduced = false
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 function reset() {
-  Object.assign(target, { rx: 0, ry: 0, zoom: 1, ox: 50, oy: 50 })
+  // face front again by the shortest way, not by unwinding every spin
+  const front = Math.round(current.ry / 360) * 360
+  Object.assign(target, { rx: 0, ry: front, zoom: 1, ox: 50, oy: 50 })
   velocity.x = velocity.y = 0
   lastInput = performance.now()
 }
@@ -47,22 +62,28 @@ function setZoom(z: number) {
   lastInput = performance.now()
 }
 
+let lastFrame = 0
+
 function tick(now: number) {
+  // frame-rate independent step (1 = one 60 Hz frame), capped after a stall
+  const step = lastFrame ? Math.min((now - lastFrame) / 16.67, 4) : 1
+  lastFrame = now
+
   if (!dragging && (velocity.x || velocity.y)) {
-    // inertia after a flick
-    target.ry = clamp(target.ry + velocity.x, -MAX_Y, MAX_Y)
-    target.rx = clamp(target.rx + velocity.y, -MAX_X, MAX_X)
-    velocity.x *= 0.9
-    velocity.y *= 0.9
+    // coast after a flick; a hard flick spins a few times
+    target.ry += velocity.x * step
+    target.rx = clamp(target.rx + velocity.y * step, -MAX_X, MAX_X)
+    const decay = 0.94 ** step
+    velocity.x *= decay
+    velocity.y *= decay
     if (Math.abs(velocity.x) < 0.02 && Math.abs(velocity.y) < 0.02) velocity.x = velocity.y = 0
   }
   else if (!reduced && !dragging && now - lastInput > IDLE_MS && target.zoom === 1) {
-    // idle sway once nobody has touched the view for a while
-    const t = now / 1000
-    target.ry = Math.sin(t * 0.55) * 14
-    target.rx = Math.cos(t * 0.42) * 5
+    // idle: slow turntable, levelling out the vertical tilt
+    target.ry += (TURNTABLE_DEG_PER_S / 60) * step
+    target.rx += (0 - target.rx) * 0.05 * step
   }
-  const k = reduced ? 1 : 0.14
+  const k = reduced ? 1 : 1 - 0.86 ** step
   current.rx += (target.rx - current.rx) * k
   current.ry += (target.ry - current.ry) * k
   current.zoom += (target.zoom - current.zoom) * k
@@ -75,8 +96,8 @@ function tick(now: number) {
       = `rotateX(${current.rx.toFixed(2)}deg) rotateY(${current.ry.toFixed(2)}deg) scale(${current.zoom.toFixed(3)})`
   }
   if (sheen.value) {
-    // light sweeps across the surface as the model turns
-    const x = 50 + (current.ry / MAX_Y) * 45
+    // light sweeps across the face as the model turns
+    const x = 50 + Math.sin((current.ry * Math.PI) / 180) * 45
     const y = 40 - (current.rx / MAX_X) * 35
     sheen.value.style.backgroundPosition = `${x}% ${y}%`
   }
@@ -131,7 +152,7 @@ function onPointerMove(e: PointerEvent) {
 
   const dy = (e.clientX - prev.x) * DRAG_Y
   const dx = -(e.clientY - prev.y) * DRAG_X
-  target.ry = clamp(target.ry + dy, -MAX_Y, MAX_Y)
+  target.ry += dy // no limit: spins all the way round
   target.rx = clamp(target.rx + dx, -MAX_X, MAX_X)
   // remember the last flick for inertia
   velocity.x = dy * 0.6
@@ -159,11 +180,10 @@ function onDoubleClick(e: MouseEvent) {
 }
 
 function onKey(e: KeyboardEvent) {
-  const step = 6
-  if (e.key === 'ArrowLeft') target.ry = clamp(target.ry - step, -MAX_Y, MAX_Y)
-  else if (e.key === 'ArrowRight') target.ry = clamp(target.ry + step, -MAX_Y, MAX_Y)
-  else if (e.key === 'ArrowUp') target.rx = clamp(target.rx + step, -MAX_X, MAX_X)
-  else if (e.key === 'ArrowDown') target.rx = clamp(target.rx - step, -MAX_X, MAX_X)
+  if (e.key === 'ArrowLeft') target.ry -= 15
+  else if (e.key === 'ArrowRight') target.ry += 15
+  else if (e.key === 'ArrowUp') target.rx = clamp(target.rx + 6, -MAX_X, MAX_X)
+  else if (e.key === 'ArrowDown') target.rx = clamp(target.rx - 6, -MAX_X, MAX_X)
   else if (e.key === '+' || e.key === '=') setZoom(target.zoom * 1.25)
   else if (e.key === '-') setZoom(target.zoom / 1.25)
   else if (e.key === '0') reset()
@@ -184,8 +204,9 @@ watch(open, (isOpen) => {
   failed.value = false
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   isTouch.value = window.matchMedia('(pointer: coarse)').matches
+  Object.assign(current, { rx: 0, ry: 0, zoom: 1, ox: 50, oy: 50 })
   reset()
-  Object.assign(current, target)
+  lastFrame = 0
   frame = requestAnimationFrame(tick)
 })
 onBeforeUnmount(() => cancelAnimationFrame(frame))
@@ -243,20 +264,30 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
           <div class="pointer-events-none absolute bottom-[16%] left-1/2 -z-10 h-10 w-[46%] -translate-x-1/2 rounded-[50%] bg-black/70 blur-2xl" />
 
           <div class="absolute inset-0 grid place-items-center [perspective:1200px]">
-            <div ref="model" class="relative w-[min(78%,760px)] will-change-transform [transform-style:preserve-3d]">
+            <div ref="model" class="relative aspect-[4/3] w-[min(78%,760px)] will-change-transform [transform-style:preserve-3d]">
+              <!-- stacked layers: two faces plus a darkened body between them -->
               <img
+                v-for="(layer, i) in layers"
+                :key="i"
                 :src="src"
-                :alt="item.title"
+                :alt="layer.front ? item.title : ''"
+                :aria-hidden="!layer.front"
                 draggable="false"
-                class="relative block aspect-[4/3] w-full object-contain drop-shadow-[0_30px_40px_rgb(0_0_0/.7)]"
-                :class="failed && 'opacity-30 grayscale'"
-                @error="failed = true"
+                class="absolute inset-0 block size-full object-contain"
+                :class="[
+                  layer.front && 'drop-shadow-[0_30px_40px_rgb(0_0_0/.7)]',
+                  !layer.face && 'brightness-[.3] saturate-50',
+                  failed && 'opacity-30 grayscale',
+                ]"
+                :style="{ transform: `translateZ(${layer.z}px)` }"
+                @error="layer.front && (failed = true)"
               >
-              <!-- sheen masked to the render's own shape -->
+              <!-- sheen on the front face only, masked to the render's own shape -->
               <div
                 ref="sheen"
-                class="pointer-events-none absolute inset-0 mix-blend-soft-light"
+                class="pointer-events-none absolute inset-0 mix-blend-soft-light [backface-visibility:hidden]"
                 :style="{
+                  transform: `translateZ(${DEPTH_PX / 2 + 0.5}px)`,
                   backgroundImage: 'linear-gradient(115deg, transparent 30%, rgb(255 255 255 / .55) 48%, transparent 64%)',
                   backgroundSize: '260% 260%',
                   maskImage: `url(${src})`,
@@ -269,14 +300,6 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
                   WebkitMaskPosition: 'center',
                 }"
               />
-              <!-- floor reflection -->
-              <img
-                :src="src"
-                alt=""
-                aria-hidden="true"
-                draggable="false"
-                class="pointer-events-none absolute inset-x-0 top-full block aspect-[4/3] w-full -scale-y-100 object-contain opacity-[.14] blur-[1px] [mask-image:linear-gradient(to_top,black,transparent_45%)]"
-              >
             </div>
           </div>
         </div>
@@ -284,8 +307,8 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
         <!-- controls -->
         <div class="z-10 flex shrink-0 items-center justify-between gap-3 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-5">
           <p class="text-[12px] text-white/35">
-            <template v-if="isTouch">Drag to rotate · pinch to zoom</template>
-            <template v-else>Drag to rotate · scroll to zoom · double-click to magnify</template>
+            <template v-if="isTouch">Drag to spin · pinch to zoom</template>
+            <template v-else>Drag to spin · scroll to zoom · double-click to magnify</template>
           </p>
           <div class="flex items-center gap-1 rounded-full border border-white/10 bg-ink-900/80 p-1">
             <button type="button" class="grid size-8 place-items-center rounded-full text-white/60 transition-colors hover:bg-white/8 hover:text-white disabled:opacity-30" :disabled="zoomLabel <= MIN_ZOOM" aria-label="Zoom out" @click="setZoom(target.zoom / 1.25)">
