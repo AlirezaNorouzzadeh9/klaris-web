@@ -17,10 +17,14 @@ const state = ref<'idle' | 'loading' | 'ready' | 'error'>('idle')
 const query = ref('')
 const limit = ref(PAGE)
 
+/** Which catalog `items` holds; one picker serves both stickers and charms. */
+let loadedFile: typeof props.file | null = null
+
 async function fetchItems() {
   state.value = 'loading'
   try {
     items.value = await load(props.file)
+    loadedFile = props.file
     state.value = 'ready'
   } catch {
     state.value = 'error'
@@ -28,7 +32,7 @@ async function fetchItems() {
 }
 
 watch(open, (isOpen) => {
-  if (isOpen && state.value !== 'ready') fetchItems()
+  if (isOpen && (state.value !== 'ready' || loadedFile !== props.file)) fetchItems()
   if (isOpen) {
     query.value = ''
     limit.value = PAGE

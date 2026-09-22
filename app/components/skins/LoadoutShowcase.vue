@@ -288,9 +288,10 @@ function openAgent() {
                   v-else
                   :key="s.key"
                   type="button"
-                  class="group relative flex h-[62px] min-w-0 cursor-zoom-in items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
+                  dir="rtl"
+                  class="group relative flex h-[62px] min-w-0 cursor-zoom-in items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-right transition-[border-color,background-color] duration-200"
                   :class="s.equipped
-                    ? 'border-[color-mix(in_oklab,var(--side)_35%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--side)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--side)_60%,transparent)]'
+                    ? 'border-[color-mix(in_oklab,var(--side)_35%,transparent)] bg-[linear-gradient(270deg,color-mix(in_oklab,var(--side)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--side)_60%,transparent)]'
                     : 'border-white/6 bg-black/20 hover:border-white/14'"
                   @click="open(s)"
                 >
@@ -302,17 +303,17 @@ function openAgent() {
                     :class="!s.equipped && 'opacity-45 grayscale-[.6]'"
                   >
                   <span class="min-w-0 flex-1">
-                    <span class="block truncate font-mono text-[9.5px] font-bold tracking-[.06em] text-white/35 uppercase">{{ s.weapon }}</span>
-                    <span class="block truncate text-[12.5px] font-bold" :class="s.equipped ? 'text-white' : 'text-white/40'">{{ s.finish }}</span>
+                    <span class="ltr block truncate text-right font-mono text-[9.5px] font-bold tracking-[.06em] text-white/35 uppercase">{{ s.weapon }}</span>
+                    <span class="ltr block truncate text-right text-[12.5px] font-bold" :class="s.equipped ? 'text-white' : 'text-white/40'">{{ s.finish }}</span>
                   </span>
-                  <span v-if="s.config" class="flex shrink-0 flex-col items-end gap-1">
+                  <span v-if="s.config" class="flex shrink-0 flex-col items-start gap-1">
                     <span
                       class="rounded-xs px-1.5 py-px font-mono text-[9px] font-bold"
                       :style="{ background: `${wearTierOf(s.config.wear).color}22`, color: wearTierOf(s.config.wear).color }"
                     >{{ wearTierOf(s.config.wear).short }}</span>
                     <span v-if="s.config.stattrak" class="rounded-xs bg-[#f5902d]/15 px-1.5 py-px font-mono text-[9px] font-bold text-[#f5902d]">ST</span>
                   </span>
-                  <span v-if="s.equipped" class="absolute inset-y-0 left-0 w-[2px] bg-[var(--side)]" />
+                  <span v-if="s.equipped" class="absolute inset-y-0 right-0 w-[2px] bg-[var(--side)]" />
                 </button>
               </div>
             </div>

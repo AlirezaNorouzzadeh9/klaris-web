@@ -109,16 +109,41 @@ function openPicker(file: 'stickers' | 'keychains', slot = 0) {
 function onPick(item: CatalogItem) {
   if (pickerFile.value === 'keychains') {
     meta.value.set(`k${item.id}`, item)
-    draft.value.keychain = { ...emptyKeychain(), id: Number(item.id) }
+    // replacing a charm keeps where it hangs
+    draft.value.keychain = { ...draft.value.keychain, id: Number(item.id) }
+    tuning.value = 'keychain'
   } else {
     meta.value.set(`s${item.id}`, item)
-    draft.value.stickers[pickerSlot.value] = { ...emptyStickers()[0]!, id: Number(item.id) }
+    const current = draft.value.stickers[pickerSlot.value]!
+    draft.value.stickers[pickerSlot.value] = { ...current, id: Number(item.id) }
+    tuning.value = pickerSlot.value
   }
 }
 
 function clearSticker(i: number) {
   draft.value.stickers[i] = emptyStickers()[0]!
+  if (tuning.value === i) tuning.value = null
 }
+
+function clearKeychain() {
+  draft.value.keychain = emptyKeychain()
+  if (tuning.value === 'keychain') tuning.value = null
+}
+
+/** Sticker slot (0-4) or the charm whose placement panel is open. */
+const tuning = ref<number | 'keychain' | null>(null)
+watch(() => props.item, () => { tuning.value = null })
+
+/** Filled slot: open its settings; empty slot: pick something for it. */
+function onSlot(i: number) {
+  if (draft.value.stickers[i]!.id) tuning.value = tuning.value === i ? null : i
+  else openPicker('stickers', i)
+}
+function onKeychainSlot() {
+  if (draft.value.keychain.id) tuning.value = tuning.value === 'keychain' ? null : 'keychain'
+  else openPicker('keychains')
+}
+const tunedSticker = computed(() => (typeof tuning.value === 'number' ? draft.value.stickers[tuning.value] : undefined))
 
 function save() {
   emit('save', teams.value, { ...draft.value, defindex: props.item!.defindex, paintId: props.item!.paintId })
@@ -274,9 +299,11 @@ function save() {
                   <button
                     type="button"
                     class="grid size-full place-items-center rounded-md border transition-colors"
-                    :class="s.id ? 'border-white/12 bg-ink-850' : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
-                    :title="s.id ? meta.get(`s${s.id}`)?.name : `Slot ${i + 1}`"
-                    @click="openPicker('stickers', i)"
+                    :class="s.id
+                      ? (tuning === i ? 'border-mint-500/70 bg-mint-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
+                      : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
+                    :title="s.id ? `${meta.get(`s${s.id}`)?.name ?? 'Sticker'} · settings` : `Slot ${i + 1}`"
+                    @click="onSlot(i)"
                   >
                     <img v-if="s.id && meta.get(`s${s.id}`)" :src="meta.get(`s${s.id}`)!.image" alt="" class="size-[85%] object-contain">
                     <Icon v-else-if="s.id" name="lucide:sticker" class="size-5 text-white/50" />
@@ -294,20 +321,68 @@ function save() {
                 </div>
               </div>
 
+              <!-- placement for the selected sticker -->
+              <div v-if="tunedSticker && typeof tuning === 'number'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
+                <p class="ltr mb-3.5 truncate text-right font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                  Slot {{ tuning + 1 }} · {{ meta.get(`s${tunedSticker.id}`)?.name ?? `Sticker #${tunedSticker.id}` }}
+                </p>
+                <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                  <SkinsAttachmentField v-model="tunedSticker.wear" label="Scratch" :min="0" :max="1" :step="0.01" />
+                  <SkinsAttachmentField v-model="tunedSticker.schema" label="Surface" :min="0" :max="10" :step="1" :decimals="0" />
+                  <SkinsAttachmentField v-model="tunedSticker.rotation" label="Rotation" :min="-180" :max="180" :step="0.1" :decimals="1" />
+                  <SkinsAttachmentField v-model="tunedSticker.x" label="Position X" :min="-1" :max="1" :step="0.0001" :decimals="4" />
+                  <SkinsAttachmentField v-model="tunedSticker.y" label="Position Y" :min="-1" :max="1" :step="0.0001" :decimals="4" />
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" class="border-white/12 bg-transparent" @click="openPicker('stickers', tuning)">
+                    <Icon name="lucide:replace" /> Replace
+                  </Button>
+                  <Button size="sm" variant="ghost" class="text-red-k/85 hover:text-red-k" @click="clearSticker(tuning)">
+                    <Icon name="lucide:trash-2" /> Remove
+                  </Button>
+                  <Button size="sm" class="ms-auto bg-mint-500 text-ink-950 hover:bg-mint-400" @click="tuning = null">Done</Button>
+                </div>
+              </div>
+
               <h4 class="mt-5 mb-3 text-[13px] font-bold text-white/80">Keychain</h4>
               <div class="flex items-center gap-3">
                 <button
                   type="button"
                   class="grid size-16 shrink-0 place-items-center rounded-md border transition-colors"
-                  :class="draft.keychain.id ? 'border-white/12 bg-ink-850' : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
-                  @click="openPicker('keychains')"
+                  :class="draft.keychain.id
+                    ? (tuning === 'keychain' ? 'border-mint-500/70 bg-mint-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
+                    : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
+                  :title="draft.keychain.id ? 'Charm settings' : 'Add a charm'"
+                  @click="onKeychainSlot"
                 >
                   <img v-if="draft.keychain.id && meta.get(`k${draft.keychain.id}`)" :src="meta.get(`k${draft.keychain.id}`)!.image" alt="" class="size-[80%] object-contain">
                   <Icon v-else name="lucide:plus" class="size-4" />
                 </button>
                 <div class="min-w-0 flex-1">
                   <p class="ltr truncate text-right text-[13px] text-white/70">{{ draft.keychain.id ? meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` : 'No keychain' }}</p>
-                  <button v-if="draft.keychain.id" type="button" class="mt-1 text-[12px] text-white/40 hover:text-red-k" @click="draft.keychain = emptyKeychain()">Remove</button>
+                  <p v-if="draft.keychain.id && tuning !== 'keychain'" class="mt-1 text-[12px] text-white/35">Tap to adjust position and pattern</p>
+                </div>
+              </div>
+
+              <!-- placement for the charm -->
+              <div v-if="draft.keychain.id && tuning === 'keychain'" class="mt-3 rounded-lg border border-white/8 bg-ink-950/50 p-3.5">
+                <p class="ltr mb-3.5 truncate text-right font-mono text-[11px] font-bold tracking-[.06em] text-white/55 uppercase">
+                  Charm · {{ meta.get(`k${draft.keychain.id}`)?.name ?? `#${draft.keychain.id}` }}
+                </p>
+                <div class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                  <SkinsAttachmentField v-model="draft.keychain.x" label="Position X" :min="-10" :max="10" :step="0.01" />
+                  <SkinsAttachmentField v-model="draft.keychain.y" label="Position Y" :min="-10" :max="10" :step="0.01" />
+                  <SkinsAttachmentField v-model="draft.keychain.z" label="Position Z" :min="-10" :max="10" :step="0.01" />
+                  <SkinsAttachmentField v-model="draft.keychain.seed" label="Pattern" :min="0" :max="100000" :step="1" :decimals="0" />
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" class="border-white/12 bg-transparent" @click="openPicker('keychains')">
+                    <Icon name="lucide:replace" /> Replace
+                  </Button>
+                  <Button size="sm" variant="ghost" class="text-red-k/85 hover:text-red-k" @click="clearKeychain">
+                    <Icon name="lucide:trash-2" /> Remove
+                  </Button>
+                  <Button size="sm" class="ms-auto bg-mint-500 text-ink-950 hover:bg-mint-400" @click="tuning = null">Done</Button>
                 </div>
               </div>
             </section>
