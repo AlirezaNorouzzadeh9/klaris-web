@@ -1,6 +1,5 @@
 <script setup lang="ts">
-/** Temporary: floating picker for the header layout and the equipped-card style. */
-const { design, setDesign } = useCardDesign()
+/** Temporary: floating picker for the page header layout. */
 const { hero, setHero } = useHeroDesign()
 </script>
 
@@ -15,18 +14,6 @@ const { hero, setHero } = useHeroDesign()
         class="h-8 rounded-full px-3 text-[12px] font-semibold transition-colors"
         :class="hero === d.key ? 'bg-cyan-k text-ink-950' : 'text-white/60 hover:text-white'"
         @click="setHero(d.key)"
-      >{{ i + 1 }} · {{ d.label }}</button>
-
-      <span class="mx-1 h-6 w-px bg-white/10" />
-
-      <span class="px-2 font-mono text-[10px] font-bold tracking-[.15em] text-white/40">EQUIPPED</span>
-      <button
-        v-for="(d, i) in CARD_DESIGNS"
-        :key="d.key"
-        type="button"
-        class="h-8 rounded-full px-3 text-[12px] font-semibold transition-colors"
-        :class="design === d.key ? 'bg-mint-500 text-ink-950' : 'text-white/60 hover:text-white'"
-        @click="setDesign(d.key)"
       >{{ i + 1 }} · {{ d.label }}</button>
     </div>
   </div>

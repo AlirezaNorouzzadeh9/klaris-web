@@ -4,9 +4,9 @@ import { wearTierOf } from '~/data/weapons'
 
 /**
  * Minimal item card: render on a tinted spotlight, centred name with the
- * weapon and float under it, then the action. An equipped card is marked in
- * one of four ways (picked with useCardDesign while we compare): a Glow,
- * b Badge, c Bar, d Filled; StatTrak (set in skin settings) tints it orange.
+ * weapon and float under it, then the action. An equipped card is filled with
+ * its accent colour and carries an EQUIPPED badge; StatTrak (set in the
+ * skin settings) turns that accent orange.
  * Inspect sits top-left, the sides top-right.
  */
 const props = withDefaults(defineProps<{
@@ -49,8 +49,6 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ select: [] }>()
 
-const { design } = useCardDesign()
-
 /** The accent at a given opacity, e.g. mix(45) -> 45% accent over whatever is behind. */
 function mix(pct: number) {
   const hex = accent.value
@@ -58,14 +56,10 @@ function mix(pct: number) {
   return `rgb(${r} ${g} ${b} / ${pct / 100})`
 }
 
-/** Border, background and halo of an equipped card, per active style. */
-const activeStyle = computed(() => {
-  if (!props.activeTeams.length) return {}
-  if (design.value === 'a') return { borderColor: mix(50), background: mix(5), boxShadow: `0 16px 38px -20px ${accent.value}` }
-  if (design.value === 'b') return { borderColor: 'rgb(255 255 255 / .1)', background: 'rgb(255 255 255 / .03)' }
-  if (design.value === 'c') return { borderColor: 'rgb(255 255 255 / .08)', background: 'rgb(255 255 255 / .02)' }
-  return { borderColor: mix(35), background: `linear-gradient(180deg, ${mix(18)}, ${mix(4)})` }
-})
+/** An equipped card is filled with its accent colour. */
+const activeStyle = computed(() => (active.value
+  ? { borderColor: mix(35), background: `linear-gradient(180deg, ${mix(18)}, ${mix(4)})` }
+  : {}))
 
 const active = computed(() => props.activeTeams.length > 0)
 const hasStattrak = computed(() => active.value && props.stattrak !== undefined)
@@ -116,18 +110,12 @@ watch(() => props.image, () => {
     ]"
     :style="{ '--accent': accent, ...activeStyle }"
   >
-    <!-- C: bar along the bottom edge -->
-    <span v-if="active && design === 'c'" class="absolute inset-x-0 bottom-0 z-[5] h-1" :style="{ background: accent }" />
-
     <!-- stage -->
     <button
       type="button"
       class="relative isolate block w-full shrink-0 overflow-hidden outline-none"
-      :class="[
-        stageClass,
-        interactive ? 'cursor-pointer' : 'cursor-default',
-      ]"
-      :style="{ background: `radial-gradient(90% 85% at 50% 40%, ${mix(active && design === 'd' ? 26 : 12)}, transparent 70%)` }"
+      :class="[stageClass, interactive ? 'cursor-pointer' : 'cursor-default']"
+      :style="{ background: `radial-gradient(90% 85% at 50% 40%, ${mix(active ? 26 : 12)}, transparent 70%)` }"
       :tabindex="interactive ? 0 : -1"
       :aria-label="title"
       @click="select"
@@ -157,9 +145,9 @@ watch(() => props.image, () => {
         <Icon name="lucide:image-off" class="size-6" />
       </span>
 
-      <!-- B: equipped badge in the corner -->
+      <!-- equipped badge in the corner -->
       <span
-        v-if="active && design === 'b'"
+        v-if="active"
         class="ltr absolute top-2 left-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[9px] font-bold"
         :style="{ background: accent, color: '#07090c' }"
       >
@@ -186,7 +174,7 @@ watch(() => props.image, () => {
       v-if="canInspect"
       type="button"
       class="absolute top-2 left-2.5 z-[6] grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/60 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
-      :class="active && design === 'b' && 'top-9'"
+      :class="active && 'top-9'"
       aria-label="Inspect"
       title="Inspect"
       @click="openInspect"
@@ -198,7 +186,7 @@ watch(() => props.image, () => {
     <button type="button" class="ltr flex flex-col items-center px-3 pt-1 text-center outline-none" :class="interactive ? 'cursor-pointer' : 'cursor-default'" tabindex="-1" @click="select">
       <span
         class="max-w-full text-[14px] font-bold"
-        :class="[titleClass, active && design === 'd' ? 'text-white' : 'text-white']"
+        :class="titleClass"
         :title="title"
       >{{ title }}</span>
       <span class="mt-1 flex max-w-full items-center gap-1.5 font-mono text-[10.5px] font-bold">
@@ -215,7 +203,7 @@ watch(() => props.image, () => {
     </button>
 
     <!-- action -->
-    <div v-if="$slots.default" class="ltr mt-auto px-3 pt-2.5" :class="active && design === 'c' ? 'pb-4' : 'pb-3'">
+    <div v-if="$slots.default" class="ltr mt-auto px-3 pt-2.5 pb-3">
       <slot />
     </div>
   </article>

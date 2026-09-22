@@ -51,7 +51,7 @@ const equipped = computed(() => (status.value === 'ready' ? String(configuredCou
       <!-- ───────── a · Split: title left, stats box right ───────── -->
       <template v-if="hero === 'a'">
         <div>
-          <p class="mb-2 inline-flex items-center gap-2 font-mono text-[10.5px] font-bold tracking-[0.3em] text-mint-500 sm:mb-3 sm:text-[11px]">
+          <p class="mb-2 inline-flex items-center gap-2 text-[10.5px] font-bold tracking-[0.3em] text-mint-500 sm:mb-3 sm:text-[11px]">
             <span class="h-px w-6 bg-mint-500/60" /> لودات · CS2
           </p>
           <h1 class="text-[26px] font-black tracking-[-0.02em] text-white sm:text-[38px]">لودات</h1>
@@ -114,7 +114,7 @@ const equipped = computed(() => (status.value === 'ready' ? String(configuredCou
 
       <!-- ───────── b · Banner: everything centred ───────── -->
       <template v-else-if="hero === 'b'">
-        <p class="mb-3 inline-flex items-center gap-2 font-mono text-[10.5px] font-bold tracking-[0.3em] text-mint-500 sm:text-[11px]">
+        <p class="mb-3 inline-flex items-center gap-2 text-[10.5px] font-bold tracking-[0.3em] text-mint-500 sm:text-[11px]">
           <span class="h-px w-6 bg-mint-500/60" /> لودات · CS2 <span class="h-px w-6 bg-mint-500/60" />
         </p>
         <h1 class="text-[30px] font-black tracking-[-0.02em] text-white sm:text-[46px]">لودات</h1>
@@ -160,7 +160,7 @@ const equipped = computed(() => (status.value === 'ready' ? String(configuredCou
         </div>
         <p class="hidden min-w-0 flex-1 truncate text-[13px] text-white/45 lg:block">{{ blurb }}</p>
         <div class="ms-auto flex items-center gap-2">
-          <span class="inline-flex h-8 items-center gap-2 rounded-md border border-white/8 bg-ink-900/70 px-3 font-mono text-[11.5px] text-white/50">
+          <span class="inline-flex h-8 items-center gap-2 rounded-md border border-white/8 bg-ink-900/70 px-3 text-[12px] text-white/50">
             ست‌شده <span class="font-bold text-white">{{ equipped }}</span>
           </span>
           <span class="hidden h-8 items-center gap-2 rounded-md border border-white/8 bg-ink-900/70 px-3 text-[12px] text-white/50 sm:inline-flex">
@@ -195,7 +195,7 @@ const equipped = computed(() => (status.value === 'ready' ? String(configuredCou
           <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_100%_0%,rgb(46_232_156/.12),transparent_60%)]" />
           <div class="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <p class="mb-2 inline-flex items-center gap-2 font-mono text-[10.5px] font-bold tracking-[0.3em] text-mint-500">
+              <p class="mb-2 inline-flex items-center gap-2 text-[10.5px] font-bold tracking-[0.3em] text-mint-500">
                 <span class="h-px w-6 bg-mint-500/60" /> لودات · CS2
               </p>
               <h1 class="text-[26px] font-black tracking-[-0.02em] text-white sm:text-[34px]">لودات</h1>
