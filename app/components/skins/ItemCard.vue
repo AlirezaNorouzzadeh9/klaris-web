@@ -180,12 +180,13 @@ watch(() => props.image, () => {
 
     <!-- wear gauge + actions -->
     <div class="ltr flex flex-1 flex-col gap-[9px] px-[11px] pt-2.5 pb-[11px]">
-      <span class="flex gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
+      <!-- steps rise from left to right, like a signal meter -->
+      <span class="flex h-[11px] items-end gap-[3px]" :title="tier ? `${tier.label} · ${wear!.toFixed(4)}` : undefined">
         <span
           v-for="(t, i) in WEAR_TIERS"
           :key="t.key"
-          class="h-[5px] flex-1 rounded-[2px]"
-          :style="{ background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
+          class="flex-1 rounded-[2px] transition-colors duration-300"
+          :style="{ height: `${3 + i * 2}px`, background: tier && i <= tierIndex ? tier.color : 'rgb(255 255 255 / .06)' }"
         />
       </span>
       <span class="mt-auto flex items-center gap-[7px]">
