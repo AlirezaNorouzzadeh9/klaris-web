@@ -156,11 +156,11 @@ function save() {
       side="right"
       dir="ltr"
       @open-auto-focus.prevent
-      class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:z-10"
+      class="w-full gap-0 border-white/8 bg-ink-900 p-0 sm:max-w-[540px] [&>button:last-child]:top-3.5 [&>button:last-child]:left-4 [&>button:last-child]:right-auto [&>button:last-child]:z-10"
     >
       <template v-if="item">
-        <div class="flex h-14 shrink-0 items-center border-b border-white/6 px-5">
-          <SheetTitle class="text-[15px] font-bold">Skin settings</SheetTitle>
+        <div dir="rtl" class="flex h-14 shrink-0 items-center border-b border-white/6 px-5">
+          <SheetTitle class="text-[15px] font-bold">تنظیمات اسکین</SheetTitle>
           <SheetDescription class="sr-only">Set the wear, pattern, name tag, StatTrak, stickers and sides for this skin.</SheetDescription>
         </div>
 
@@ -396,13 +396,13 @@ function save() {
           </div>
         </div>
 
-        <div class="flex shrink-0 items-center gap-2 border-t border-white/6 bg-ink-900 p-4">
+        <div dir="rtl" class="flex shrink-0 items-center gap-2 border-t border-white/6 bg-ink-900 p-4">
           <Button class="flex-1" size="lg" :disabled="busy" @click="save">
             <Icon v-if="busy" name="lucide:loader-2" class="animate-spin" />
-            {{ isNew ? 'Equip this skin' : 'Save changes' }}
+            {{ isNew ? 'ست کردن اسکین' : 'ذخیره تنظیمات' }}
           </Button>
           <Button v-if="!isNew" variant="destructive" size="lg" :disabled="busy" @click="emit('remove')">
-            <Icon name="lucide:trash-2" /> Remove
+            <Icon name="lucide:trash-2" /> پاک کردن
           </Button>
         </div>
       </template>
