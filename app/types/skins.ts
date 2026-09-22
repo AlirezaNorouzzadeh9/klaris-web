@@ -46,16 +46,8 @@ export interface CatalogModel {
   side: 'all' | 't' | 'ct'
   /** Only VIPs can wear it. */
   vip?: boolean
-}
-
-/** A custom player model the server ships (PlayerModelChanger config). */
-export interface CatalogModel {
-  id: string
-  name: string
-  /** Sides that can use it; "all" means both. */
-  side: 'all' | 't' | 'ct'
-  /** Only VIPs can wear it. */
-  vip?: boolean
+  /** Preview shot; these models have no Valve render. */
+  image?: string
 }
 
 /** music, collectibles (pins), keychains and stickers share this shape. */

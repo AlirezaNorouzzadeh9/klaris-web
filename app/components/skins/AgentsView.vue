@@ -102,12 +102,12 @@ function toggleModel(m: CatalogModel) {
         <SkinsItemCard
           v-for="m in visibleModels"
           :key="m.id"
-          image=""
+          :image="m.image ?? ''"
+          cover
           :title="m.name"
           kicker="Klaris"
           :active-teams="modelOn(m) ? [side] : []"
           glow="rgb(245 180 61 / .16)"
-          :inspectable="false"
           stage-class="h-[186px]"
           @select="toggleModel(m)"
         >

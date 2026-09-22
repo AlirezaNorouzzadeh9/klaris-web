@@ -1,9 +1,9 @@
 [
-  { "id": "megumin", "name": "Megumin", "side": "all", "vip": true },
-  { "id": "mordecai", "name": "Mordecai", "side": "all", "vip": true },
-  { "id": "agent_smith", "name": "Agent Smith", "side": "all", "vip": true },
-  { "id": "agent_smith_w", "name": "Agent Smith (White)", "side": "all", "vip": true },
-  { "id": "leon", "name": "Leon Kennedy", "side": "all", "vip": true },
-  { "id": "ghostface", "name": "GhostFace", "side": "all", "vip": true },
-  { "id": "goku", "name": "Son Goku", "side": "all", "vip": true }
+  { "id": "megumin", "name": "Megumin", "side": "all", "vip": true, "image": "/img/models/megumin.webp" },
+  { "id": "mordecai", "name": "Mordecai", "side": "all", "vip": true, "image": "/img/models/mordecai.webp" },
+  { "id": "agent_smith", "name": "Agent Smith", "side": "all", "vip": true, "image": "/img/models/agent_smith.webp" },
+  { "id": "agent_smith_w", "name": "Agent Smith (White)", "side": "all", "vip": true, "image": "/img/models/agent_smith_w.webp" },
+  { "id": "leon", "name": "Leon Kennedy", "side": "all", "vip": true, "image": "/img/models/leon.webp" },
+  { "id": "ghostface", "name": "GhostFace", "side": "all", "vip": true, "image": "/img/models/ghostface.webp" },
+  { "id": "goku", "name": "Son Goku", "side": "all", "vip": true, "image": "/img/models/goku.webp" }
 ]
