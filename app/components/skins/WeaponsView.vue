@@ -133,6 +133,11 @@ async function onSave(teams: TeamId[], config: SkinConfig) {
 async function onRemove() {
   if (!editing.value) return
   const ok = await removeSkin(editing.value.weapon_defindex)
+  // A knife is a model as well as a finish: drop it from the sides that wore it.
+  if (ok && props.knives) {
+    const wearing = TEAMS.filter(t => loadout.value.knife[t] === editing.value!.weapon_name)
+    if (wearing.length) await setKnife(wearing, null)
+  }
   if (ok) editorOpen.value = false
 }
 </script>
