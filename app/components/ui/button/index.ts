@@ -11,16 +11,16 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-mint-500 text-mint-950 hover:bg-mint-400 hover:shadow-mint",
+          "bg-brand-500 text-brand-950 hover:bg-brand-400 hover:shadow-brand",
         destructive:
           "bg-red-k/12 text-red-k border border-red-k/35 hover:bg-red-k/20 hover:border-red-k/60",
         outline:
-          "border border-white/12 bg-white/[.02] text-foreground hover:border-mint-500/50 hover:bg-mint-500/[.06] hover:text-mint-300",
+          "border border-white/12 bg-white/[.02] text-foreground hover:border-brand-500/50 hover:bg-brand-500/[.06] hover:text-brand-300",
         secondary:
           "bg-ink-700 text-foreground border border-white/6 hover:bg-ink-600",
         ghost:
           "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-        link: "text-mint-400 underline-offset-4 hover:underline",
+        link: "text-brand-400 underline-offset-4 hover:underline",
         vip:
           "bg-gold-k text-[#1a1203] hover:brightness-110 hover:shadow-[0_8px_28px_-8px_rgb(245_180_61/.55)]",
       },

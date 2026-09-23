@@ -69,7 +69,7 @@ async function onRemove() {
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <Icon name="lucide:wifi-off" class="size-9" />
     <span class="ltr">Could not load the gloves list</span>
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
+    <button type="button" class="text-brand-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <template v-else>
@@ -81,7 +81,7 @@ async function onRemove() {
         type="button"
         class="h-[34px] shrink-0 rounded-full border px-3.5 text-[12.5px] font-semibold transition-colors"
         :class="[
-          kit === k ? 'border-mint-500/50 bg-mint-500/10 text-mint-300' : 'border-white/8 text-white/50 hover:text-white/80',
+          kit === k ? 'border-brand-500/50 bg-brand-500/10 text-brand-300' : 'border-white/8 text-white/50 hover:text-white/80',
         ]"
         @click="kit = k"
       >

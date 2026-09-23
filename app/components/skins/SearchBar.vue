@@ -22,7 +22,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   <div class="group relative" dir="rtl">
     <Icon
       name="lucide:search"
-      class="pointer-events-none absolute top-1/2 -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-mint-500"
+      class="pointer-events-none absolute top-1/2 -translate-y-1/2 text-white/30 transition-colors group-focus-within:text-brand-500"
       :class="{
         'start-3.5 size-4': size === 'md',
         'start-4 size-[18px]': size === 'lg',
@@ -36,7 +36,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       :placeholder="placeholder"
       enterkeyhint="search"
       autocomplete="off"
-      class="w-full text-white outline-none transition-[border-color,box-shadow] placeholder:text-white/30 focus:border-mint-500/50 focus:shadow-[0_0_0_4px_rgb(46_232_156/.08)] [&::-webkit-search-cancel-button]:appearance-none"
+      class="w-full text-white outline-none transition-[border-color,box-shadow] placeholder:text-white/30 focus:border-brand-500/50 focus:shadow-[0_0_0_4px_rgb(249_96_15/.1)] [&::-webkit-search-cancel-button]:appearance-none"
       :class="{
         'h-[38px] rounded-full border border-white/10 bg-ink-900/80 ps-[38px] pe-12 text-[13px]': size === 'md',
         'h-12 rounded-xl border border-white/10 bg-ink-900/80 ps-11 pe-20 text-[14.5px]': size === 'lg',

@@ -35,7 +35,7 @@ function randomize() {
   <div class="min-w-0">
     <div class="mb-2 flex items-center justify-between gap-2">
       <span class="ltr truncate font-mono text-[10.5px] font-bold tracking-[.08em] text-white/40 uppercase">{{ label }}</span>
-      <div class="ltr flex shrink-0 overflow-hidden rounded-sm border border-white/10 bg-ink-950/70 focus-within:border-mint-500/50">
+      <div class="ltr flex shrink-0 overflow-hidden rounded-sm border border-white/10 bg-ink-950/70 focus-within:border-brand-500/50">
         <input
           :value="model.toFixed(decimals)"
           type="number"
@@ -49,7 +49,7 @@ function randomize() {
         >
         <button
           type="button"
-          class="grid w-7 place-items-center border-l border-white/10 text-white/40 transition-colors hover:bg-white/5 hover:text-mint-400"
+          class="grid w-7 place-items-center border-l border-white/10 text-white/40 transition-colors hover:bg-white/5 hover:text-brand-400"
           :title="`Random ${label.toLowerCase()}`"
           @click="randomize"
         >

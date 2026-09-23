@@ -141,7 +141,7 @@ async function onRemove() {
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <Icon name="lucide:wifi-off" class="size-9" />
     <span class="ltr">Could not load the skin list</span>
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
+    <button type="button" class="text-brand-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
   <template v-else>
   <!-- phones / tablets: full-width search above the class dropdowns -->

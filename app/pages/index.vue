@@ -29,13 +29,13 @@ const stats = [
 
     <div class="relative mx-auto max-w-[1440px] px-4 pt-14 pb-10 sm:px-6 sm:pt-20 sm:pb-14 lg:px-10 lg:pt-24 lg:pb-16">
       <div class="max-w-[620px] text-right">
-        <p class="flex items-center gap-3 text-[11px] font-bold tracking-[0.3em] text-mint-400">
-          <span class="h-px w-8 bg-mint-500/60" /> COUNTER STRIKE 2
+        <p class="flex items-center gap-3 text-[11px] font-bold tracking-[0.3em] text-brand-400">
+          <span class="h-px w-8 bg-brand-500/60" /> COUNTER STRIKE 2
         </p>
 
         <h1 class="mt-5 text-[32px] leading-[1.3] font-black tracking-[-0.02em] text-white sm:text-[46px] lg:text-[52px]">
           کامیونیتی حرفه‌ای
-          <span class="mt-1 block text-mint-400 drop-shadow-[0_6px_28px_rgb(46_232_156/.35)]">برای گیمرهای واقعی</span>
+          <span class="mt-1 block text-brand-400 drop-shadow-[0_6px_28px_rgb(249_96_15/.35)]">برای گیمرهای واقعی</span>
         </h1>
 
         <p class="mt-5 max-w-[520px] text-[13.5px] leading-8 text-white/60 sm:text-[15px]">
@@ -45,14 +45,14 @@ const stats = [
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <NuxtLink
             to="/servers"
-            class="inline-flex h-12 items-center gap-2.5 rounded-xl bg-mint-500 px-6 text-[14px] font-bold text-ink-950 shadow-[0_14px_34px_-14px_var(--color-mint-500)] transition-colors hover:bg-mint-400"
+            class="inline-flex h-12 items-center gap-2.5 rounded-xl bg-brand-500 px-6 text-[14px] font-bold text-ink-950 shadow-[0_14px_34px_-14px_var(--color-brand-500)] transition-colors hover:bg-brand-400"
           >
             شروع بازی
             <Icon name="lucide:play" class="size-4" />
           </NuxtLink>
           <NuxtLink
             to="/servers"
-            class="inline-flex h-12 items-center gap-2.5 rounded-xl border border-white/12 bg-white/[.03] px-5 text-[14px] font-semibold text-white/75 backdrop-blur-sm transition-colors hover:border-mint-500/40 hover:text-white"
+            class="inline-flex h-12 items-center gap-2.5 rounded-xl border border-white/12 bg-white/[.03] px-5 text-[14px] font-semibold text-white/75 backdrop-blur-sm transition-colors hover:border-brand-500/40 hover:text-white"
           >
             مشاهده سرورها
             <Icon name="lucide:gamepad-2" class="size-4" />
@@ -67,7 +67,7 @@ const stats = [
           :key="s.label"
           class="flex items-center gap-3 bg-ink-950/80 px-5 py-4"
         >
-          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-mint-500/10 text-mint-400">
+          <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-500/10 text-brand-400">
             <Icon :name="s.icon" class="size-5" />
           </span>
           <span class="min-w-0">

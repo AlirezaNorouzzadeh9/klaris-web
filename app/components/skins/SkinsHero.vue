@@ -31,7 +31,7 @@ async function onReset() {
   <section class="mx-auto max-w-[1440px] px-4 pt-7 sm:px-6 lg:px-10">
     <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-b border-white/8 pb-5">
       <div class="flex items-center gap-3.5">
-        <span class="h-11 w-[3px] rounded-full bg-gradient-to-b from-mint-400 to-cyan-k" />
+        <span class="h-11 w-[3px] rounded-full bg-gradient-to-b from-brand-400 to-brand-red" />
         <div>
           <h1 class="text-[24px] leading-none font-black text-white sm:text-[28px]">لوداوت من</h1>
           <p class="mt-2 text-[12.5px] text-white/45 sm:text-[13px]">
@@ -43,7 +43,7 @@ async function onReset() {
       <div class="flex items-center gap-2">
         <button
           type="button"
-          class="inline-flex h-10 items-center gap-2 rounded-lg border border-mint-500/30 bg-mint-500/10 px-3.5 text-[12.5px] font-bold text-mint-300 transition-colors hover:border-mint-500/60 hover:bg-mint-500/15"
+          class="inline-flex h-10 items-center gap-2 rounded-lg border border-brand-500/30 bg-brand-500/10 px-3.5 text-[12.5px] font-bold text-brand-300 transition-colors hover:border-brand-500/60 hover:bg-brand-500/15"
           @click="copyCommand"
         >
           <Icon name="lucide:copy" class="size-4" />

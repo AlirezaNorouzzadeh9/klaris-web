@@ -47,7 +47,7 @@ function toggle(item: CatalogItem, team: TeamId) {
 
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <span class="ltr">Could not load the list</span>
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
+    <button type="button" class="text-brand-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">

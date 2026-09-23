@@ -83,7 +83,7 @@ function toggleModel(m: CatalogModel) {
 
   <div v-if="state === 'error'" class="grid place-items-center gap-3 py-24 text-center text-white/50">
     <span class="ltr">Could not load the agent list</span>
-    <button type="button" class="text-mint-400 hover:underline" @click="fetchCatalog">Try again</button>
+    <button type="button" class="text-brand-400 hover:underline" @click="fetchCatalog">Try again</button>
   </div>
 
   <div v-else-if="state === 'loading'" class="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(188px,1fr))]">
@@ -107,7 +107,7 @@ function toggleModel(m: CatalogModel) {
           :title="m.name"
           kicker="Klaris"
           :active-teams="modelOn(m) ? [side] : []"
-          glow="rgb(245 180 61 / .16)"
+          glow="rgb(255 215 0 / .16)"
           stage-class="h-[186px]"
           @select="toggleModel(m)"
         >
@@ -132,7 +132,7 @@ function toggleModel(m: CatalogModel) {
       :title="split(a).name"
       :kicker="split(a).faction"
       :active-teams="loadout.agents[a.team] === a.model ? [a.team] : []"
-      :glow="a.team === 2 ? 'rgb(226 173 85 / .16)' : 'rgb(98 174 234 / .16)'"
+      :glow="a.team === 2 ? 'rgb(244 180 26 / .16)' : 'rgb(75 143 226 / .16)'"
       stage-class="h-[186px]"
       @select="toggle(a)"
     >

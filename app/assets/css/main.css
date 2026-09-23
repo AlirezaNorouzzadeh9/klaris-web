@@ -6,36 +6,41 @@
 
 /*
  * KLARIS design tokens.
- * Surfaces are near-black with a cool tint; mint is the single brand accent.
- * Cyan / gold / red / violet carry meaning (info, VIP, danger, admin) and are
- * never used as decoration.
+ * Surfaces are near-black with a cool blue tint; the brand accent is an
+ * orange that pairs with a red for gradients. Gold / red / blue carry meaning
+ * (VIP, danger, info) and are never used as decoration.
  */
 @theme {
   --font-sans: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-ink-950: #07090c;
-  --color-ink-900: #0b0e12;
-  --color-ink-850: #0f1318;
-  --color-ink-800: #11151a;
-  --color-ink-750: #151a21;
-  --color-ink-700: #1b212a;
-  --color-ink-600: #252d38;
+  --color-ink-950: #111317;
+  --color-ink-900: #161a21;
+  --color-ink-850: #1a1e26;
+  --color-ink-800: #1e232c;
+  --color-ink-750: #232935;
+  --color-ink-700: #272e3b;
+  --color-ink-600: #333b4a;
 
-  --color-mint-300: #8dfcd0;
-  --color-mint-400: #52f5b4;
-  --color-mint-500: #2ee89c;
-  --color-mint-600: #1fc481;
-  --color-mint-950: #04130d;
+  --color-brand-300: #ffb27a;
+  --color-brand-400: #ff8a3d;
+  --color-brand-500: #f9600f;
+  --color-brand-600: #d94d06;
+  --color-brand-950: #2a1204;
 
-  --color-cyan-k: #3fd2f2;
-  --color-gold-k: #f5b43d;
-  --color-red-k: #f4515a;
+  /* the second stop of every brand gradient */
+  --color-brand-red: #ff1744;
+  --color-brand-amber: #ffa500;
+
+  --color-cyan-k: #4b8fe2;
+  --color-gold-k: #ffd700;
+  --color-red-k: #ff1744;
   --color-violet-k: #9d80ff;
+  --color-green-k: #00e676;
 
   /* Side colours, as the game itself uses them. */
-  --color-side-t: #e2ad55;
-  --color-side-ct: #62aeea;
+  --color-side-t: #f4b41a;
+  --color-side-ct: #4b8fe2;
 
   --radius-xs: 3px;
   --radius-sm: 5px;
@@ -46,7 +51,7 @@
 
   --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 12px 32px -12px rgb(0 0 0 / 0.6);
   --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 22px 48px -18px rgb(0 0 0 / 0.75);
-  --shadow-mint: 0 0 0 1px rgb(46 232 156 / 0.35), 0 8px 28px -8px rgb(46 232 156 / 0.35);
+  --shadow-brand: 0 0 0 1px rgb(249 96 15 / 0.35), 0 8px 28px -8px rgb(249 96 15 / 0.4);
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-shimmer: shimmer 1.6s linear infinite;
@@ -60,24 +65,24 @@
 /* shadcn-vue semantic variables, mapped onto the Klaris palette. */
 :root {
   --radius: 7px;
-  --background: #07090c;
-  --foreground: #e8edf2;
-  --card: #0f1318;
-  --card-foreground: #e8edf2;
-  --popover: #0f1318;
-  --popover-foreground: #e8edf2;
-  --primary: #2ee89c;
-  --primary-foreground: #04130d;
-  --secondary: #1b212a;
-  --secondary-foreground: #e8edf2;
-  --muted: #151a21;
-  --muted-foreground: #8b96a5;
-  --accent: #1b212a;
-  --accent-foreground: #e8edf2;
-  --destructive: #f4515a;
+  --background: #111317;
+  --foreground: #f2f2f2;
+  --card: #1a1e26;
+  --card-foreground: #f2f2f2;
+  --popover: #161a21;
+  --popover-foreground: #f2f2f2;
+  --primary: #f9600f;
+  --primary-foreground: #ffffff;
+  --secondary: #272e3b;
+  --secondary-foreground: #f2f2f2;
+  --muted: #232935;
+  --muted-foreground: #808896;
+  --accent: #272e3b;
+  --accent-foreground: #f2f2f2;
+  --destructive: #ff1744;
   --border: rgb(255 255 255 / 0.08);
   --input: rgb(255 255 255 / 0.1);
-  --ring: #2ee89c;
+  --ring: #f9600f;
 }
 
 @theme inline {
@@ -129,11 +134,11 @@
   }
 
   ::selection {
-    background: rgb(46 232 156 / 0.3);
+    background: rgb(249 96 15 / 0.35);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-mint-500);
+    outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
   }
 }

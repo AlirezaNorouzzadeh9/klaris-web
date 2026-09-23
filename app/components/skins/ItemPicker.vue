@@ -63,7 +63,7 @@ function pick(item: CatalogItem) {
             v-model="query"
             type="search"
             placeholder="جستجو… مثلاً Katowice یا Holo"
-            class="h-10 w-full rounded-md border border-white/10 bg-ink-950/70 ps-9 pe-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-mint-500/50"
+            class="h-10 w-full rounded-md border border-white/10 bg-ink-950/70 ps-9 pe-3 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-brand-500/50"
           >
         </div>
       </DialogHeader>
@@ -76,7 +76,7 @@ function pick(item: CatalogItem) {
         <div v-else-if="state === 'error'" class="grid place-items-center gap-3 py-16 text-center text-white/50">
           <Icon name="lucide:wifi-off" class="size-8" />
           Could not load the list
-          <button type="button" class="text-mint-400 hover:underline" @click="fetchItems">Try again</button>
+          <button type="button" class="text-brand-400 hover:underline" @click="fetchItems">Try again</button>
         </div>
 
         <p v-else-if="!filtered.length" class="py-16 text-center text-white/40">Nothing found</p>
@@ -87,7 +87,7 @@ function pick(item: CatalogItem) {
               v-for="item in visible"
               :key="item.id"
               type="button"
-              class="group flex flex-col items-center gap-1.5 rounded-md border border-white/6 bg-ink-850 p-2 transition-colors hover:border-mint-500/50 hover:bg-mint-500/[.05]"
+              class="group flex flex-col items-center gap-1.5 rounded-md border border-white/6 bg-ink-850 p-2 transition-colors hover:border-brand-500/50 hover:bg-brand-500/[.05]"
               :title="item.name"
               @click="pick(item)"
             >
@@ -98,7 +98,7 @@ function pick(item: CatalogItem) {
           <div v-if="visible.length < filtered.length" class="mt-4 text-center">
             <button
               type="button"
-              class="rounded-md border border-white/10 px-4 py-2 text-[13px] text-white/60 transition-colors hover:border-mint-500/40 hover:text-mint-300"
+              class="rounded-md border border-white/10 px-4 py-2 text-[13px] text-white/60 transition-colors hover:border-brand-500/40 hover:text-brand-300"
               @click="limit += PAGE"
             >
               Show more

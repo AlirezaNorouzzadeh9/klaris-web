@@ -72,7 +72,7 @@ const floatText = computed(() => (tier.value ? props.wear!.toFixed(3) : '—'))
 const canInspect = computed(() => props.inspectable && !!(props.image || props.fallback))
 
 /** Card tint: StatTrak orange, equipped mint, otherwise a cool steel blue. */
-const accent = computed(() => (hasStattrak.value ? '#f5902d' : active.value ? '#2ee89c' : '#62aeea'))
+const accent = computed(() => (hasStattrak.value ? '#ffd700' : active.value ? '#f9600f' : '#62aeea'))
 
 const { inspect } = useInspect()
 function openInspect() {
@@ -166,7 +166,7 @@ watch(() => props.image, () => {
     <span v-if="active" class="ltr pointer-events-none absolute top-2 right-2 z-[6] flex gap-[3px]">
       <span
         v-if="hasStattrak"
-        class="rounded-full border border-[#f5902d]/40 bg-ink-950/60 px-1.5 py-px font-mono text-[9px] font-bold text-[#f5902d] backdrop-blur-sm"
+        class="rounded-full border border-[#ffd700]/40 bg-ink-950/60 px-1.5 py-px font-mono text-[9px] font-bold text-[#ffd700] backdrop-blur-sm"
       >ST™</span>
       <span
         v-for="t in activeTeams"
@@ -180,7 +180,7 @@ watch(() => props.image, () => {
     <button
       v-if="canInspect"
       type="button"
-      class="absolute top-2 left-2.5 z-[6] grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/60 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-mint-500/50 hover:text-mint-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
+      class="absolute top-2 left-2.5 z-[6] grid size-7 place-items-center rounded-full border border-white/10 bg-ink-950/60 text-white/60 opacity-0 backdrop-blur-sm transition-[opacity,color,border-color] duration-200 group-hover:opacity-100 hover:border-brand-500/50 hover:text-brand-300 focus-visible:opacity-100 pointer-coarse:opacity-100"
       :class="active && 'top-9'"
       aria-label="Inspect"
       title="Inspect"

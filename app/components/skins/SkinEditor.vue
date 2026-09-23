@@ -192,21 +192,21 @@ function save() {
             >
             <button
               type="button"
-              class="absolute top-3 end-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-3 text-[12px] font-semibold text-white/70 backdrop-blur-sm transition-colors hover:border-mint-500/50 hover:text-mint-300"
+              class="absolute top-3 end-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-ink-950/70 px-3 text-[12px] font-semibold text-white/70 backdrop-blur-sm transition-colors hover:border-brand-500/50 hover:text-brand-300"
               @click="openInspect"
             >
               <Icon name="lucide:scan-eye" class="size-3.5" /> Inspect
             </button>
             <div class="absolute top-3 start-3 flex flex-col items-start gap-1.5">
               <span class="rounded-xs px-2 py-0.5 font-mono text-[10.5px] font-bold" :style="{ background: `${tier.color}22`, color: tier.color }">{{ tier.label }}</span>
-              <span v-if="draft.stattrak" class="rounded-xs bg-[#f5902d]/15 px-2 py-0.5 font-mono text-[10.5px] font-bold text-[#f5902d]">StatTrak™ {{ draft.stattrakCount }}</span>
+              <span v-if="draft.stattrak" class="rounded-xs bg-[#ffd700]/15 px-2 py-0.5 font-mono text-[10.5px] font-bold text-[#ffd700]">StatTrak™ {{ draft.stattrakCount }}</span>
             </div>
             <div class="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3">
               <div>
                 <p class="font-mono text-[10.5px] font-bold tracking-wider text-white/35">{{ item.caption }}</p>
                 <p class="text-[15px] font-bold text-white">{{ item.title }}</p>
               </div>
-              <p v-if="draft.nametag" class="truncate font-mono text-[12px] text-mint-300">"{{ draft.nametag }}"</p>
+              <p v-if="draft.nametag" class="truncate font-mono text-[12px] text-brand-300">"{{ draft.nametag }}"</p>
             </div>
           </div>
 
@@ -223,7 +223,7 @@ function save() {
                   step="0.000001"
                   inputmode="decimal"
                   aria-label="Float"
-                  class="ltr h-8 w-28 rounded-sm border border-white/10 bg-ink-950/70 px-2 text-center font-mono text-[12.5px] text-white outline-none focus:border-mint-500/50"
+                  class="ltr h-8 w-28 rounded-sm border border-white/10 bg-ink-950/70 px-2 text-center font-mono text-[12.5px] text-white outline-none focus:border-brand-500/50"
                   @change="clampFloat"
                 >
               </div>
@@ -253,7 +253,7 @@ function save() {
               <div class="mb-3 flex items-baseline justify-between">
                 <h4 class="text-[13px] font-bold text-white/80">Pattern</h4>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" class="grid size-8 place-items-center rounded-sm border border-white/10 text-white/50 transition-colors hover:border-mint-500/40 hover:text-mint-400" title="Random" @click="randomSeed">
+                  <button type="button" class="grid size-8 place-items-center rounded-sm border border-white/10 text-white/50 transition-colors hover:border-brand-500/40 hover:text-brand-400" title="Random" @click="randomSeed">
                     <Icon name="lucide:dices" class="size-4" />
                   </button>
                   <input
@@ -262,7 +262,7 @@ function save() {
                     min="0"
                     max="1000"
                     aria-label="Pattern"
-                    class="ltr h-8 w-20 rounded-sm border border-white/10 bg-ink-950/70 px-2 text-center font-mono text-[12.5px] text-white outline-none focus:border-mint-500/50"
+                    class="ltr h-8 w-20 rounded-sm border border-white/10 bg-ink-950/70 px-2 text-center font-mono text-[12.5px] text-white outline-none focus:border-brand-500/50"
                   >
                 </div>
               </div>
@@ -277,7 +277,7 @@ function save() {
                   v-model="draft.nametag"
                   maxlength="20"
                   placeholder="No name tag"
-                  class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-mint-500/50"
+                  class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-brand-500/50"
                 >
               </label>
               <div>
@@ -291,7 +291,7 @@ function save() {
                   min="0"
                   :disabled="!draft.stattrak"
                   aria-label="StatTrak kill count"
-                  class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 font-mono text-sm text-white outline-none transition-opacity focus:border-mint-500/50 disabled:opacity-35"
+                  class="ltr h-10 w-full rounded-md border border-white/10 bg-ink-950/70 px-3 font-mono text-sm text-white outline-none transition-opacity focus:border-brand-500/50 disabled:opacity-35"
                 >
               </div>
             </section>
@@ -305,8 +305,8 @@ function save() {
                     type="button"
                     class="grid size-full place-items-center rounded-md border transition-colors"
                     :class="s.id
-                      ? (tuning === i ? 'border-mint-500/70 bg-mint-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
-                      : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
+                      ? (tuning === i ? 'border-brand-500/70 bg-brand-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
+                      : 'border-dashed border-white/12 text-white/25 hover:border-brand-500/50 hover:text-brand-400'"
                     :title="s.id ? `${meta.get(`s${s.id}`)?.name ?? 'Sticker'} · settings` : `Slot ${i + 1}`"
                     @click="onSlot(i)"
                   >
@@ -345,7 +345,7 @@ function save() {
                   <Button size="sm" variant="ghost" class="text-red-k/85 hover:text-red-k" @click="clearSticker(tuning)">
                     <Icon name="lucide:trash-2" /> Remove
                   </Button>
-                  <Button size="sm" class="ms-auto bg-mint-500 text-ink-950 hover:bg-mint-400" @click="tuning = null">Done</Button>
+                  <Button size="sm" class="ms-auto bg-brand-500 text-ink-950 hover:bg-brand-400" @click="tuning = null">Done</Button>
                 </div>
               </div>
 
@@ -355,8 +355,8 @@ function save() {
                   type="button"
                   class="grid size-16 shrink-0 place-items-center rounded-md border transition-colors"
                   :class="draft.keychain.id
-                    ? (tuning === 'keychain' ? 'border-mint-500/70 bg-mint-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
-                    : 'border-dashed border-white/12 text-white/25 hover:border-mint-500/50 hover:text-mint-400'"
+                    ? (tuning === 'keychain' ? 'border-brand-500/70 bg-brand-500/8' : 'border-white/12 bg-ink-850 hover:border-white/25')
+                    : 'border-dashed border-white/12 text-white/25 hover:border-brand-500/50 hover:text-brand-400'"
                   :title="draft.keychain.id ? 'Charm settings' : 'Add a charm'"
                   @click="onKeychainSlot"
                 >
@@ -387,7 +387,7 @@ function save() {
                   <Button size="sm" variant="ghost" class="text-red-k/85 hover:text-red-k" @click="clearKeychain">
                     <Icon name="lucide:trash-2" /> Remove
                   </Button>
-                  <Button size="sm" class="ms-auto bg-mint-500 text-ink-950 hover:bg-mint-400" @click="tuning = null">Done</Button>
+                  <Button size="sm" class="ms-auto bg-brand-500 text-ink-950 hover:bg-brand-400" @click="tuning = null">Done</Button>
                 </div>
               </div>
             </section>

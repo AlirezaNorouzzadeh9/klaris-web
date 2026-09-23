@@ -327,7 +327,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                       class="rounded-xs px-1.5 py-px font-mono text-[9px] font-bold"
                       :style="{ background: `${wearTierOf(s.config.wear).color}22`, color: wearTierOf(s.config.wear).color }"
                     >{{ wearTierOf(s.config.wear).short }}</span>
-                    <span v-if="s.config.stattrak" class="rounded-xs bg-[#f5902d]/15 px-1.5 py-px font-mono text-[9px] font-bold text-[#f5902d]">ST</span>
+                    <span v-if="s.config.stattrak" class="rounded-xs bg-[#ffd700]/15 px-1.5 py-px font-mono text-[9px] font-bold text-[#ffd700]">ST</span>
                   </span>
                   <span v-if="s.equipped" class="absolute inset-y-0 left-0 w-[2px] bg-[var(--side)]" />
                 </button>

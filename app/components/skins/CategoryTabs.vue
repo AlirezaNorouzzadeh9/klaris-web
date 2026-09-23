@@ -4,7 +4,7 @@ import { CATEGORIES } from '~/data/weapons'
 
 /**
  * Flat tabs split by hairlines, each with its item count; the active one turns
- * white with a mint tick along the bar's bottom edge. Laid out from the left.
+ * the active pill is filled with the brand colour. Laid out from the left.
  */
 const model = defineModel<CategoryKey>({ required: true })
 
@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="sticky top-[76px] z-30 border-b border-white/6 bg-ink-950/90 backdrop-blur-md sm:top-20">
+  <div class="sticky top-14 z-30 border-b border-white/6 bg-ink-950/90 backdrop-blur-md">
     <div class="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
       <div dir="ltr" class="scrollbar-none -mx-4 overflow-x-auto px-4 py-3 sm:mx-0 sm:px-0">
         <div class="mx-auto flex w-max items-center gap-2" role="tablist" aria-label="Categories">
@@ -45,7 +45,7 @@ onMounted(async () => {
             :aria-selected="model === cat.key"
             class="flex h-9 shrink-0 items-center gap-2 rounded-lg border px-3.5 text-[12.5px] font-semibold whitespace-nowrap transition-colors duration-250 sm:h-10 sm:px-4 sm:text-[13px]"
             :class="model === cat.key
-              ? 'border-mint-500 bg-mint-500 text-ink-950 shadow-[0_10px_24px_-14px_var(--color-mint-500)]'
+              ? 'border-brand-500 bg-brand-500 text-ink-950 shadow-[0_10px_24px_-14px_var(--color-brand-500)]'
               : 'border-white/8 bg-white/[.02] text-white/60 hover:border-white/20 hover:text-white'"
             @click="model = cat.key"
           >
