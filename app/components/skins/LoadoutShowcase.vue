@@ -2,13 +2,22 @@
 import type { CatalogAgent, CatalogGlove, CatalogItem, CatalogSkin, CategoryKey, SkinConfig, TeamId } from '~/types/skins'
 import { wearTierOf } from '~/data/weapons'
 import { finishName, weaponLabel } from '~/composables/useCatalog'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog'
 
 /**
  * The player's whole loadout for one side, laid out like the in-game loadout
  * screen: agent on a brand-lit stage, the gear column (knife, gloves, music
  * kit, pin) and the three weapon columns. Every tile jumps to that item's list.
  */
-const { loadout, status } = useLoadout()
+const { loadout, status, resetAll, busy } = useLoadout()
+const confirmOpen = ref(false)
+
+async function onReset() {
+  if (await resetAll()) confirmOpen.value = false
+}
 const { load } = useCatalog()
 
 const team = ref<TeamId>(3)
@@ -346,6 +355,36 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
           </div>
         </div>
       </div>
+
+      <!-- reset sits at the end of the panel, after everything it clears -->
+      <div class="flex justify-start border-t border-white/6 px-4 py-3 sm:px-5">
+        <button
+          type="button"
+          class="inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3.5 text-[12.5px] font-semibold text-white/50 transition-colors hover:border-red-k/50 hover:text-red-k"
+          @click="confirmOpen = true"
+        >
+          <Icon name="lucide:rotate-ccw" class="size-3.5" />
+          ریست لوداوت
+        </button>
+      </div>
     </div>
+
+    <Dialog v-model:open="confirmOpen">
+      <DialogContent dir="rtl" class="border-white/10 bg-ink-900 sm:max-w-md">
+        <DialogHeader class="text-start">
+          <DialogTitle>لوداوت ریست شود؟</DialogTitle>
+          <DialogDescription class="leading-7">
+            همه‌ی انتخاب‌های اسکین، چاقو، دستکش، ایجنت، موسیقی و پین برای هر دو تیم به حالت پیش‌فرض برمی‌گردد. این کار برگشت‌پذیر نیست.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter class="gap-2 sm:justify-end">
+          <Button variant="destructive" :disabled="busy === 'reset'" @click="onReset">
+            <Icon v-if="busy === 'reset'" name="lucide:loader-2" class="animate-spin" />
+            ریست همه‌چیز
+          </Button>
+          <DialogClose as-child><Button variant="ghost">انصراف</Button></DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </section>
 </template>
