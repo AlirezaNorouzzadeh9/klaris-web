@@ -199,7 +199,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
       <div class="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-25 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
 
       <!-- header -->
-      <header dir="ltr" class="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 px-4 py-3 sm:px-5">
+      <header dir="ltr" class="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 px-4 py-2.5 sm:px-5">
         <div class="flex items-center gap-3">
           <span class="h-7 w-1 rounded-full bg-[var(--accent)]" />
           <div>
@@ -229,12 +229,12 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
         </div>
       </header>
 
-      <div class="grid gap-3 p-3 sm:p-4 lg:grid-cols-[minmax(0,230px)_112px_minmax(0,1fr)] lg:gap-4">
+      <div class="grid gap-2.5 p-2.5 sm:p-3 lg:grid-cols-[minmax(0,196px)_96px_minmax(0,1fr)] lg:gap-3">
         <!-- agent stage + gear (gear sits beside the agent on phones) -->
         <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3 lg:contents">
           <button
             type="button"
-            class="group relative isolate h-[228px] overflow-hidden rounded-xl border border-white/6 bg-black/25 lg:h-auto lg:min-h-[354px]"
+            class="group relative isolate h-[190px] overflow-hidden rounded-xl border border-white/6 bg-black/25 lg:h-auto lg:min-h-[286px]"
             :title="'Browse agents'"
             :aria-label="agent.name"
             @click="openAgent"
@@ -265,7 +265,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
             </div>
           </button>
 
-          <div class="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:grid-rows-4">
+          <div class="grid grid-cols-2 gap-1.5 lg:grid-cols-1 lg:grid-rows-4">
             <button
               v-for="g in gear"
               :key="g.key"
@@ -281,7 +281,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                 :src="g.image"
                 alt=""
                 loading="lazy"
-                class="h-12 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105"
+                class="h-9 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105"
                 :class="g.key === 'gloves' && '[transform:scaleX(-1)]'"
               >
               <Icon v-else :name="g.icon" class="size-6" />
@@ -311,19 +311,19 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
 
           <div class="ltr grid gap-3 lg:grid-cols-3">
             <div v-for="c in columns" :key="c.key" class="min-w-0" :class="mobileColumn === c.key ? 'block' : 'hidden lg:block'">
-              <p class="mb-2 hidden items-center gap-2 text-[10.5px] font-bold tracking-[.12em] text-white/35 lg:flex">
+              <p class="mb-1.5 hidden items-center gap-2 text-[10px] font-bold tracking-[.12em] text-white/35 lg:flex">
                 {{ c.label }} <span class="h-px flex-1 bg-white/6" />
               </p>
               <div class="flex flex-col gap-1">
                 <template v-if="loading">
-                  <span v-for="n in 7" :key="n" class="skeleton h-[46px] rounded-lg" />
+                  <span v-for="n in 7" :key="n" class="skeleton h-[38px] rounded-lg" />
                 </template>
                 <button
                   v-for="s in c.slots"
                   v-else
                   :key="s.key"
                   type="button"
-                  class="group relative flex h-[46px] min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
+                  class="group relative flex h-[38px] min-w-0 cursor-pointer items-center gap-2 overflow-hidden rounded-md border ps-1 pe-2.5 text-left transition-[border-color,background-color] duration-200"
                   :class="s.equipped
                     ? 'border-[color-mix(in_oklab,var(--accent)_38%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--accent)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--accent)_65%,transparent)]'
                     : 'border-white/6 bg-black/20 hover:border-white/14'"
@@ -338,8 +338,8 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                     :class="!s.equipped && 'opacity-45 grayscale-[.6]'"
                   >
                   <span class="min-w-0 flex-1">
-                    <span class="block truncate text-[9.5px] font-bold tracking-[.04em] text-white/35">{{ s.weapon }}</span>
-                    <span class="block truncate text-[12.5px] font-bold" :class="s.equipped ? 'text-white' : 'text-white/40'">{{ s.finish }}</span>
+                    <span class="block truncate text-[9px] font-bold tracking-[.04em] text-white/35">{{ s.weapon }}</span>
+                    <span class="block truncate text-[12px] font-bold" :class="s.equipped ? 'text-white' : 'text-white/40'">{{ s.finish }}</span>
                   </span>
                   <span v-if="s.config" class="flex shrink-0 flex-col items-end gap-1">
                     <span
@@ -357,7 +357,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
       </div>
 
       <!-- reset sits at the end of the panel, after everything it clears -->
-      <div class="flex justify-start border-t border-white/6 px-4 py-3 sm:px-5">
+      <div class="flex justify-start border-t border-white/6 px-4 py-2.5 sm:px-5">
         <button
           type="button"
           class="inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3.5 text-[12.5px] font-semibold text-white/50 transition-colors hover:border-red-k/50 hover:text-red-k"
