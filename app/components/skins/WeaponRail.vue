@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TeamId } from '~/types/skins'
 import type { WeaponEntry } from '~/composables/useCatalog'
 import { matchesQuery } from '~/composables/useCatalog'
 import { ALL_WEAPONS, groupWeapons } from '~/data/weapons'
@@ -8,11 +9,17 @@ const props = defineProps<{
   weapons: WeaponEntry[]
   /** defindexes that have a saved skin (or the equipped knife). */
   configured: Set<number>
+  /** Sides each weapon is equipped on, for the T / CT chips. */
+  sides?: (defindex: number) => TeamId[]
   grouped?: boolean
   allLabel: string
   total: number
 }>()
 const model = defineModel<number>({ required: true })
+
+/** Falls back to "equipped, side unknown" when the view does not pass sides. */
+const sidesOf = (defindex: number): TeamId[] =>
+  props.sides ? props.sides(defindex) : (props.configured.has(defindex) ? [2, 3] : [])
 
 const railFilter = ref('')
 const groups = computed(() =>
@@ -77,7 +84,15 @@ const groups = computed(() =>
           />
           <img :src="w.image" alt="" loading="lazy" class="h-[26px] w-[52px] shrink-0 object-contain opacity-95">
           <span class="ltr flex-1 truncate text-right text-[12.5px] font-semibold" :class="model === w.defindex ? 'text-white' : 'text-white/60 group-hover:text-white/85'">{{ w.label }}</span>
-          <span v-if="configured.has(w.defindex)" class="size-1.5 shrink-0 rounded-full bg-brand-500" title="Skin equipped" />
+          <!-- which sides wear this weapon, so two knives never look like one -->
+          <span v-if="sidesOf(w.defindex).length" class="ltr flex shrink-0 gap-[3px]">
+            <span
+              v-for="t in sidesOf(w.defindex)"
+              :key="t"
+              class="rounded-full px-1 py-px font-mono text-[8.5px] font-bold"
+              :class="t === 2 ? 'bg-side-t/15 text-side-t' : 'bg-side-ct/15 text-side-ct'"
+            >{{ t === 2 ? 'T' : 'CT' }}</span>
+          </span>
         </button>
       </div>
     </div>

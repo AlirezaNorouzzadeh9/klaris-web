@@ -276,7 +276,10 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                 :class="g.key === 'gloves' && '[transform:scaleX(-1)]'"
               >
               <Icon v-else :name="g.icon" class="size-6" />
-              <span class="ltr w-full truncate text-center text-[10px] font-semibold" :class="g.equipped ? 'text-white/80' : 'text-white/35'">{{ g.equipped ? g.finish : g.weapon }}</span>
+              <span class="ltr w-full min-w-0 text-center">
+                <span v-if="g.equipped" class="block truncate text-[9px] font-bold text-white/40">{{ g.weapon }}</span>
+                <span class="block truncate text-[10px] font-semibold" :class="g.equipped ? 'text-white/85' : 'text-white/35'">{{ g.equipped ? g.finish : g.weapon }}</span>
+              </span>
               <span v-if="g.equipped" class="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--accent)]" />
             </button>
           </div>

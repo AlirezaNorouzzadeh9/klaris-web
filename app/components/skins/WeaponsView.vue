@@ -87,6 +87,14 @@ const configured = computed(() => {
   return set
 })
 
+/** Sides a weapon (or knife) is currently equipped on, for the rail chips. */
+function sidesOf(defindex: number): TeamId[] {
+  return TEAMS.filter((t) => {
+    if (props.knives) return loadout.value.knife[t] === weapons.value.find(w => w.defindex === defindex)?.name
+    return loadout.value.skins[t][defindex] !== undefined
+  })
+}
+
 function teamsFor(skin: CatalogSkin): TeamId[] {
   return TEAMS.filter((t) => {
     const cfg = loadout.value.skins[t][skin.weapon_defindex]
@@ -183,6 +191,7 @@ async function onRemove() {
         v-model="selected"
         :weapons="weapons"
         :configured="configured"
+        :sides="sidesOf"
         :grouped="!knives"
         :all-label="allLabel"
         :total="pool.length"
