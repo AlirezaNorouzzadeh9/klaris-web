@@ -1,6 +1,10 @@
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
+  // Only the finished pages are prerendered; the nav links to sections that do not exist yet.
+  nitro: {
+    prerender: { crawlLinks: false, routes: ['/', '/skins'], failOnError: false },
+  },
   compatibilityDate: '2026-09-01',
   devtools: { enabled: false },
 
