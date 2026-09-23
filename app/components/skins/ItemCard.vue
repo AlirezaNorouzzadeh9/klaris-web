@@ -79,7 +79,14 @@ const accent = computed(() => (hasStattrak.value ? '#ffd700' : active.value ? '#
 
 const { inspect } = useInspect()
 function openInspect() {
-  inspect({ image: props.image, fallback: props.fallback, title: props.title, kicker: props.kicker, wear: active.value ? props.wear : undefined })
+  inspect({
+    image: props.image,
+    fallback: props.fallback,
+    title: props.title,
+    kicker: props.kicker,
+    wear: active.value ? props.wear : undefined,
+    flip: props.flip,
+  })
 }
 
 function select() {
