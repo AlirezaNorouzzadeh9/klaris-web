@@ -5,7 +5,7 @@ import { finishName, weaponLabel } from '~/composables/useCatalog'
 
 /**
  * The player's whole loadout for one side, laid out like the in-game loadout
- * screen: agent on a side-tinted stage, the gear column (knife, gloves, music
+ * screen: agent on a brand-lit stage, the gear column (knife, gloves, music
  * kit, pin) and the three weapon columns. Every tile jumps to that item's list.
  */
 const { loadout, status } = useLoadout()
@@ -183,16 +183,16 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
   <section class="mx-auto max-w-[1440px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-7">
     <div
       class="relative isolate overflow-hidden rounded-2xl border border-white/7 bg-ink-900"
-      :style="{ '--side': side.color }"
+      :style="{ '--side': side.color, '--accent': 'var(--color-brand-500)' }"
     >
       <!-- side-tinted backdrop, like the game's loadout screen -->
-      <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(120%_90%_at_85%_0%,color-mix(in_oklab,var(--side)_22%,transparent),transparent_60%)] transition-[background] duration-700" />
+      <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(120%_90%_at_85%_0%,rgb(249_96_15/.13),transparent_60%)] transition-[background] duration-700" />
       <div class="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-25 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
 
       <!-- header -->
       <header dir="ltr" class="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 px-4 py-3 sm:px-5">
         <div class="flex items-center gap-3">
-          <span class="h-7 w-1 rounded-full bg-[var(--side)] transition-colors duration-500" />
+          <span class="h-7 w-1 rounded-full bg-[var(--accent)]" />
           <div>
             <p class="text-[10.5px] font-bold tracking-[.18em] text-white/35">Your Loadout</p>
             <p class="text-[15px] font-bold text-white">{{ side.label }}</p>
@@ -230,7 +230,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
             :aria-label="agent.name"
             @click="openAgent"
           >
-            <div class="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-gradient-to-t from-[color-mix(in_oklab,var(--side)_28%,transparent)] to-transparent transition-[background] duration-700" />
+            <div class="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-gradient-to-t from-[color-mix(in_oklab,var(--accent)_26%,transparent)] to-transparent transition-[background] duration-700" />
             <div class="absolute bottom-[14%] left-1/2 -z-10 h-6 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/60 blur-xl" />
             <span v-if="loading" class="skeleton absolute inset-6 rounded-lg" />
             <Transition
@@ -262,7 +262,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
               :key="g.key"
               type="button"
               class="group relative flex min-w-0 flex-col items-center justify-center gap-1 overflow-hidden rounded-lg border bg-black/25 p-1.5 transition-colors"
-              :class="[g.equipped ? 'border-[color-mix(in_oklab,var(--side)_40%,transparent)]' : 'border-white/6 hover:border-white/15', g.image ? '' : 'text-white/20']"
+              :class="[g.equipped ? 'border-[color-mix(in_oklab,var(--accent)_45%,transparent)]' : 'border-white/6 hover:border-white/15', g.image ? '' : 'text-white/20']"
               :title="`${g.weapon} · ${g.finish}`"
               @click="openGear(g)"
             >
@@ -270,7 +270,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
               <img v-else-if="g.image" :src="g.image" alt="" loading="lazy" class="h-12 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105">
               <Icon v-else :name="g.icon" class="size-6" />
               <span class="ltr w-full truncate text-center text-[10px] font-semibold" :class="g.equipped ? 'text-white/80' : 'text-white/35'">{{ g.equipped ? g.finish : g.weapon }}</span>
-              <span v-if="g.equipped" class="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--side)]" />
+              <span v-if="g.equipped" class="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--accent)]" />
             </button>
           </div>
         </div>
@@ -306,7 +306,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                   type="button"
                   class="group relative flex h-[46px] min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-lg border ps-1 pe-3 text-left transition-[border-color,background-color] duration-200"
                   :class="s.equipped
-                    ? 'border-[color-mix(in_oklab,var(--side)_35%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--side)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--side)_60%,transparent)]'
+                    ? 'border-[color-mix(in_oklab,var(--accent)_38%,transparent)] bg-[linear-gradient(90deg,color-mix(in_oklab,var(--accent)_14%,transparent),transparent_70%)] hover:border-[color-mix(in_oklab,var(--accent)_65%,transparent)]'
                     : 'border-white/6 bg-black/20 hover:border-white/14'"
                   :title="`${s.weapon} skins`"
                   @click="openSlot(s)"
@@ -329,7 +329,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
                     >{{ wearTierOf(s.config.wear).short }}</span>
                     <span v-if="s.config.stattrak" class="rounded-xs bg-[#ffd700]/15 px-1.5 py-px font-mono text-[9px] font-bold text-[#ffd700]">ST</span>
                   </span>
-                  <span v-if="s.equipped" class="absolute inset-y-0 left-0 w-[2px] bg-[var(--side)]" />
+                  <span v-if="s.equipped" class="absolute inset-y-0 left-0 w-[2px] bg-[var(--accent)]" />
                 </button>
               </div>
             </div>
