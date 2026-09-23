@@ -364,7 +364,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
           @click="confirmOpen = true"
         >
           <Icon name="lucide:rotate-ccw" class="size-3.5" />
-          ریست لوداوت
+          ریست اسکین‌ها
         </button>
       </div>
     </div>
@@ -372,7 +372,7 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
     <Dialog v-model:open="confirmOpen">
       <DialogContent dir="rtl" class="border-white/10 bg-ink-900 sm:max-w-md">
         <DialogHeader class="text-start">
-          <DialogTitle>لوداوت ریست شود؟</DialogTitle>
+          <DialogTitle>اسکین‌ها ریست شوند؟</DialogTitle>
           <DialogDescription class="leading-7">
             همه‌ی انتخاب‌های اسکین، چاقو، دستکش، ایجنت، موسیقی و پین برای هر دو تیم به حالت پیش‌فرض برمی‌گردد. این کار برگشت‌پذیر نیست.
           </DialogDescription>

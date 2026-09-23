@@ -44,21 +44,28 @@ onMounted(async () => {
             role="tab"
             :aria-selected="model === cat.key"
             class="flex h-9 shrink-0 items-center gap-2 rounded-lg border px-3.5 text-[12.5px] font-semibold whitespace-nowrap transition-colors duration-250 sm:h-10 sm:px-4 sm:text-[13px]"
-            :class="model === cat.key
-              ? 'border-brand-500 bg-brand-500 text-ink-950 shadow-[0_10px_24px_-14px_var(--color-brand-500)]'
-              : 'border-white/8 bg-white/[.02] text-white/60 hover:border-white/20 hover:text-white'"
+            :class="[
+              // the exclusive tab wears the VIP gold, not the brand orange
+              cat.key === 'exclusive'
+                ? (model === cat.key
+                  ? 'border-gold-k bg-gold-k text-ink-950 shadow-[0_10px_24px_-14px_var(--color-gold-k)]'
+                  : 'border-gold-k/30 bg-gold-k/[.06] text-gold-k/85 hover:border-gold-k/60 hover:text-gold-k')
+                : (model === cat.key
+                  ? 'border-brand-500 bg-brand-500 text-ink-950 shadow-[0_10px_24px_-14px_var(--color-brand-500)]'
+                  : 'border-white/8 bg-white/[.02] text-white/60 hover:border-white/20 hover:text-white'),
+            ]"
             @click="model = cat.key"
           >
             <Icon
               :name="cat.icon"
               class="size-3.5 sm:size-4"
-              :class="model === cat.key ? 'text-ink-950' : 'text-white/35'"
+              :class="model === cat.key ? 'text-ink-950' : cat.key === 'exclusive' ? 'text-gold-k/70' : 'text-white/35'"
             />
             {{ cat.label }}
             <span
               v-if="counts[cat.key] !== undefined"
               class="font-mono text-[10px] font-bold"
-              :class="model === cat.key ? 'text-ink-950/55' : 'text-white/25'"
+              :class="model === cat.key ? 'text-ink-950/55' : cat.key === 'exclusive' ? 'text-gold-k/45' : 'text-white/25'"
             >{{ counts[cat.key] }}</span>
           </button>
         </div>
