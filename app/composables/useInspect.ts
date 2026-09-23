@@ -8,6 +8,8 @@ export interface InspectItem {
   kicker?: string
   /** Float of the equipped copy, when there is one. */
   wear?: number
+  /** Mirror the render (glove art faces the other way). */
+  flip?: boolean
 }
 
 /** One viewer per page; any card or panel opens it with `inspect(item)`. */

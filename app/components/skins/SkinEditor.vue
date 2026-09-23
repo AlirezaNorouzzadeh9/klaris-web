@@ -42,6 +42,7 @@ function openInspect() {
     title: props.item.title,
     kicker: props.item.caption,
     wear: props.kind === 'glove' ? undefined : draft.value.wear,
+    flip: props.kind === 'glove',
   })
 }
 
@@ -182,6 +183,7 @@ function save() {
               :src="item.image"
               :alt="item.title"
               class="mx-auto h-full w-[78%] object-contain py-6 drop-shadow-[0_16px_20px_rgb(0_0_0/.75)]"
+              :class="kind === 'glove' && '[transform:scaleX(-1)]'"
               @error="previewFailed = true"
             >
             <img

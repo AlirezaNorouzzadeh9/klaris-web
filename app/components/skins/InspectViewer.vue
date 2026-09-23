@@ -279,7 +279,7 @@ const src = computed(() => (failed.value ? item.value?.fallback : item.value?.im
                   !layer.face && 'brightness-[.3] saturate-50',
                   failed && 'opacity-30 grayscale',
                 ]"
-                :style="{ transform: `translateZ(${layer.z}px)` }"
+                :style="{ transform: `translateZ(${layer.z}px)${item.flip ? ' scaleX(-1)' : ''}` }"
                 @error="layer.front && (failed = true)"
               >
               <!-- sheen on the front face only, masked to the render's own shape -->

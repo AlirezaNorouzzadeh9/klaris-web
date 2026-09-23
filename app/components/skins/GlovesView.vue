@@ -102,6 +102,7 @@ async function onRemove() {
         v-for="g in visible"
         :key="`${g.weapon_defindex}-${g.paint}`"
         :image="g.image"
+        flip
         :title="finishName(g.paint_name)"
         :kicker="weaponLabel(g.paint_name)"
         :active-teams="teamsFor(g)"

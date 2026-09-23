@@ -33,6 +33,8 @@ const props = withDefaults(defineProps<{
   stageClass?: string
   /** Fill the stage instead of fitting inside it (screenshots, not renders). */
   cover?: boolean
+  /** Mirror the render; glove art faces the other way to every weapon. */
+  flip?: boolean
   /** Lines the title may wrap to (music kits and pins have long names). */
   titleLines?: 1 | 2
 }>(), {
@@ -47,6 +49,7 @@ const props = withDefaults(defineProps<{
   interactive: true,
   stageClass: 'h-[146px]',
   cover: false,
+  flip: false,
   titleLines: 1,
 })
 
@@ -140,6 +143,7 @@ watch(() => props.image, () => {
           loaded ? 'opacity-100' : 'opacity-0',
           interactive && 'group-hover:scale-[1.05]',
           cover ? 'size-full object-cover' : 'h-full w-[88%] object-contain py-3 drop-shadow-[0_12px_14px_rgb(0_0_0/.65)]',
+          flip && '[transform:scaleX(-1)]',
         ]"
         @load="loaded = true"
         @error="failed = true"

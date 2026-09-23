@@ -267,7 +267,14 @@ const openAgent = () => browse('agents', undefined, team.value === 2 ? 't' : 'ct
               @click="openGear(g)"
             >
               <span v-if="loading" class="skeleton size-10 rounded-md" />
-              <img v-else-if="g.image" :src="g.image" alt="" loading="lazy" class="h-12 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105">
+              <img
+                v-else-if="g.image"
+                :src="g.image"
+                alt=""
+                loading="lazy"
+                class="h-12 w-full object-contain drop-shadow-[0_6px_8px_rgb(0_0_0/.5)] transition-transform duration-300 group-hover:scale-105"
+                :class="g.key === 'gloves' && '[transform:scaleX(-1)]'"
+              >
               <Icon v-else :name="g.icon" class="size-6" />
               <span class="ltr w-full truncate text-center text-[10px] font-semibold" :class="g.equipped ? 'text-white/80' : 'text-white/35'">{{ g.equipped ? g.finish : g.weapon }}</span>
               <span v-if="g.equipped" class="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--accent)]" />
