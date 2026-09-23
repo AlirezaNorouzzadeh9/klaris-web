@@ -113,7 +113,7 @@ function toggleModel(m: CatalogModel) {
         >
           <SkinsCardAction
             :active="modelOn(m)"
-            :label="modelOn(m) ? 'Equipped' : 'Select'"
+            :label="modelOn(m) ? 'انتخاب شده' : 'انتخاب'"
             :icon="modelOn(m) ? 'lucide:check' : 'lucide:plus'"
             :disabled="busy === `model-${m.id}` || busy === 'model-null'"
             @click="toggleModel(m)"
@@ -138,7 +138,7 @@ function toggleModel(m: CatalogModel) {
     >
       <SkinsCardAction
         :active="loadout.agents[a.team] === a.model"
-        :label="loadout.agents[a.team] === a.model ? 'Equipped' : 'Select'"
+        :label="loadout.agents[a.team] === a.model ? 'انتخاب شده' : 'انتخاب'"
         :icon="loadout.agents[a.team] === a.model ? 'lucide:check' : 'lucide:plus'"
         :disabled="busy === `agent-${a.model}` || busy === 'agent-null'"
         @click="toggle(a)"

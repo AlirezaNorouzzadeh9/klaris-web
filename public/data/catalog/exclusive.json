@@ -1,0 +1,10 @@
+[
+  { "id": "megumin", "name": "Megumin", "kind": "model", "vip": true, "image": "/img/models/megumin.webp" },
+  { "id": "goku", "name": "Son Goku", "kind": "model", "vip": true, "image": "/img/models/goku.webp" },
+  { "id": "leon", "name": "Leon Kennedy", "kind": "model", "vip": true, "image": "/img/models/leon.webp" },
+  { "id": "ghostface", "name": "GhostFace", "kind": "model", "vip": false, "image": "/img/models/ghostface.webp" },
+  { "id": "mordecai", "name": "Mordecai", "kind": "model", "vip": false, "image": "/img/models/mordecai.webp" },
+  { "id": "agent_smith", "name": "Agent Smith", "kind": "model", "vip": true, "image": "/img/models/agent_smith.webp" },
+  { "id": "agent_smith_w", "name": "Agent Smith (White)", "kind": "model", "vip": true, "image": "/img/models/agent_smith_w.webp" },
+  { "id": "energy_kukri", "name": "Energy Kukri", "kind": "knife", "vip": true, "soon": true }
+]

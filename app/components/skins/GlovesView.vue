@@ -110,7 +110,7 @@ async function onRemove() {
       >
         <SkinsCardAction
           :active="teamsFor(g).length > 0"
-          :label="teamsFor(g).length ? 'Settings' : 'Select'"
+          :label="teamsFor(g).length ? 'تنظیمات' : 'انتخاب'"
           :icon="teamsFor(g).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
           @click="openEditor(g)"
         />

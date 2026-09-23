@@ -29,7 +29,8 @@ onMounted(ensureLoaded)
 
     <section id="loadout-browser" class="mx-auto max-w-[1440px] scroll-mt-32 px-4 pt-5 pb-8 sm:px-6 lg:px-10 lg:pt-[22px]">
       <!-- keyed so each view mounts fresh and loads only its own catalog -->
-      <SkinsWeaponsView v-if="category === 'skins'" key="skins" :knives="false" />
+      <SkinsExclusiveView v-if="category === 'exclusive'" key="exclusive" />
+      <SkinsWeaponsView v-else-if="category === 'skins'" key="skins" :knives="false" />
       <SkinsWeaponsView v-else-if="category === 'knives'" key="knives" :knives="true" />
       <SkinsGlovesView v-else-if="category === 'gloves'" />
       <SkinsAgentsView v-else-if="category === 'agents'" />

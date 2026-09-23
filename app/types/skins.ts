@@ -9,7 +9,7 @@
 export type TeamId = 2 | 3
 export const TEAMS: readonly TeamId[] = [2, 3] as const
 
-export type CategoryKey = 'skins' | 'knives' | 'gloves' | 'agents' | 'music' | 'pins'
+export type CategoryKey = 'exclusive' | 'skins' | 'knives' | 'gloves' | 'agents' | 'music' | 'pins'
 
 export type WeaponClass = 'pistol' | 'smg' | 'rifle' | 'sniper' | 'shotgun' | 'mg' | 'knife'
 
@@ -36,6 +36,19 @@ export interface CatalogAgent {
   image: string
   model: string
   agent_name: string
+}
+
+/** Anything only Klaris servers have: a custom model, knife or finish. */
+export interface CatalogExclusive {
+  id: string
+  name: string
+  /** What it replaces in game, for the card's small line. */
+  kind: 'model' | 'knife' | 'skin'
+  image?: string
+  /** VIP-only, or free for everyone. */
+  vip?: boolean
+  /** Shown when the item is on the server but not wired to the site yet. */
+  soon?: boolean
 }
 
 /** A custom player model the server ships (PlayerModelChanger config). */

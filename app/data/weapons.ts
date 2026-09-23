@@ -72,6 +72,7 @@ export interface CategoryMeta {
 }
 
 export const CATEGORIES: CategoryMeta[] = [
+  { key: 'exclusive', label: 'Exclusive', icon: 'lucide:crown' },
   { key: 'skins', label: 'Skins', icon: 'lucide:crosshair' },
   { key: 'knives', label: 'Knives', icon: 'lucide:swords' },
   { key: 'gloves', label: 'Gloves', icon: 'lucide:hand' },

@@ -224,7 +224,7 @@ async function onRemove() {
         >
           <SkinsCardAction
             :active="teamsFor(skin).length > 0"
-            :label="teamsFor(skin).length ? 'Settings' : 'Select'"
+            :label="teamsFor(skin).length ? 'تنظیمات' : 'انتخاب'"
             :icon="teamsFor(skin).length ? 'lucide:sliders-horizontal' : 'lucide:plus'"
             @click="openEditor(skin)"
           />
