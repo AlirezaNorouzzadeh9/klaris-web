@@ -6,7 +6,7 @@ const nav = [
   { to: '/servers', label: 'سرورها' },
   { to: '/vip', label: 'VIP', ltr: true },
   { to: '/store', label: 'فروشگاه' },
-  { to: '/skins', label: 'شخصی‌سازی' },
+  { to: '/skins', label: 'تنظیمات اسکین' },
   { to: '/leaderboard', label: 'رنکینگ' },
   { to: '/rules', label: 'قوانین' },
 ]
